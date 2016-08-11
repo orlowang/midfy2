@@ -1,0 +1,37 @@
+html,body{
+  height: 100%;
+  overflow: hidden;
+}
+#ReactContainer{
+  width: 100%;
+  height: 100%;
+}
+#ReactContainer>div{
+  height: 100%;
+}
+
+/* 框架根节点 */
+.fmroot{
+
+}
+
+/* 框架左侧栏 */
+.fmleft{
+  background-color: #293038;
+  color: #fff;
+}
+.fmleft .menuComp{
+  padding-top: 20rem;
+}
+
+/* 用户信息 */
+.usra{}
+.userareaComp img,
+.uploadComp .view{
+  background-image: url(../img/person.svg);
+}
+
+/* 框架主体 */
+.fmbody{
+
+}

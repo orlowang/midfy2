@@ -1,0 +1,24 @@
+{
+  "globalDependencies": {
+    "chalk": "registry:dt/chalk#0.4.0+20160317120654",
+    "express": "registry:dt/express#4.0.0+20160317120654",
+    "express-serve-static-core": "registry:dt/express-serve-static-core#0.0.0+20160701212727",
+    "history": "registry:dt/history#1.8.0+20160316155526",
+    "lodash": "registry:dt/lodash#3.10.0+20160619033623",
+    "mime": "registry:dt/mime#0.0.0+20160316155526",
+    "node": "registry:dt/node#6.0.0+20160613154055",
+    "react": "registry:dt/react#0.14.0+20160630100702",
+    "react-addons-css-transition-group": "registry:dt/react-addons-css-transition-group#0.14.0+20160316155526",
+    "react-dom": "registry:dt/react-dom#0.14.0+20160412154040",
+    "react-motion": "registry:dt/react-motion#0.0.0+20160705193226",
+    "react-redux": "registry:dt/react-redux#4.4.0+20160703120921",
+    "react-relay": "registry:dt/react-relay#0.9.2+20160729215536",
+    "react-router": "registry:dt/react-router#2.0.0+20160621215300",
+    "react-router-redux": "registry:dt/react-router-redux#4.0.0+20160703120921",
+    "redux-thunk": "registry:dt/redux-thunk#2.1.0+20160703120921",
+    "serve-static": "registry:dt/serve-static#0.0.0+20160606155157",
+    "source-map": "registry:dt/source-map#0.0.0+20160317120654",
+    "uglify-js": "registry:dt/uglify-js#2.6.1+20160316155526",
+    "webpack": "registry:dt/webpack#1.12.9+20160523035535"
+  }
+}

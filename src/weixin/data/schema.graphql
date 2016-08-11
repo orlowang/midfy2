@@ -1,0 +1,27 @@
+schema {
+  query: Query
+}
+
+type function {
+  id: String
+  name: String
+  description: String
+  icon: String
+}
+
+interface Node {
+  id: ID!
+}
+
+type Query {
+  node(id: ID!): Node
+  system: [system]
+  functions: [function]
+}
+
+type system {
+  id: String
+  name: String
+  icon: String
+  brief: String
+}

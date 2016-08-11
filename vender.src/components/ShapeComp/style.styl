@@ -1,0 +1,19 @@
+span.base{
+  display: inline-block;
+  position: relative;
+  >i{
+    display: inline-block;
+    position: absolute;
+    bottom: 30%;
+    width: 50%;
+    border-top: 2rem solid #fff;
+  }
+  >i:first-child{
+    transform: translate(0%, 0%) rotate(45deg);
+    transform-origin: 100% 100%;
+  }
+  >i:last-child{
+    transform: translate(100%, 0%) rotate(-45deg);
+    transform-origin: 0% 100%;
+  }
+}

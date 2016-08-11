@@ -1,0 +1,34 @@
+// We only need to import the modules necessary for initial render
+import * as Relay from "react-relay";
+import Dashboard from '../views/dashboard'
+import Routes from './routes'
+
+/*  Note: Instead of using JSX, we recommend using react-router
+    PlainRoute objects to build route definitions.   */
+let routes = [];
+const queryConfig = {
+  viewer: () => Relay.QL`query { viewer }`,
+};
+
+export const DashboardRoutes = (store) => ({
+  path: '/',
+  component: Dashboard,
+  childRoutes: Routes(store),
+  queries: queryConfig
+})
+routes.push(DashboardRoutes)
+
+export const SignInRoutes = (store) => ({
+  path: '/signin',
+  getComponent (nextState, cb) {
+    require.ensure([], (require) => {
+      const SignIn = require('../views/signin').default
+      cb(null, SignIn)
+    }, 'SignIn')
+  }
+})
+routes.push(SignInRoutes)
+
+export default (store) => routes.map((route) => {
+  return route(store)
+})

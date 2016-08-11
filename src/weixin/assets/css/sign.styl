@@ -1,0 +1,29 @@
+@import 'styleguide';
+
+.Signin{
+  display: flex;
+  align-items: center;
+  height: 100%;
+
+  .inner{
+    width: $loginWidth;
+    margin: -16% auto 0;
+  }
+
+  :global(.textInputComp){
+    margin-top: 32rem;
+
+    input{
+      padding-top: 4rem;
+      padding-bottom: 4rem;
+    }
+  }
+
+  :global(.userareaComp){
+    padding-top: 10rem;
+    background-color: darken($mainColor, 20%);
+    >div{
+      border: $usrImgBorderSize solid #fff;
+    }
+  }
+}

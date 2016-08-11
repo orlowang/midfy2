@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="<%= htmlWebpackPlugin.options.lang %>">
+  <head>
+    <title><%= htmlWebpackPlugin.options.title %></title>
+    <meta charset="UTF-8">
+    <script>
+      var _dpr = window.devicePixelRatio;
+      var _scale = 1 / _dpr;
+      var _font_size = _dpr + 'px';
+      document.write(navigator.platform.match('Win|Mac|X11') != null ? '<style type="text/css">html{min-height:100%;font-size:1px}</style>' : '<meta name="viewport" content="initial-scale=' + _scale + ',  maximum-scale=' + _scale + ', user-scalable=no">\n<style type="text/css">html{min-height:100%;font-size:' + _font_size + '}</style>')
+    </script>
+  </head>
+  <body>
+    <div id="ReactContainer"></div>
+  </body>
+</html>

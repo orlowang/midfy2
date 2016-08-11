@@ -1,0 +1,21 @@
+{
+    "compileOnSave": true,
+    "compilerOptions": {
+        "outDir": "./tsbuild/",
+        "noImplicitAny": false,
+        "module": "commonjs",
+        "removeComments": false,
+        "target": "es6",
+        "jsx": "react",
+        "sourceMap": false,
+        "allowJs": true
+    },
+    "exclude": [
+        "bin",
+        "build",
+        "conf",
+        "docs",
+        "node_modules",
+        "tsbuild"
+    ]
+}

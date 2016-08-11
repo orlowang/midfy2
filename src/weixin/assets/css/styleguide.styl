@@ -1,0 +1,64 @@
+
+$mainColor = #293038
+$mainBgColor = #383838
+
+$themeColor = #0ead87
+
+$iconSize = 16rem
+
+// fm skeleton
+$fmTopHeight = 44rem
+$fmLeftWidth = 180rem
+
+// usr area
+$usrAreaPaddingTop = 40rem
+$usrImgSize = 96rem
+$usrImgBorderSize = 4rem
+
+$switchSize = 24rem
+$uploadViewSize = 96rem
+
+:export{
+  usrImgSize: $usrImgSize;
+  usrImgBorderSize: $usrImgBorderSize;
+  switchSize: $switchSize;
+  uploadViewSize: $uploadViewSize;
+}
+
+// menu stylesheet
+$menuListHeight = 32rem
+
+// login
+$loginWidth = 320rem;
+
+
+// ==============================================================
+// 去掉移动端可点击元素在点击是的半透明背景
+tap0hightlight{-webkit-tap-highlight-color: rgba(0,0,0,0)}
+
+:global(.easeDown-enter){
+  opacity: 0.01;
+}
+:global(.easeDown-enter.easeDown-enter-active){
+  opacity: 1;
+  transition: opacity 500ms ease-in;
+}
+:global(.easeDown-leave){
+  opacity: 1;
+}
+:global(.easeDown-leave.easeDown-leave-active){
+  opacity: 0.01;
+  transition: opacity 300ms ease-in;
+}
+
+@import '../../../../node_modules/normalize.css/normalize.css';
+
+body{
+  font-size: 16rem;
+  user-select: none; 
+  font-family: "Myriad Set Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+a{
+  outline: none;
+}
+

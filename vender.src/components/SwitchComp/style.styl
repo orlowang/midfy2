@@ -1,0 +1,29 @@
+.switch{
+  display: flex;
+  align-items: center;
+  input{
+    opacity: 0;
+    width: 0;
+    height: 0;
+    &:checked+span{
+      i{
+        transform: translateX(100%);
+      }
+    }
+  }
+  .shape{
+    display: inline-block;
+    border-width: 1rem;
+    border-style: solid;
+    cursor: pointer;
+    transition: all 150ms ease-out;
+
+    i{
+      display: block;
+      transform: translateX(0);
+      border-radius: 100%;
+      box-shadow: 1px 0 3px rgba(0,0,0,.05);
+      transition: all 150ms ease-out;
+    }
+  }
+}
