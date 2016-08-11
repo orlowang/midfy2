@@ -9,8 +9,8 @@ import {
   Router
 } from "react-router";
 import * as useRelay from "react-router-relay";
-import "./assets/css/style.css";
 import CreateRoutes from "./route";
+import "./assets/css/style.css";
 
 Relay.injectNetworkLayer(
   new Relay.DefaultNetworkLayer('http://dev.local:8089/graphql', {
@@ -19,7 +19,7 @@ Relay.injectNetworkLayer(
     // }
   })
 );
-console.log(useRelay);
+console.log(useRelay)
 ReactDOM.render(
   <Router 
     environment={Relay.Store}

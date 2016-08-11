@@ -12,7 +12,7 @@ import {
 const data = require('./mock.json')
 
 const systemType = new GraphQLObjectType({
-  name: 'system',
+  name: 'System',
   fields: {
     id: {type: GraphQLString},
     name: {type: GraphQLString},
@@ -21,8 +21,8 @@ const systemType = new GraphQLObjectType({
   }
 })
 
-const funcType = new GraphQLObjectType({
-  name: 'function',
+const functionType = new GraphQLObjectType({
+  name: 'Function',
   fields: {
     id: {type: GraphQLString},
     name: {type: GraphQLString},
@@ -31,24 +31,13 @@ const funcType = new GraphQLObjectType({
     
   }
 })
-
-export const system = {
-  type: new GraphQLList(systemType),
-  resolve: (_, args) => data.systems
-};
-
-export const functions = {
-  type: new GraphQLList(funcType),
-  resolve: (_, args) => data.functions
-}
-
 const { nodeInterface, nodeField } = nodeDefinitions(
   (globalId) => {
     const { type, id } = fromGlobalId(globalId);
     switch (type) {
-      case 'system':
+      case 'System':
         return (_, args) => data.systems;
-      case 'function':
+      case 'Function':
         return (_, args) => data.functions;
     }
     return null;
@@ -64,20 +53,30 @@ const { nodeInterface, nodeField } = nodeDefinitions(
   }
 );
 
+let viewerType = new GraphQLObjectType({
+  name: "Viewer",
+  description: "Base type for Smashgather queries",
+  fields: () => ({
+    system: {
+      type: new GraphQLList(systemType),
+      resolve: (_, args) => data.systems
+    },
+    functions: {
+      type: new GraphQLList(functionType),
+      resolve: (_, args) => data.functions
+    }
+  })
+})
+
 let queryType = new GraphQLObjectType({
   name: 'Query',
   fields: () => ({
     node: nodeField,
-    system,
-    functions
     // add your own root fields here
-    // viewer: {
-    //   type: new GraphQLList(),
-    //   resolve: [
-    //     system,
-    //     functions
-    //   ]
-    // }
+    viewer: {
+      type: viewerType,
+      resolve: () => { return {} }
+    }
   })
 })
 

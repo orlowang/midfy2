@@ -2,7 +2,7 @@ schema {
   query: Query
 }
 
-type function {
+type Function {
   id: String
   name: String
   description: String
@@ -15,13 +15,17 @@ interface Node {
 
 type Query {
   node(id: ID!): Node
-  system: [system]
-  functions: [function]
+  viewer: Viewer
 }
 
-type system {
+type System {
   id: String
   name: String
   icon: String
   brief: String
+}
+
+type Viewer {
+  system: [System]
+  functions: [Function]
 }

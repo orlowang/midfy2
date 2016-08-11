@@ -1,9 +1,8 @@
 import gulp from 'gulp';
+import shell from 'gulp-shell';
 import path from 'path';
 import fs from 'fs';
 import chalk from "chalk";
-import { graphql } from 'graphql';
-import { introspectionQuery, printSchema } from 'graphql/utilities';
 import express from 'express';
 import gutil from 'gulp-util';
 import concat from 'gulp-concat';
@@ -71,32 +70,9 @@ gulp.task("rundev", ["webpack:Build Schema"], function(){
 })
 
 // BUILD SCHEMA
-gulp.task("webpack:Build Schema", function(callback) {
-  let Schema = require(`${Midfy.ENV_PROJECTPATH}/data/schema`).default;
-  const graphQLFile = `${Midfy.ENV_PROJECTPATH}/data/schema.graphql`;
-  const jsonFile = `${Midfy.ENV_PROJECTPATH}/data/schema.json`;
-  
-  if (require(jsonFile).data == undefined) {
-    try {
-      const json = graphql(Schema, introspectionQuery);
-      if (json.errors) {
-        console.error(chalk.red(`ERROR introspecting schema: ${JSON.stringify(json.errors, null, 2)}`));
-      } else {
-        fs.writeFileSync(jsonFile, JSON.stringify(json, null, 2));
-        fs.writeFileSync(graphQLFile, printSchema(Schema));
-        console.log(chalk.magenta('Schema has been regenerated'));
-      }
-    } catch (err) {
-      console.error(chalk.red(err.stack));
-    }
-  }
-  // cp.execSync('babel-node ./make_schema.js', (err) => {
-  //   if (err) {
-  //     if(err) throw new gutil.PluginError("webpack:Build Schema", err);
-  //   }
-  // })
-  callback()
-})
+gulp.task("webpack:Build Schema", shell.task([
+  'babel-node ./make_schema.js'
+]))
 
 gulp.task("webpack:Build APP", function(callback) {
   buildAPP(callback)

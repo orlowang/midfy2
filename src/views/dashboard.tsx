@@ -99,10 +99,12 @@ class Dashboard extends React.Component<DashboardProps, {}>{
 export default Relay.createContainer(Dashboard, {
   fragments: {
     viewer: () => Relay.QL`
-      fragments on system {
-        id,
-        name,
-        brief
+      fragments on Viewer {
+        system {
+          id,
+          name,
+          brief
+        }
       }
     `
   }

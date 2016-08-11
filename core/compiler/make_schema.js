@@ -2,11 +2,11 @@ import path from 'path';
 import fs from 'fs';
 import { graphql } from 'graphql';
 import { introspectionQuery, printSchema } from 'graphql/utilities';
-import schema from '../../src/weixin/data/schema';
-const Midfy = require('../config');
-
-const jsonFile = `${Midfy.ENV_BASEPATH}/src/weixin/data/schema.json`;
-const graphQLFile = `${Midfy.ENV_BASEPATH}/src/weixin/data/schema.graphql`;
+import Midfy from '../config';
+console.log("======????")
+let schema = require(`${Midfy.ENV_PROJECTPATH}/data/schema`).default;
+const jsonFile = `${Midfy.ENV_PROJECTPATH}/data/schema.json`;
+const graphQLFile = `${Midfy.ENV_PROJECTPATH}/data/schema.graphql`;
 
 async function updateSchema() {
   try {

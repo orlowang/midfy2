@@ -24,7 +24,7 @@ const webpackConfig = {
                 test: /\.tsx?$/,
                 exclude: /node_modules/,
                 loaders: [
-                    `babel?cacheDirectory,presets[]=stage-0,presets[]=es2015,plugins[]=transform-class-properties,plugins[]=babel-relay-plugin-loader`,
+                    `babel?cacheDirectory,passPerPreset,presets[]=stage-0,presets[]=es2015,plugins[]=transform-class-properties,plugins[]=babel-relay-plugin-loader`,
                     'ts'
                 ]
             },
