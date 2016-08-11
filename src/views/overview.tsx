@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {
   MountAnima
-} from '../../../vender.src/components/Animate';
+} from '../../vender.src/components/Animate';
 const skeleton = require('../assets/css/skeleton.styl');
 
 export interface OverviewProps {};

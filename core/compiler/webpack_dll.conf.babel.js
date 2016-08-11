@@ -11,7 +11,7 @@ const compile_output = {
     library: 'dlls',
 };
 
-export const webpackDllConfig = {
+export default {
     entry: usercfg.compile.dlls || Midfy.compile.dlls,
     devtool: !compile.devtool ? 'source-map' : compile.devtool,
     output: !compile.output ? compile_output : _.defaultsDeep(compile_output, compile.output),

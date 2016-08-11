@@ -6,8 +6,6 @@ import _ from 'lodash';
 import { urlToRequest } from 'loader-utils';
 import Midfy from '../config';
 
-const babelrelayplugin = urlToRequest('../utils/babelrelayplugin');
-console.log(babelrelayplugin)
 const usercfg = require(`${Midfy.ENV_PROJECTPATH}/config.json`);
 const webpackConfig = {
     entry: usercfg.app.entry || Midfy.app.entry,
@@ -26,7 +24,7 @@ const webpackConfig = {
                 test: /\.tsx?$/,
                 exclude: /node_modules/,
                 loaders: [
-                    `babel?cacheDirectory,presets[]=stage-0,presets[]=es2015,plugins[]=transform-class-properties,plugins[]=${urlToRequest('../utils/babelrelayplugin')}`,
+                    `babel?cacheDirectory,presets[]=stage-0,presets[]=es2015,plugins[]=transform-class-properties,plugins[]=babel-relay-plugin-loader`,
                     'ts'
                 ]
             },

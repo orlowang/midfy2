@@ -18,12 +18,11 @@ import sourcemaps from 'gulp-sourcemaps';
 import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
 import Midfy from '../config';
-import webpackConfig from './webpack_app.conf.babel';
-import { webpackDllConfig } from './webpack_dll.conf.babel';
 
 const usercfg = require(`${Midfy.ENV_PROJECTPATH}/config.json`);
 
 function buildDLLs(callback) {
+  const webpackDllConfig = require('./webpack_dll.conf.babel').default;
   webpack(webpackDllConfig, function(err, stats) {
     if(err) throw new gutil.PluginError("webpack:Build DLLs", err);
 		gutil.log("[webpack:Build DLLs]", stats.toString({
@@ -45,6 +44,7 @@ function buildAPP(callback) {
 
 gulp.task("rundev", ["webpack:Build Schema"], function(){
   const serv = express();
+  const webpackConfig = require('./webpack_app.conf.babel').default;
   let deps = getDepsVersion(usercfg.compile.dlls || Midfy.compile.dlls);
   fs.readFile(`${Midfy.compile.dllsOut}/dllsVersion.json`, 'utf8', (err, data) => {
     // create 'dllsVersion.json' if not exist.
@@ -77,7 +77,6 @@ gulp.task("webpack:Build Schema", function(callback) {
   const jsonFile = `${Midfy.ENV_PROJECTPATH}/data/schema.json`;
   
   if (require(jsonFile).data == undefined) {
-    console.log('=======')
     try {
       const json = graphql(Schema, introspectionQuery);
       if (json.errors) {

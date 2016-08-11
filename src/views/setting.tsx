@@ -2,17 +2,17 @@ import * as React from 'react';
 const skeleton = require('../assets/css/skeleton.styl');
 import {
   MountAnima
-} from '../../../vender.src/components/Animate';
+} from '../../vender.src/components/Animate';
 import {
   Switch
-} from '../../../vender.src/components/SwitchComp';
+} from '../../vender.src/components/SwitchComp';
 import {
   Upload
-} from '../../../vender.src/components/UploadComp';
+} from '../../vender.src/components/UploadComp';
 import {
   TextInput,
   Title
-} from '../../../vender.src/components/TextComp';
+} from '../../vender.src/components/TextComp';
 
 const keys = [
   {

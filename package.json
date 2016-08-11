@@ -4,11 +4,16 @@
   "description": "since neither wind blowing nor streamers flying, how does mind fly?",
   "main": "index.js",
   "scripts": {
-    "start": "./bin/run_dev_srv.sh",
-    "build:dlls": "./bin/run_dlls_build.sh",
-    "build:schema": "./bin/run_check_graphql.sh",
+    "start": "NODE_ENV=development gulp 'rundev' --gulpfile ./core/compiler/make_app_dev.babel.js",
+    "build:dlls": "NODE_ENV=development gulp 'webpack:Build DLLs' --gulpfile ./core/compiler/make_app_dev.babel.js",
+    "build:schema": "NODE_ENV=development gulp 'webpack:Build Schema' --gulpfile ./core/compiler/make_app_dev.babel.js",
     "watch": "NODE_ENV=development webpack-dev --display-chunks --profile --color --config ./core/compiler/make_app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "metadata": {
+    "graphql": {
+      "schema": "./src/data/schema.json"
+    }
   },
   "repository": {
     "type": "git",

@@ -1,10 +1,10 @@
 import * as React from 'react';
 import {
   Userarea
-} from '../../../vender.src/components/UserareaComp';
+} from '../../vender.src/components/UserareaComp';
 import {
   SignIn
-} from '../../../vender.src/components/UsersignComp';
+} from '../../vender.src/components/UsersignComp';
 const skeleton = require('../assets/css/sign.styl');
 
 export interface SigninProps {};

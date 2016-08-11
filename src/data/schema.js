@@ -54,6 +54,7 @@ const { nodeInterface, nodeField } = nodeDefinitions(
     return null;
   },
   (obj) => {
+    console.log()
     if (obj instanceof system) {
       return systemType;
     } else if (obj instanceof functions) {
