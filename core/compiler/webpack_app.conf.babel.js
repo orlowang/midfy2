@@ -24,7 +24,7 @@ const webpackConfig = {
                 test: /\.tsx?$/,
                 exclude: /node_modules/,
                 loaders: [
-                    `babel?cacheDirectory,passPerPreset,presets[]=stage-0,presets[]=es2015,plugins[]=transform-class-properties,plugins[]=babel-relay-plugin-loader`,
+                    `babel?passPerPreset,presets[]=stage-0,presets[]=es2015,plugins[]=transform-class-properties,plugins[]=babel-relay-plugin-loader`,
                     'ts'
                 ]
             },
@@ -112,6 +112,7 @@ const webpackConfig = {
                 minifyURLs: true,
             },
             inject: true,
+            debug: !!Midfy.ENV_DEVELOPMENT
         }),
     ],
     postcss: () => {

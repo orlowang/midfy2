@@ -3,7 +3,7 @@ import fs from 'fs';
 import { graphql } from 'graphql';
 import { introspectionQuery, printSchema } from 'graphql/utilities';
 import Midfy from '../config';
-console.log("======????")
+
 let schema = require(`${Midfy.ENV_PROJECTPATH}/data/schema`).default;
 const jsonFile = `${Midfy.ENV_PROJECTPATH}/data/schema.json`;
 const graphQLFile = `${Midfy.ENV_PROJECTPATH}/data/schema.graphql`;

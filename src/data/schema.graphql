@@ -2,11 +2,33 @@ schema {
   query: Query
 }
 
-type Function {
+type Banner {
+  url: String
+  title: String
+  linkTo: String
+  isMarketing: Boolean
+}
+
+type Goods {
   id: String
   name: String
-  description: String
-  icon: String
+  mainImg: String
+  price: Int
+  hasSold: Int
+  inStock: Int
+}
+
+type GoodsDetail {
+  id: String
+  name: String
+  price: Int
+  hasSold: Int
+  kuas: [Kua]
+}
+
+type Kua {
+  name: String
+  key: [String]
 }
 
 interface Node {
@@ -15,17 +37,11 @@ interface Node {
 
 type Query {
   node(id: ID!): Node
+  goodsDetail(id: String): GoodsDetail
   viewer: Viewer
 }
 
-type System {
-  id: String
-  name: String
-  icon: String
-  brief: String
-}
-
 type Viewer {
-  system: [System]
-  functions: [Function]
+  banner: [Banner]
+  goods: [Goods]
 }

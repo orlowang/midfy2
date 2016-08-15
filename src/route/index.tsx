@@ -1,30 +1,45 @@
 // We only need to import the modules necessary for initial render
 import * as Relay from "react-relay";
-import Dashboard from '../views/dashboard';
-import ViewerQuery from "./ViewerQuery";
+import Mall from '../views/Mall';
+import ViewerQuery, {
+  goodsDetailQuery,
+  goodsOrderQuery
+} from "./ViewerQuery";
 import Routes from './routes';
 
 /*  Note: Instead of using JSX, we recommend using react-router
     PlainRoute objects to build route definitions.   */
 let CreateRoutes = [];
 
-export const DashboardRoutes = {
+export const MallRoutes = {
   path: '/',
-  component: Dashboard,
-  childRoutes: Routes,
+  component: Mall,
   queries: ViewerQuery
 }
-CreateRoutes.push(DashboardRoutes)
+CreateRoutes.push(MallRoutes)
 
-export const SignInRoutes = {
-  path: '/signin',
+export const DetailRoutes = {
+  path: '/detail/:goodsid',
   getComponent (nextState, cb) {
     require.ensure([], (require) => {
-      const SignIn = require('../views/signin').default
-      cb(null, SignIn)
-    }, 'SignIn')
-  }
+      const Detail = require('../views/detail').default
+      cb(null, Detail)
+    }, 'Detail')
+  },
+  queries: goodsDetailQuery
 }
-CreateRoutes.push(SignInRoutes)
+CreateRoutes.push(DetailRoutes)
+
+export const OrderRoutes = {
+  path: '/order/:goodsid',
+  getComponent (nextState, cb) {
+    require.ensure([], (require) => {
+      const Order = require('../views/order').default
+      cb(null, Order)
+    }, 'Order')
+  },
+  queries: goodsOrderQuery
+}
+CreateRoutes.push(OrderRoutes)
 
 export default CreateRoutes

@@ -16,6 +16,21 @@ export class Title extends React.Component<TitleProps, {}>{
   }
 }
 
+export interface TextProps {
+  className?: string;
+};
+/**
+ * Text
+ */
+export class Text extends React.Component<TextProps, {}>{
+  render(){
+    let _classname = this.props.className ? ' ' + this.props.className : '';
+    return <p className={`${styl.base} ${styl.textComp}${_classname} textComp`}>
+      {this.props.children}
+    </p>; 
+  }
+}
+
 export interface TextInputProps {
   className?: string;
   ispwd?: boolean;
