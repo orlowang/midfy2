@@ -24,23 +24,43 @@ import {
 } from "../../vender.src/components/MallComp";
 const skeleton = require('../assets/css/skeleton.styl');
 
+class DetailStatus {
+  orderSession: Object;
+}
+
 export interface DetailProps {};
 
-class Detail extends React.Component<DetailProps, {}>{
+class Detail extends React.Component<DetailProps, DetailStatus>{
+  constructor(props){
+    super(props);
+    this.state = {
+      orderSession: {}
+    };
+  };
 
-  componentDidMount(){
-
+  componentWillMount(){
+    let orderSessionID = `order-${this.props.goodsDetail.id}`;
+    if (localStorage[orderSessionID]) {
+      this.setState({
+        orderSession: JSON.parse(localStorage[orderSessionID])
+      })
+    }
   }
 
   render(){
     let ui_kuas = this.props.goodsDetail.kuas.map((kua, index) => {
-      return <GoodsKUASimple className={`${skeleton.goodskua}`} key={index} kuas={kua.key}>
+      let currentKUA = this.state.orderSession[kua.name] || null;
+      return <GoodsKUASimple sessionId={`order-${this.props.goodsDetail.id}`} 
+        className={`${skeleton.goodskua}`} 
+        key={index} 
+        kuas={kua.key}
+        current={currentKUA}>
         {kua.name}
       </GoodsKUASimple>;
     });
     return <div className={`${skeleton.info} info`}>
       <div className={skeleton.root}>
-        <div>
+        <div className={skeleton.rootwrap}>
           <MountAnima>
             <div className={`${skeleton.detail} detail`}>
               <GoodsItem goodsInfo={this.props.goodsDetail.price}>

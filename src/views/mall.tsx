@@ -36,8 +36,7 @@ class Mall extends React.Component<MallProps, {}>{
     return <MountAnimaShow>
       <div className={`${skeleton.root} fmroot`}>
         <Banner className={skeleton.banner} imgList={this.props.viewer.banner}></Banner>
-        <div className={skeleton.goodsList}>{ui_good_list}</div>
-        <Link to={''} className={skeleton.btn}>查看历史活动商品</Link>
+        <div className={`${skeleton.goodsList}`}>{ui_good_list}</div>
       </div>
     </MountAnimaShow>;
   }

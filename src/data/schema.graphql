@@ -38,7 +38,15 @@ interface Node {
 type Query {
   node(id: ID!): Node
   goodsDetail(id: String): GoodsDetail
+  user: User
   viewer: Viewer
+}
+
+type User {
+  id: String
+  name: String
+  phoneNumber: String
+  address: Boolean
 }
 
 type Viewer {

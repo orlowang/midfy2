@@ -6,7 +6,7 @@
   overflow: auto;
   -webkit-overflow-scrolling: touch;
 
-  &>div{
+  .rootwrap{
     padding-bottom: 56rem;
   }
 
@@ -24,6 +24,7 @@
       border-bottom: 1px solid $subFrontBgColor;
       p{
         font-size: 14rem;
+        height: 39.2rem;
       }
       :global(.price){
         font-size: 18rem;
@@ -34,7 +35,6 @@
         color: $subFrontBgColor;
       }
       :global(.wrap){
-        font-weight: 200;
         align-items: flex-end;
       }
       img{
@@ -57,6 +57,7 @@
     :global(.price){
       color: $mainColor;
       font-size: 20rem;
+      line-height: 18rem;
       span{
         font-size: 24rem;
       }
@@ -66,7 +67,6 @@
     }
     :global(.sign){
       font-size: 14rem;
-      font-weight: 200;
       color: $subFrontBgColor;
     }
   }
@@ -136,15 +136,32 @@
 // Counter Component style
 :global(.counter){
   float: right;
-  span{
-    height: 22rem;
-    width: 22rem;
-    border-radius: 2rem;
+  a{
+    &:first-child{
+      border-radius: 2rem 0 0 2rem;
+    }
+    &:last-child{
+      border-radius: 0 2rem 2rem 0;
+    }
+    height: 33rem;
+    width: 33rem;
+    line-height: 30rem;
     background-color: $subBgColor;
+    border: 1px solid $subFrontBgColor;
+    &:active{
+      color: #fff;
+      background-color: $mainColor;
+      border-color: $mainColor;
+    }
   }
   input{
-    margin-left: 8rem;
-    margin-right: 8rem;
+    box-shadow: none;
+    border-radius: 0;
+    padding: 0;
+    border-width: 1px 0;
+    border-style: solid;
+    border-color: $subFrontBgColor;
+    height: 33rem;
     text-align: center;
     width: 40rem; 
   }

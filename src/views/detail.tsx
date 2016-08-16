@@ -23,39 +23,30 @@ const skeleton = require('../assets/css/skeleton.styl');
 
 const mock_detail = `<div>sfsfssfsfs<br/>sfsfssfsfs<br/>sfsfssfsfs<br/>sfsfssfsfs<br/>sfsfssfsfs<br/>sfsfssfsfs<br/>sfsfssfsfs<br/>sfsfssfsfs<br/>sfsfssfsfs<br/>sfsfssfsfs<br/>sfsfssfsfs<br/>sfsfssfsfs<br/>sfsfssfsfs<br/>sfsfssfsfs<br/>sfsfssfsfs<br/>sfsfssfsfs<br/>sfsfssfsfs<br/>sfsfssfsfs<br/>sfsfssfsfs<br/>sfsfssfsfs<br/>sfsfssfsfs<br/></div>`;
 
-class DetailStatus {
-  session: string;
-}
-
 export interface DetailProps {};
 
-class Detail extends React.Component<DetailProps, DetailStatus>{
-  constructor(props){
-    super(props);
-    this.state = {
-      session: localStorage[`order-${this.props.goodsDetail.id}`]
-    };
-  };
+class Detail extends React.Component<DetailProps, {}>{
+
+  componentWillMount(){
+    
+  }
 
   componentDidMount(){
-    if (!this.state.session) {
-      let data = {}, data_string;
-      this.props.goodsDetail.kuas.map((kua) => {
-        data[kua] = ''
-      })
-      localStorage.setItem(`order-${this.props.goodsDetail.id}`, JSON.stringify({"d":12}))
-      this.setState({
-        session: `order-${this.props.goodsDetail.id}`
-      })
-    }
+    console.log(this.props.goodsDetail)
+    // let orderSessionID = `order-${this.props.goodsDetail.id}`;
+    // if (!localStorage[orderSessionID]) {
+    //   let data = {}, data_string;
+    //   this.props.goodsDetail.kuas.map((kua) => {
+    //     data[kua.name] = ''
+    //   })
+    //   localStorage.setItem(orderSessionID, JSON.stringify(data))
+    // }
   }
 
   render(){
-    console.log(JSON.parse(localStorage.getItem(`order-${this.props.goodsDetail.id}`)))
-    console.log(this.state)
     console.log(this.props.goodsDetail)
     let ui_kuas = this.props.goodsDetail.kuas.map((kua, index) => {
-      return <GoodsKUASimple className={`${skeleton.goodskua}`} key={index} kuas={kua.key}>
+      return <GoodsKUASimple sessionId={`order-${this.props.goodsDetail.id}`} className={`${skeleton.goodskua}`} key={index} kuas={kua.key}>
         {kua.name}
       </GoodsKUASimple>;
     });
@@ -66,7 +57,7 @@ class Detail extends React.Component<DetailProps, DetailStatus>{
     };
     return <div className={`${skeleton.info} info`}>
       <div className={skeleton.root}>
-        <div>
+        <div className={skeleton.rootwrap}>
           <MountAnimaShow>
             <Banner className={skeleton.banner} imgList={[]}></Banner>
           </MountAnimaShow>

@@ -18,6 +18,7 @@ export class Title extends React.Component<TitleProps, {}>{
 
 export interface TextProps {
   className?: string;
+  lineClamp?: number;
 };
 /**
  * Text
@@ -25,7 +26,11 @@ export interface TextProps {
 export class Text extends React.Component<TextProps, {}>{
   render(){
     let _classname = this.props.className ? ' ' + this.props.className : '';
-    return <p className={`${styl.base} ${styl.textComp}${_classname} textComp`}>
+    return <p className={`${styl.base} ${styl.textComp}${_classname} textComp`} 
+      style={{
+        WebkitLineClamp: this.props.lineClamp || 2
+      }}
+    >
       {this.props.children}
     </p>; 
   }

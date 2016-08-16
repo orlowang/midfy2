@@ -72,6 +72,7 @@ export interface GoodsKUASimpleProps {
   className?: string;
   kuas: string[];
   sessionId?: string;
+  current?: string;
 };
 
 /**
@@ -81,17 +82,22 @@ export class GoodsKUASimple extends React.Component<GoodsKUASimpleProps, goodsKU
   constructor(props){
     super(props);
     this.state = {
-      selected: ''
+      selected: this.props.current || ''
     };
   };
 
   handleSelect(kua){
     this.setState({
-      selected: kua
+      selected: this.state.selected == kua ? '' : kua
     });
-
-    if (this.props.sessionId) {
-      window.localStorage.setItem(this.props.sessionId, kua)
+    let session = localStorage.getItem(this.props.sessionId);
+    if (this.props.sessionId && session) {
+      let data = JSON.parse(session);
+      data[String(this.props.children)] = this.state.selected == kua ? '' : kua;
+      this.setState({
+        selected: this.state.selected == kua ? '' : kua
+      })
+      localStorage.setItem(this.props.sessionId, JSON.stringify(data))
     }
   }
 
