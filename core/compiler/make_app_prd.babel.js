@@ -7,9 +7,10 @@ let sourcemaps = require('gulp-sourcemaps');
 let Midfy = require('../config');
 
 gulp.task("Make vendors", function() {
+
   
 })
 
 gulp.task("Make polyfill", function() {
-  
+
 })
