@@ -37,7 +37,6 @@ interface Node {
 
 type Query {
   node(id: ID!): Node
-  goodsDetail(id: String): GoodsDetail
   user: User
   viewer: Viewer
 }
@@ -51,5 +50,6 @@ type User {
 
 type Viewer {
   banner: [Banner]
+  goodsDetail(id: String): GoodsDetail
   goods: [Goods]
 }

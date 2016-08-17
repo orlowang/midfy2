@@ -86,6 +86,8 @@ const { nodeInterface, nodeField } = nodeDefinitions(
         return (_, args) => data.banner;
       case 'Goods':
         return (_, args) => data.goods;
+      case 'GoodsDetail':
+        return (_, args) => data.goods;
     }
     return null;
   },
@@ -94,6 +96,8 @@ const { nodeInterface, nodeField } = nodeDefinitions(
       return bannerType;
     } else if (obj instanceof goods) {
       return goodsType;
+    } else if (obj instanceof goodsDetail) {
+      return goodsDetailType;
     }
     return null;
   }
@@ -107,17 +111,6 @@ let viewerType = new GraphQLObjectType({
       type: new GraphQLList(bannerType),
       resolve: (_, args) => data.banner
     },
-    goods: {
-      type: new GraphQLList(goodsType),
-      resolve: (_, args) => data.goods
-    }
-  })
-})
-
-let queryType = new GraphQLObjectType({
-  name: 'Query',
-  fields: () => ({
-    node: nodeField,
     goodsDetail: {
       type: goodsDetailType,
       args: {
@@ -131,6 +124,17 @@ let queryType = new GraphQLObjectType({
         }
       }
     },
+    goods: {
+      type: new GraphQLList(goodsType),
+      resolve: (_, args) => data.goods
+    }
+  })
+})
+
+let queryType = new GraphQLObjectType({
+  name: 'Query',
+  fields: () => ({
+    node: nodeField,
     user: {
       type: userType,
       resolve: (_) => data.user
