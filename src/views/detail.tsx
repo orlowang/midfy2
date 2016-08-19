@@ -12,7 +12,8 @@ import {
   Text
 } from "../../vender.src/components/TextComp";
 import {
-  GoodsItemSimple,
+  GoodsItemFlat,
+  DetailStaticWrap,
   GoodsKUASimple,
   BigBtn
 } from "../../vender.src/components/MallComp";
@@ -32,68 +33,77 @@ class Detail extends React.Component<DetailProps, {}>{
   }
 
   componentDidMount(){
-    console.log(this.props.goodsDetail)
-    // let orderSessionID = `order-${this.props.goodsDetail.id}`;
-    // if (!localStorage[orderSessionID]) {
-    //   let data = {}, data_string;
-    //   this.props.goodsDetail.kuas.map((kua) => {
-    //     data[kua.name] = ''
-    //   })
-    //   localStorage.setItem(orderSessionID, JSON.stringify(data))
-    // }
+    let goods_detail = this.props.viewer.Goods;
+    let orderSessionID = `order-${goods_detail.Id}`;
+    if (!localStorage[orderSessionID]) {
+      let data = {}, data_string;
+      goods_detail.SKU.map((sku) => {
+        data[sku.Name] = ''
+      })
+      localStorage.setItem(orderSessionID, JSON.stringify(data))
+    }
   }
 
   render(){
-    console.log(this.props.goodsDetail)
-    let ui_kuas = this.props.goodsDetail.kuas.map((kua, index) => {
-      return <GoodsKUASimple sessionId={`order-${this.props.goodsDetail.id}`} className={`${skeleton.goodskua}`} key={index} kuas={kua.key}>
-        {kua.name}
-      </GoodsKUASimple>;
-    });
+    let goods_detail = this.props.viewer.Goods;
     let ui_detail = (page) => {
       return {
         __html: page
       }
+    };
+    let data_goods_info = {
+      goodsImage: null,
+      goodsPrice: goods_detail.Price,
+      goodsSubTitle: goods_detail.subTitle,
+      tags: goods_detail.Tags
     };
     return <div className={`${skeleton.info} info`}>
       <div className={skeleton.root}>
         <div className={skeleton.rootwrap}>
           <MountAnimaShow>
             <Banner className={skeleton.banner} imgList={[]}></Banner>
+            <GoodsItemFlat className={skeleton.goodsInfoFlat} goodsInfo={data_goods_info} imagePosition="up">
+              {goods_detail.Name}
+            </GoodsItemFlat>
           </MountAnimaShow>
           <MountAnima>
-            <div className={`${skeleton.detail} detail`}>
-              <GoodsItemSimple goodsPrice={this.props.goodsDetail.price} goodsSign={0}>
-                {this.props.goodsDetail.name}
-              </GoodsItemSimple>
-            </div>
-            {ui_kuas}
-            <ItemIOS className={skeleton.fare} title="运费">
-              <span>￥12.00</span>
-              <span>0.00</span>
-            </ItemIOS>
-            <div className={`${skeleton.goodsinfo}`}>
-              <div dangerouslySetInnerHTML={ui_detail(mock_detail)}></div>
-            </div>
+            <DetailStaticWrap title={'产品描述'}>
+              <div dangerouslySetInnerHTML={ui_detail('safafasfsasfasfasfsafsfsafsfsfsfsfsaf')}></div>
+            </DetailStaticWrap>
+          </MountAnima>
+          <MountAnima delay={200}>
+            <DetailStaticWrap title={'图文详情'}>
+              <div dangerouslySetInnerHTML={ui_detail('safafasfsasfasfasfsafsfsafsfsfsfsfsaf')}></div>
+            </DetailStaticWrap>
           </MountAnima>
         </div>
       </div>
-      <BigBtn to={`/order/${this.props.goodsDetail.id}`}>立即购买</BigBtn>
+      <BigBtn to={`/order/${goods_detail.Id}`}>立即购买</BigBtn>
     </div>;
   }
 }
 
 export default Relay.createContainer(Detail, {
+  initialVariables: {
+    goodsid: null
+  },
   fragments: {
-    goodsDetail: () => Relay.QL`
-      fragments on GoodsDetail {
-        id,
-        name,
-        price,
-        hasSold,
-        kuas{
-          name,
-          key
+    viewer: () => Relay.QL`
+      fragments on Viewer {
+        Goods(id: $goodsid){
+          Id,
+          Name,
+          Photos,
+          Price,
+          subTitle,
+          Tags{
+            Id,
+            Name
+          },
+          SKU{
+            Name,
+            Key
+          }
         }
       }
     `

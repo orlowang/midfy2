@@ -1,9 +1,9 @@
 {
   "user": {
-    "id": "u10001",
-    "name": "蒋先生",
+    "Id": "u10001",
+    "Name": "蒋先生",
     "phoneNumber": 13699998888,
-    "address": "深圳市福田区梅林路万科大厦数据与信息中心住这儿部门"
+    "Address": "深圳市福田区梅林路万科大厦数据与信息中心住这儿部门"
   },
   "banner": [
     {
@@ -30,16 +30,29 @@
   ],
   "goods": [
     {
-      "id": "gs10001",
-      "name": "【苏宁易购超市】清风 淡绿花抽纸2层200抽20包箱装 新老包装随机",
-      "mainImg": "/path/to/img",
-      "price": "23.00",
+      "Id": "gs10001",
+      "Name": "淡绿花抽纸",
+      "subTitle": "【苏宁易购超市】清风 淡绿花抽纸2层200抽20包箱装 新老包装随机",
+      "Photos": [
+        "/path/to/img1",
+        "/path/to/img2",
+        "/path/to/img3",
+        "/path/to/img4",
+        "/path/to/img5"
+      ],
+      "Price": "23.00",
       "hasSold": 1240,
       "inStock": 2390,
-      "kuas": [
+      "Tags": [
         {
-          "name": "型号",
-          "key": [
+          "Id": "001",
+          "Name": "阳光基金"
+        }
+      ],
+      "SKU": [
+        {
+          "Name": "型号",
+          "Key": [
             "AB",
             "CD",
             "EFG",
@@ -48,8 +61,8 @@
           ]
         },
         {
-          "name": "颜色",
-          "key": [
+          "Name": "颜色",
+          "Key": [
             "Red",
             "Yellow",
             "Blue"
@@ -58,16 +71,24 @@
       ]
     },
     {
-      "id": "gs10002",
-      "name": "发货到20点【送耳机+壳+膜】Meizu/魅族 魅蓝note3 全网通4G手机",
-      "mainImg": "/path/to/img",
-      "price": "998.00",
+      "Id": "gs10002",
+      "Name": "魅蓝note3",
+      "subTitle": "发货到20点【送耳机+壳+膜】Meizu/魅族 魅蓝note3 全网通4G手机",
+      "Photos": [
+        "/path/to/img1",
+        "/path/to/img2",
+        "/path/to/img3",
+        "/path/to/img4",
+        "/path/to/img5"
+      ],
+      "Price": "998.00",
       "hasSold": 55,
       "inStock": 1000,
-      "kuas": [
+      "Tags": [],
+      "SKU": [
         {
-          "name": "型号",
-          "key": [
+          "Name": "型号",
+          "Key": [
             "AB",
             "CD",
             "EFG",
@@ -76,8 +97,8 @@
           ]
         },
         {
-          "name": "颜色",
-          "key": [
+          "Name": "颜色",
+          "Key": [
             "Red",
             "Yellow",
             "Blue"
@@ -86,16 +107,24 @@
       ]
     },
     {
-      "id": "gs10003",
-      "name": "源自华为honor/荣耀 荣耀畅玩5X移动版智能手机",
-      "mainImg": "/path/to/img",
-      "price": "1999.00",
+      "Id": "gs10003",
+      "Name": "荣耀畅玩5X",
+      "subTitle": "源自华为honor/荣耀 荣耀畅玩5X移动版智能手机",
+      "Photos": [
+        "/path/to/img1",
+        "/path/to/img2",
+        "/path/to/img3",
+        "/path/to/img4",
+        "/path/to/img5"
+      ],
+      "Price": "1999.00",
       "hasSold": 90,
       "inStock": 2000,
-      "kuas": [
+      "Tags": [],
+      "SKU": [
         {
-          "name": "型号",
-          "key": [
+          "Name": "型号",
+          "Key": [
             "AB",
             "CD",
             "EFG",
@@ -104,8 +133,8 @@
           ]
         },
         {
-          "name": "颜色",
-          "key": [
+          "Name": "颜色",
+          "Key": [
             "Red",
             "Yellow",
             "Blue"
@@ -114,16 +143,29 @@
       ]
     },
     {
-      "id": "gs10004",
-      "name": "现货速发【送上网流量】中移动Apple/苹果 iPhone 6s 手机全网通",
-      "mainImg": "/path/to/img",
-      "price": "5499.00",
+      "Id": "gs10004",
+      "Name": "iPhone 6s",
+      "subTitle": "现货速发【送上网流量】中移动Apple/苹果 iPhone 6s 手机全网通",
+      "Photos": [
+        "/path/to/img1",
+        "/path/to/img2",
+        "/path/to/img3",
+        "/path/to/img4",
+        "/path/to/img5"
+      ],
+      "Price": "5499.00",
       "hasSold": 7899,
       "inStock": 2000,
-      "kuas": [
+      "Tags": [
         {
-          "name": "型号",
-          "key": [
+          "Id": "001",
+          "Name": "阳光基金"
+        }
+      ],
+      "SKU": [
+        {
+          "Name": "型号",
+          "Key": [
             "AB",
             "CD",
             "EFG",
@@ -132,8 +174,8 @@
           ]
         },
         {
-          "name": "颜色",
-          "key": [
+          "Name": "颜色",
+          "Key": [
             "Red",
             "Yellow",
             "Blue"
@@ -142,16 +184,29 @@
       ]
     },
     {
-      "id": "gs10005",
-      "name": "小米MAX智能安卓6.4吋大屏双卡手机包邮Xiaomi/小米 小米Max 64GB",
-      "mainImg": "/path/to/img",
-      "price": "2499.00",
+      "Id": "gs10005",
+      "Name": "小米MAX",
+      "subTitle": "小米MAX智能安卓6.4吋大屏双卡手机包邮Xiaomi/小米 小米Max 64GB",
+      "Photos": [
+        "/path/to/img1",
+        "/path/to/img2",
+        "/path/to/img3",
+        "/path/to/img4",
+        "/path/to/img5"
+      ],
+      "Price": "2499.00",
       "hasSold": 1983,
       "inStock": 12,
-      "kuas": [
+      "Tags": [
         {
-          "name": "型号",
-          "key": [
+          "Id": "001",
+          "Name": "阳光基金"
+        }
+      ],
+      "SKU": [
+        {
+          "Name": "型号",
+          "Key": [
             "AB",
             "CD",
             "EFG",
@@ -160,8 +215,8 @@
           ]
         },
         {
-          "name": "颜色",
-          "key": [
+          "Name": "颜色",
+          "Key": [
             "Red",
             "Yellow",
             "Blue"

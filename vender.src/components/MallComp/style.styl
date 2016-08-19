@@ -15,7 +15,7 @@
   justify-content: space-between;
 }
 
-.goodsKUASimple{
+.goodsSKUSimple{
   display: flex;
   height: 56rem;
   align-items: center;
@@ -38,11 +38,56 @@
   position: fixed;
   bottom: 0;
   width: 100%;
-  height: 56rem;
-  line-height: 56rem;
+  height: 48rem;
+  line-height: 48rem;
   font-size: 18rem;
   background-color: #f39800;
   color: #fff;
   text-align: center;
   text-decoration: none;
+}
+
+.goodsItemFlat{
+  display: flex;
+  .goodsWrap{
+    text-align: center;
+    display: flex;
+    flex: 1;
+    order: 2;
+  }
+  img{
+    flex: 1;
+  }
+  .tag001{
+    background-color: #f60;
+  }
+  .title{
+    width: 100%;
+  }
+  .level{
+    align-items: center;
+    flex-direction: row;
+  }
+  .vertical{
+    justify-content: center;
+    flex-direction: column;
+  }
+  .front{
+    order: 0;
+    & + .split{
+      order: 1
+    }
+  }
+  .end{
+    order: 4;
+    & + .split{
+      order: 3
+    }
+  }
+}
+
+.detailStaticWrap{
+  &>div{
+    overflow: hidden;
+  }
 }

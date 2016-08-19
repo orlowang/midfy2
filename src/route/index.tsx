@@ -1,10 +1,7 @@
 // We only need to import the modules necessary for initial render
 import * as Relay from "react-relay";
 import Mall from '../views/Mall';
-import ViewerQuery, {
-  goodsDetailQuery,
-  goodsOrderQuery
-} from "./ViewerQuery";
+import ViewerQuery from "./ViewerQuery";
 import Routes from './routes';
 
 /*  Note: Instead of using JSX, we recommend using react-router
@@ -26,7 +23,7 @@ export const DetailRoutes = {
       cb(null, Detail)
     }, 'Detail')
   },
-  queries: goodsDetailQuery
+  queries: ViewerQuery,
 }
 CreateRoutes.push(DetailRoutes)
 
@@ -38,8 +35,20 @@ export const OrderRoutes = {
       cb(null, Order)
     }, 'Order')
   },
-  queries: goodsOrderQuery
+  queries: ViewerQuery
 }
 CreateRoutes.push(OrderRoutes)
+
+export const AddressRoutes = {
+  path: '/address/:goodsid',
+  getComponent (nextState, cb) {
+    require.ensure([], (require) => {
+      const Address = require('../views/Address').default
+      cb(null, Address)
+    }, 'Address')
+  },
+  queries: ViewerQuery
+}
+CreateRoutes.push(AddressRoutes)
 
 export default CreateRoutes

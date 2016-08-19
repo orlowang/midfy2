@@ -25,7 +25,8 @@ const Midfycfg = {
             speed: 4
         },
         dlls: ['react', 'react-dom', 'react-relay', 'react-router'],
-        dllsOut: `${basepath}/.__DLLs`
+        dllsOut: `${basepath}/.__DLLs`,
+        noInfo: false
     },
     server: {
         devport: 8088

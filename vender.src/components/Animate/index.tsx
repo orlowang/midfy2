@@ -7,6 +7,7 @@ const styl = require('./style.styl');
 
 export interface MountAnimaProps {
   type?: string;
+  delay?: number;
 };
 
 /**

@@ -10,8 +10,8 @@ export interface TitleProps {
 export class Title extends React.Component<TitleProps, {}>{
   render(){
     let _classname = this.props.className ? ' ' + this.props.className : '';
-    return <div className={`${styl.base}${_classname} titleComp`}>
-      <p>{this.props.children}</p>
+    return <div className={`${styl.titleComp}${_classname} titleComp`}>
+      <span>{this.props.children}</span>
     </div>; 
   }
 }

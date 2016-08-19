@@ -4,7 +4,8 @@ import {
   GraphQLString,
   GraphQLBoolean,
   GraphQLInt,
-  GraphQLList
+  GraphQLList,
+  GraphQLNonNull
 } from 'graphql'
 import {
   nodeDefinitions,
@@ -13,13 +14,29 @@ import {
 
 const data = require('./mock.json')
 
+const skuType = new GraphQLObjectType({
+  name: 'Sku',
+  fields: {
+    Name: {type: GraphQLString},
+    Key: {type: new GraphQLList(GraphQLString)}
+  }
+})
+
+const tagsType = new GraphQLObjectType({
+  name: 'Tags',
+  fields: {
+    Id: {type: GraphQLString},
+    Name: {type: GraphQLString}
+  }
+})
+
 const orderType = new GraphQLObjectType({
   name: 'Order',
   fields: {
-    id: {type: GraphQLString},
+    Id: {type: GraphQLString},
     createTime: {type: GraphQLString},
     goodsId: {type: GraphQLString},
-    goodsKUA: {type: kuaType},
+    goodsSKU: {type: skuType},
     goodsTotalPrice: {type: GraphQLInt},
     userName: {type: GraphQLString},
     userPhoneNumber: {type: GraphQLInt},
@@ -30,51 +47,35 @@ const orderType = new GraphQLObjectType({
 const userType = new GraphQLObjectType({
   name: 'User',
   fields: {
-    id: {type: GraphQLString},
-    name: {type: GraphQLString},
+    Id: {type: GraphQLString},
+    Name: {type: GraphQLString},
     phoneNumber: {type: GraphQLString},
-    address: {type: GraphQLBoolean},
-  }
-})
-
-const bannerType = new GraphQLObjectType({
-  name: 'Banner',
-  fields: {
-    url: {type: GraphQLString},
-    title: {type: GraphQLString},
-    linkTo: {type: GraphQLString},
-    isMarketing: {type: GraphQLBoolean},
+    Address: {type: GraphQLBoolean},
   }
 })
 
 const goodsType = new GraphQLObjectType({
   name: 'Goods',
   fields: {
-    id: {type: GraphQLString},
-    name: {type: GraphQLString},
-    mainImg: {type: GraphQLString},
-    price: {type: GraphQLInt},
+    Id: {type: GraphQLString},
+    Name: {type: GraphQLString},
+    subTitle: {type: GraphQLString},
+    Photos: {type: new GraphQLList(GraphQLString)},
+    mainPhoto: {
+      type: GraphQLString,
+      args: {
+        index: {
+          type: GraphQLInt,
+          defaultValue: 0
+        }
+      },
+      resolve: (obj, args) => obj.Photos[args.index]
+    },
+    Price: {type: GraphQLInt},
     hasSold: {type: GraphQLInt},
-    inStock: {type: GraphQLInt}
-  }
-})
-
-const kuaType = new GraphQLObjectType({
-  name: 'Kua',
-  fields: {
-    name: {type: GraphQLString},
-    key: {type: new GraphQLList(GraphQLString)}
-  }
-})
-
-const goodsDetailType = new GraphQLObjectType({
-  name: 'GoodsDetail',
-  fields: {
-    id: {type: GraphQLString},
-    name: {type: GraphQLString},
-    price: {type: GraphQLInt},
-    hasSold: {type: GraphQLInt},
-    kuas: {type: new GraphQLList(kuaType)}
+    inStock: {type: GraphQLInt},
+    Tags: {type: new GraphQLList(tagsType)},
+    SKU: {type: new GraphQLList(skuType)}
   }
 })
 
@@ -103,11 +104,22 @@ let viewerType = new GraphQLObjectType({
   name: "Viewer",
   description: "Base type for Smashgather queries",
   fields: () => ({
-    banner: {
-      type: new GraphQLList(bannerType),
-      resolve: (_, args) => data.banner
+    Goods: {
+      type: goodsType,
+      args: {
+        id: {
+          type: new GraphQLNonNull(GraphQLString)
+        }
+      },
+      resolve: (_, args) => {
+        for (let i = 0; i < data.goods.length; i++) {
+          if (data.goods[i].Id == args.id) {
+            return data.goods[i]
+          }
+        }
+      }
     },
-    goods: {
+    goodsList: {
       type: new GraphQLList(goodsType),
       resolve: (_, args) => data.goods
     }
@@ -118,19 +130,6 @@ let queryType = new GraphQLObjectType({
   name: 'Query',
   fields: () => ({
     node: nodeField,
-    goodsDetail: {
-      type: goodsDetailType,
-      args: {
-        id: {type: GraphQLString}
-      },
-      resolve: (_, args) => {
-        for (let i = 0; i < data.goods.length; i++) {
-          if (data.goods[i].id == args.id) {
-            return data.goods[i]
-          }
-        }
-      }
-    },
     user: {
       type: userType,
       resolve: (_) => data.user

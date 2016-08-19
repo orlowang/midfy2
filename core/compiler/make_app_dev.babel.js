@@ -50,7 +50,9 @@ gulp.task("rundev", ["webpack:Build Schema"], function(){
     if (err) {
       console.log('[ERR]:'+err)
       buildDLLs(function(){
-        serv.use(webpackDevMiddleware(webpack(webpackConfig)));
+        serv.use(webpackDevMiddleware(webpack(webpackConfig), {
+          noInfo: Midfy.compile.noInfo
+        }));
       });
       return;
     }
@@ -58,11 +60,15 @@ gulp.task("rundev", ["webpack:Build Schema"], function(){
     let version = JSON.parse(data).version;
     if (version != deps.version) {
       buildDLLs(function(){
-        serv.use(webpackDevMiddleware(webpack(webpackConfig)));
+        serv.use(webpackDevMiddleware(webpack(webpackConfig), {
+          noInfo: Midfy.compile.noInfo
+        }));
       });
       return;
     }
-    serv.use(webpackDevMiddleware(webpack(webpackConfig)));
+    serv.use(webpackDevMiddleware(webpack(webpackConfig), {
+      noInfo: Midfy.compile.noInfo
+    }));
   })
   serv.listen(Midfy.server.devport, function(){
     // console.log("server is start.")

@@ -2,33 +2,17 @@ schema {
   query: Query
 }
 
-type Banner {
-  url: String
-  title: String
-  linkTo: String
-  isMarketing: Boolean
-}
-
 type Goods {
-  id: String
-  name: String
-  mainImg: String
-  price: Int
+  Id: String
+  Name: String
+  subTitle: String
+  Photos: [String]
+  mainPhoto(index: Int = 0): String
+  Price: Int
   hasSold: Int
   inStock: Int
-}
-
-type GoodsDetail {
-  id: String
-  name: String
-  price: Int
-  hasSold: Int
-  kuas: [Kua]
-}
-
-type Kua {
-  name: String
-  key: [String]
+  Tags: [Tags]
+  SKU: [Sku]
 }
 
 interface Node {
@@ -37,19 +21,28 @@ interface Node {
 
 type Query {
   node(id: ID!): Node
-  goodsDetail(id: String): GoodsDetail
   user: User
   viewer: Viewer
 }
 
+type Sku {
+  Name: String
+  Key: [String]
+}
+
+type Tags {
+  Id: String
+  Name: String
+}
+
 type User {
-  id: String
-  name: String
+  Id: String
+  Name: String
   phoneNumber: String
-  address: Boolean
+  Address: Boolean
 }
 
 type Viewer {
-  banner: [Banner]
-  goods: [Goods]
+  Goods(id: String!): Goods
+  goodsList: [Goods]
 }

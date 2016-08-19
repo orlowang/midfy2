@@ -19,7 +19,7 @@ import {
 } from "../../vender.src/components/TextComp";
 import {
   GoodsItem,
-  GoodsKUASimple,
+  GoodsSKUSimple,
   BigBtn
 } from "../../vender.src/components/MallComp";
 const skeleton = require('../assets/css/skeleton.styl');
@@ -39,7 +39,8 @@ class Detail extends React.Component<DetailProps, DetailStatus>{
   };
 
   componentWillMount(){
-    let orderSessionID = `order-${this.props.goodsDetail.id}`;
+    let goods_detail = this.props.viewer.Goods;
+    let orderSessionID = `order-${goods_detail.Id}`;
     if (localStorage[orderSessionID]) {
       this.setState({
         orderSession: JSON.parse(localStorage[orderSessionID])
@@ -48,26 +49,33 @@ class Detail extends React.Component<DetailProps, DetailStatus>{
   }
 
   render(){
-    let ui_kuas = this.props.goodsDetail.kuas.map((kua, index) => {
-      let currentKUA = this.state.orderSession[kua.name] || null;
-      return <GoodsKUASimple sessionId={`order-${this.props.goodsDetail.id}`} 
-        className={`${skeleton.goodskua}`} 
+    let goods_detail = this.props.viewer.Goods;
+    let ui_sku = goods_detail.SKU.map((sku, index) => {
+      let currentSKU = this.state.orderSession[sku.Name] || null;
+      return <GoodsSKUSimple sessionId={`order-${goods_detail.Id}`} 
+        className={`${skeleton.goodsSKU}`} 
         key={index} 
-        kuas={kua.key}
-        current={currentKUA}>
-        {kua.name}
-      </GoodsKUASimple>;
+        sku={sku.Key}
+        current={currentSKU}>
+        {sku.Name}
+      </GoodsSKUSimple>;
     });
-    return <div className={`${skeleton.info} info`}>
+    let data_goods = {
+      goodsImage: goods_detail.mainPhoto,
+      goodsPrice: goods_detail.Price,
+      goodsSubTitle: goods_detail.subTitle,
+      inStock: goods_detail.inStock
+    };
+    return <div className={`${skeleton.order} order`}>
       <div className={skeleton.root}>
         <div className={skeleton.rootwrap}>
           <MountAnima>
             <div className={`${skeleton.detail} detail`}>
-              <GoodsItem goodsInfo={this.props.goodsDetail.price}>
-                {this.props.goodsDetail.name}
+              <GoodsItem goodsInfo={data_goods} signType={'inStock'}>
+                {goods_detail.Name}
               </GoodsItem>
             </div>
-            {ui_kuas}
+            {ui_sku}
             <ItemIOS className={skeleton.fare} title="运费">
               <span>￥12.00</span>
               <span>0.00</span>
@@ -89,22 +97,29 @@ class Detail extends React.Component<DetailProps, DetailStatus>{
           </MountAnima>
         </div>
       </div>
-      <BigBtn to={`/order/${this.props.goodsDetail.id}`}>付款</BigBtn>
+      <BigBtn to={`/order/${goods_detail.Id}`}>付款</BigBtn>
     </div>;
   }
 }
 
 export default Relay.createContainer(Detail, {
+  initialVariables: {
+    goodsid: null
+  },
   fragments: {
-    goodsDetail: () => Relay.QL`
-      fragments on GoodsDetail {
-        id,
-        name,
-        price,
-        hasSold,
-        kuas{
-          name,
-          key
+    viewer: () => Relay.QL`
+      fragments on Viewer {
+        Goods(id: $goodsid){
+          Id,
+          Name,
+          mainPhoto,
+          Price,
+          subTitle,
+          inStock,
+          SKU{
+            Name,
+            Key
+          }
         }
       }
     `

@@ -3,10 +3,7 @@ import * as Relay from "react-relay";
 const skeleton = require('../assets/css/skeleton.styl');
 import { Link } from 'react-router';
 import {
-  Banner
-} from '../../vender.src/components/BannerComp';
-import {
-  GoodsItem
+  GoodsItemFlat
 } from '../../vender.src/components/MallComp';
 import {
   MountAnimaShow
@@ -18,24 +15,24 @@ class Mall extends React.Component<MallProps, {}>{
 
 
   render(){
-    let ui_good_list = this.props.viewer.goods.map((goods, index) => {
+    let ui_good_list = this.props.viewer.goodsList.map((goods, index) => {
       let data = {
-        goodsImage: goods.mainImg,
-        goodsPrice: goods.price,
+        goodsImage: goods.mainPhoto,
+        goodsPrice: goods.Price,
+        goodsSubTitle: goods.subTitle,
         hasSold: goods.hasSold,
         inStock: goods.inStock,
-        tags: [],
+        tags: goods.Tags,
       };
-      return <Link key={index} to={`/detail/${goods.id}`}>
-        <GoodsItem className={skeleton.goodsitem} goodsInfo={data}>
-          {goods.name}
-        </GoodsItem>
+      return <Link key={index} to={`/detail/${goods.Id}`}>
+        <GoodsItemFlat imagePosition={index%2 ? 'down' : 'up'} className={skeleton.goodsItemFlat} goodsInfo={data}>
+          {goods.Name}
+        </GoodsItemFlat>
       </Link>;
     });
-    
     return <MountAnimaShow>
       <div className={`${skeleton.root} fmroot`}>
-        <Banner className={skeleton.banner} imgList={this.props.viewer.banner}></Banner>
+        <div className={skeleton.banner}></div>
         <div className={`${skeleton.goodsList}`}>{ui_good_list}</div>
       </div>
     </MountAnimaShow>;
@@ -46,19 +43,16 @@ export default Relay.createContainer(Mall, {
   fragments: {
     viewer: () => Relay.QL`
       fragments on Viewer {
-        goods {
-          id,
-          name,
-          mainImg,
-          price,
-          hasSold,
-          inStock
-        },
-        banner {
-          url,
-          title,
-          linkTo,
-          isMarketing
+        goodsList {
+          Id,
+          Name,
+          subTitle,
+          mainPhoto,
+          Price,
+          Tags {
+            Id,
+            Name
+          },
         }
       }
     `

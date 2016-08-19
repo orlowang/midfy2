@@ -18,13 +18,22 @@
     a{
       text-decoration: none;
     }
-    .goodsitem{
+    .goodsItemFlat{
       padding: 16rem;
       box-sizing: border-box;
       border-bottom: 1px solid $subFrontBgColor;
-      p{
+      :global(.split){
+        width: 16rem;
+      }
+      :global(.titleComp){
         font-size: 14rem;
-        height: 39.2rem;
+      }
+      :global(.textComp){
+        margin-top: 4rem;
+        margin-bottom: 8rem;
+        line-height: 20rem;
+        font-size: 12rem;
+        color: $subFrontBgColor;
       }
       :global(.price){
         font-size: 18rem;
@@ -38,9 +47,8 @@
         align-items: flex-end;
       }
       img{
-        width: 72rem;
-        height: 72rem;
-        margin-right: 16rem;
+        width: 164rem;
+        height: 164rem;
       }
     }
   }
@@ -49,28 +57,85 @@
 .info{
   height: 100%;
   .banner{
-    height: 375rem;
+    width: 100%;
+    height: 175rem;
   }
-  .detail{
+  .goodsInfoFlat{
     background-color: #fff;
-    padding: 16rem;
-    :global(.price){
-      color: $mainColor;
+    margin-bottom: 8rem;
+    padding: 0 16rem 24rem;
+    :global(.titleComp){
       font-size: 20rem;
-      line-height: 18rem;
-      span{
-        font-size: 24rem;
-      }
     }
-    :global(.wrap){
-      align-items: center;
-    }
-    :global(.sign){
+    :global(.textComp){
+      margin-top: 4rem;
+      margin-bottom: 8rem;
+      line-height: 20rem;
       font-size: 14rem;
       color: $subFrontBgColor;
     }
+    :global(.price){
+      font-size: 20rem;
+      color: $mainColor;
+    }
   }
-  .goodskua{
+}
+
+// Counter Component style
+:global(.counter){
+  float: right;
+  a{
+    &:first-child{
+      border-radius: 2rem 0 0 2rem;
+    }
+    &:last-child{
+      border-radius: 0 2rem 2rem 0;
+    }
+    height: 33rem;
+    width: 33rem;
+    line-height: 30rem;
+    background-color: $subBgColor;
+    border: 1px solid $subFrontBgColor;
+    &:active{
+      color: #fff;
+      background-color: $mainColor;
+      border-color: $mainColor;
+    }
+  }
+  input{
+    box-shadow: none;
+    border-radius: 0;
+    padding: 0;
+    border-width: 1px 0;
+    border-style: solid;
+    border-color: $subFrontBgColor;
+    height: 33rem;
+    text-align: center;
+    width: 40rem; 
+  }
+}
+
+:global(.detailStaticWrap){
+  background-color: #fff;
+  padding: 24rem 16rem;
+  margin-bottom: 8rem;
+  :global(.titleComp){
+    text-align: center;
+    span{
+      font-size: 16rem;
+      padding-bottom: 4rem;
+      border-bottom: 2rem solid $mainColor;
+    }
+    margin-bottom: 24rem;
+  }
+}
+
+.order{
+  .detail{
+    padding: 16rem;
+    background-color: #fff;
+  }
+  .goodsSKU{
     border-top: 1px solid $subFrontBgColor;
     padding-left: 16rem;
     padding-right: 16rem;
@@ -131,38 +196,27 @@
       margin-bottom: 0;
     }
   }
-}
-
-// Counter Component style
-:global(.counter){
-  float: right;
-  a{
-    &:first-child{
-      border-radius: 2rem 0 0 2rem;
+  :global(.goodsItem){
+    img{
+      width: 72rem;
+      height: 72rem;
+      margin-right: 16rem;
     }
-    &:last-child{
-      border-radius: 0 2rem 2rem 0;
+    :global(.title){
+      font-size: 14rem;
     }
-    height: 33rem;
-    width: 33rem;
-    line-height: 30rem;
-    background-color: $subBgColor;
-    border: 1px solid $subFrontBgColor;
-    &:active{
-      color: #fff;
-      background-color: $mainColor;
-      border-color: $mainColor;
+    :global(.text){
+      color: $subFrontBgColor;
+      margin-top: 4rem;
+      margin-bottom: 4rem;
+      font-size: 12rem;
     }
-  }
-  input{
-    box-shadow: none;
-    border-radius: 0;
-    padding: 0;
-    border-width: 1px 0;
-    border-style: solid;
-    border-color: $subFrontBgColor;
-    height: 33rem;
-    text-align: center;
-    width: 40rem; 
+    :global(.price){
+      font-size: 12rem;
+    }
+    :global(.sign){
+      color: $subFrontBgColor;
+      font-size: 12rem;
+    }
   }
 }
