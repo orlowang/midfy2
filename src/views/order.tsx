@@ -2,7 +2,8 @@ import * as React from 'react';
 import * as Relay from "react-relay";
 import { Link } from 'react-router';
 import {
-  ItemIOS
+  ItemIOS,
+  ItemIOSLink
 } from '../../vender.src/components/ItemIOSComp';
 import {
   Counter
@@ -80,14 +81,14 @@ class Detail extends React.Component<DetailProps, DetailStatus>{
               <span>￥12.00</span>
               <span>0.00</span>
             </ItemIOS>
-            <div className={skeleton.address}>
-              <span>收货人：{`蒋先生`}</span>
-              <span className={skeleton.phone}>{`13966668888`}</span>
-              <p>收货地址：{`深圳市福田区梅林路万科大厦数据与信息中心住这儿部门`}</p>
-            </div>
             <ItemIOS className={skeleton.itemIOS} title='数量'>
               <Counter></Counter>
             </ItemIOS>
+            <ItemIOSLink link={'/address/1'}>
+              <span>收货人：{`蒋先生`}</span>
+              <span className={skeleton.phone}>{`13966668888`}</span>
+              <p>收货地址：{`深圳市福田区梅林路万科大厦数据与信息中心住这儿部门`}</p>
+            </ItemIOSLink>
             <ItemIOS className={skeleton.weixin} title="付款方式">
               <span>微信支付</span>
             </ItemIOS>

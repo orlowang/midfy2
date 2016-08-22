@@ -1,22 +1,24 @@
-.itemIOS{
+.SquareArrow{
   display: flex;
-  align-items: center;
-  background-color: #fff;
-  border-top: 1px solid #ccc;
-  .wrap{
+  .arrow{
     display: flex;
-    flex: 1;
-    justify-content: flex-end;
+    align-items: center;
+    padding-top: 35.355%;
+    width: 100%;
+    &>i{
+      width: 100%;
+      border-top-style: solid;
+      &:first-child{
+        transform: rotate(45deg);
+        transform-origin: 100% 100%;
+      }
+      &:last-child{
+        transform: rotate(-45deg);
+        transform-origin: 0 100%;
+      }
+    }
+    &.right{
+      transform: rotate(-90deg);
+    }
   }
-  &:last-child{
-    border-top-width: 0;
-  }
-  &:last-child{
-    border-top-width: 1px;
-  }
-}
-
-.itemIOSLink{
-  display: flex;
-  justify-content: center;
 }

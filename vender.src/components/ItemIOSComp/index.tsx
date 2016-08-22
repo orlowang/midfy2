@@ -1,5 +1,9 @@
 import * as React from 'react';
 import { Link } from 'react-router';
+import {
+  SquareArrow
+} from '../SymbolComp';
+const ArrowRight = require('react-icons/lib/md/keyboard-arrow-right');
 const styl = require('./style.styl');
 
 export interface ItemIOSProps {
@@ -33,7 +37,9 @@ export class ItemIOSLink extends React.Component<ItemIOSLinkProps, {}>{
     let _classname = this.props.className ? ' ' + this.props.className : '';
     return <Link to={this.props.link} className={`${styl.itemIOSLink}${_classname} itemIOSLink`}>
       <div className={`${styl.wrap} wrap`}>{this.props.children}</div>
-      <span className={`${styl.arr} arr`}></span>
+      <div className={styl.arrow}>
+        <ArrowRight size={'64'} color={'#909090'}/>
+      </div>
     </Link>; 
   }
 }

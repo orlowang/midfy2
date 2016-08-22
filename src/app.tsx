@@ -1,7 +1,6 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import * as Relay from "react-relay";
-import Dashboard from "./views/dashboard";
 import {
   applyRouterMiddleware,
   browserHistory,

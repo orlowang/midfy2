@@ -38,7 +38,7 @@ export class Text extends React.Component<TextProps, {}>{
 
 export interface TextInputProps {
   className?: string;
-  ispwd?: boolean;
+  type?: string;
   placeholder?: string;
   filter?: string;
   verification?: string;
@@ -101,7 +101,7 @@ export class TextInput extends React.Component<TextInputProps, TextInputState>{
     let _classname = this.props.className ? ' ' + this.props.className : '';
     let _input_status = this.state.isinput ? ` ${styl.active} active` : '';
     return <div className={`${styl.textInput}${_classname}${_input_status} textInputComp`}>
-      <input ref="text" type={this.props.ispwd ? 'password' : 'text'} 
+      <input ref="text" type={this.props.type || 'text'} 
         onFocus={this.activeInput.bind(this)}
         onInput={this.props.filter && this.textFilter.bind(this)}
         onBlur={this.textVerify.bind(this)} 

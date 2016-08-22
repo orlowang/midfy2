@@ -3,7 +3,8 @@ $mainColor = #f39800
 $mainFontColor = #393939
 $mainBgColor = #faf8f5
 $subBgColor = #f2f0ed
-$subFrontBgColor = #cccccc
+$subFrontBgColor = #909090
+$IOSborderColor = #e6e4e1
 
 $themeColor = #0ead87
 $therdFontColor = #979799
@@ -58,13 +59,14 @@ tap0hightlight{-webkit-tap-highlight-color: rgba(0,0,0,0)}
 @import '../../../node_modules/normalize.css/normalize.css';
 
 body{
-  font-size: 16rem;
+  font-size: 1.33333rem;
   user-select: none; 
   font-family: "Myriad Set Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
   background-color: $mainBgColor;
   color: $mainFontColor;
   outline: none;
   -webkit-tap-highlight-color: rgba(0,0,0,0);
+  -webkit-text-size-adjust: none;
 }
 a{
   outline: none;

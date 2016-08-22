@@ -15,7 +15,7 @@ export interface MountAnimaProps {
  */
 export class MountAnima extends React.Component<MountAnimaProps, {}>{
   render(){
-    return <Motion defaultStyle={{y: 20, o: .2}} style={{y: spring(0), o: spring(1)}}>
+    return <Motion defaultStyle={{y: 1.66667, o: .2}} style={{y: spring(0), o: spring(1)}}>
       {({y, o}) => <div style={{
         WebkitTransform: `translate3d(0, ${y}rem, 0)`,
         transform: `translate3d(0, ${y}rem, 0)`,

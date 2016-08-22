@@ -14,7 +14,7 @@ import {
 import {
   GoodsItemFlat,
   DetailStaticWrap,
-  GoodsKUASimple,
+  GoodsSKUSimple,
   BigBtn
 } from "../../vender.src/components/MallComp";
 import {

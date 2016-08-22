@@ -31,7 +31,7 @@ class Mall extends React.Component<MallProps, {}>{
       </Link>;
     });
     return <MountAnimaShow>
-      <div className={`${skeleton.root} fmroot`}>
+      <div className={`${skeleton.root} ${skeleton.scrollwrap} fmroot`}>
         <div className={skeleton.banner}></div>
         <div className={`${skeleton.goodsList}`}>{ui_good_list}</div>
       </div>

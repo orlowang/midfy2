@@ -96,7 +96,7 @@ export class Counter extends React.Component<CounterProps, CounterStatus>{
     let _max_limit_classname = this.state.maxLimit ? `${styl.noaction} noaction` : '';
     return <div className={`${styl.counter}${_classname} counter`}>
       <a onClick={this.handleReduce.bind(this)} className={_min_limit_classname}>-</a>
-      <input onChange={this.handleChange.bind(this)} onBlur={this.handleLeaveCheck.bind(this)} ref="counter" type="text" value={this.state.count}/>
+      <input onChange={this.handleChange.bind(this)} onBlur={this.handleLeaveCheck.bind(this)} ref="counter" type="tel" value={this.state.count}/>
       <a onClick={this.handlePlus.bind(this)} className={_max_limit_classname}>+</a>
     </div>; 
   }
