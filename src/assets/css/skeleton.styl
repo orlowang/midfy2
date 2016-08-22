@@ -60,14 +60,14 @@
 
 .info{
   height: 100%;
-  .banner{
+  .slideTouch{
     width: 100%;
     height: 14.83333rem;;
   }
   .goodsInfoFlat{
     background-color: #fff;
     margin-bottom: 0.66667rem;
-    padding: 0 1.33333rem 2rem;
+    padding: 2rem 1.33333rem;
     :global(.titleComp){
       font-size: 1.66667rem;
     }
@@ -289,5 +289,23 @@
 :global(.itemIOSLink){
   :global(.arrow){
     width: 2rem;
+  }
+}
+
+:global(.slideTouch){
+  :global(.status){
+    position: relative;
+    z-index: 1;
+    margin-left: -0.5rem;
+    span{
+      height: 0.16667rem;
+      background-color: $IOSborderColor;
+      margin-top: -1.33333rem;
+      width: 3.4rem;
+      margin-left: 0.5rem;
+    }
+    :global(.on){
+      background-color: $mainColor;
+    }
   }
 }

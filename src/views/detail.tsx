@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as Relay from "react-relay";
 import { Link } from 'react-router';
 import {
-  Banner
+  SlideTouch
 } from '../../vender.src/components/BannerComp';
 import {
   MountAnima,
@@ -45,7 +45,7 @@ class Detail extends React.Component<DetailProps, {}>{
   }
 
   render(){
-    let goods_detail = this.props.viewer.Goods;
+    let goods_detail = this.props.viewer.Goods, goods_photos = [];
     let ui_detail = (page) => {
       return {
         __html: page
@@ -57,11 +57,17 @@ class Detail extends React.Component<DetailProps, {}>{
       goodsSubTitle: goods_detail.subTitle,
       tags: goods_detail.Tags
     };
+    goods_detail.Photos.map((photo) => {
+      goods_photos.push({
+        url: photo
+      })
+    })
+
     return <div className={`${skeleton.info} info`}>
       <div className={skeleton.root}>
         <div className={skeleton.rootwrap}>
           <MountAnimaShow>
-            <Banner className={skeleton.banner} imgList={[]}></Banner>
+            <SlideTouch className={skeleton.slideTouch} imgList={goods_photos}></SlideTouch>
             <GoodsItemFlat className={skeleton.goodsInfoFlat} goodsInfo={data_goods_info} imagePosition="up">
               {goods_detail.Name}
             </GoodsItemFlat>
