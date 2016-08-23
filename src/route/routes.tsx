@@ -2,15 +2,15 @@
 
 const _list = [];
 
-export const DetailRoutes = {
-  path: '/detail/:goodsid',
+export const OverviewRoutes = {
+  path: '/sys/:sysid',
   getComponent (nextState, cb) {
     require.ensure([], (require) => {
-      const Detail = require('../views/detail').default
-      cb(null, Detail)
-    }, 'Detail')
+      const Overview = require('../views/overview').default
+      cb(null, Overview)
+    }, 'Overview')
   }
 }
-_list.push(DetailRoutes);
+_list.push(OverviewRoutes);
 
 export default _list
