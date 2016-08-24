@@ -30,6 +30,9 @@ const Midfycfg = {
     server: {
         devport: 8088
     },
+    SIMPLE_GRAPHQL_SRV: {
+        port: 8089
+    },
     AUTOPREFIXER_BROWSERS: [
         'Android 2.3',
         'Android >= 4',

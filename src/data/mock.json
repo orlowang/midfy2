@@ -1,171 +1,60 @@
 {
-  "user": {
-    "id": "u10001",
-    "name": "蒋先生",
-    "phoneNumber": 13699998888,
-    "address": "深圳市福田区梅林路万科大厦数据与信息中心住这儿部门"
-  },
-  "banner": [
+  "menu": [
     {
-      "url": "url",
-      "title": "title",
-      "linkTo": "linkto",
-      "isMarketing": "false"
-    },{
-      "url": "url",
-      "title": "title",
-      "linkTo": "linkto",
-      "isMarketing": "false"
-    },{
-      "url": "url",
-      "title": "title",
-      "linkTo": "linkto",
-      "isMarketing": "false"
-    },{
-      "url": "url",
-      "title": "title",
-      "linkTo": "linkto",
-      "isMarketing": "false"
-    }
-  ],
-  "goods": [
+      "id": 201,
+      "name": "system 01",
+      "keyprop": "icos.fire",
+      "url": "sys/201",
+      "child": []
+    },
     {
-      "id": "gs10001",
-      "name": "【苏宁易购超市】清风 淡绿花抽纸2层200抽20包箱装 新老包装随机",
-      "mainImg": "/path/to/img",
-      "price": "23.00",
-      "hasSold": 1240,
-      "inStock": 2390,
-      "kuas": [
+      "id": 202,
+      "name": "system 02",
+      "keyprop": "icos.fire",
+      "url": null,
+      "child": [
         {
-          "name": "型号",
-          "key": [
-            "AB",
-            "CD",
-            "EFG",
-            "HI",
-            "J"
-          ]
+          "id": 2021,
+          "name": "system 02-1",
+          "keyprop": "icos.fire",
+          "url": "sys/2021",
+          "child": []
         },
         {
-          "name": "颜色",
-          "key": [
-            "Red",
-            "Yellow",
-            "Blue"
-          ]
+          "id": 2022,
+          "name": "system 02-2",
+          "keyprop": "icos.fire",
+          "url": "sys/2022",
+          "child": []
         }
       ]
     },
     {
-      "id": "gs10002",
-      "name": "发货到20点【送耳机+壳+膜】Meizu/魅族 魅蓝note3 全网通4G手机",
-      "mainImg": "/path/to/img",
-      "price": "998.00",
-      "hasSold": 55,
-      "inStock": 1000,
-      "kuas": [
-        {
-          "name": "型号",
-          "key": [
-            "AB",
-            "CD",
-            "EFG",
-            "HI",
-            "J"
-          ]
-        },
-        {
-          "name": "颜色",
-          "key": [
-            "Red",
-            "Yellow",
-            "Blue"
-          ]
-        }
-      ]
+      "id": 203,
+      "name": "system 03",
+      "keyprop": "icos.fire",
+      "url": "sys/203",
+      "child": []
     },
     {
-      "id": "gs10003",
-      "name": "源自华为honor/荣耀 荣耀畅玩5X移动版智能手机",
-      "mainImg": "/path/to/img",
-      "price": "1999.00",
-      "hasSold": 90,
-      "inStock": 2000,
-      "kuas": [
+      "id": 204,
+      "name": "system 04",
+      "keyprop": "icos.fire",
+      "url": null,
+      "child": [
         {
-          "name": "型号",
-          "key": [
-            "AB",
-            "CD",
-            "EFG",
-            "HI",
-            "J"
-          ]
+          "id": 2041,
+          "name": "system 04-1",
+          "keyprop": "icos.fire",
+          "url": "sys/2041",
+          "child": []
         },
         {
-          "name": "颜色",
-          "key": [
-            "Red",
-            "Yellow",
-            "Blue"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "gs10004",
-      "name": "现货速发【送上网流量】中移动Apple/苹果 iPhone 6s 手机全网通",
-      "mainImg": "/path/to/img",
-      "price": "5499.00",
-      "hasSold": 7899,
-      "inStock": 2000,
-      "kuas": [
-        {
-          "name": "型号",
-          "key": [
-            "AB",
-            "CD",
-            "EFG",
-            "HI",
-            "J"
-          ]
-        },
-        {
-          "name": "颜色",
-          "key": [
-            "Red",
-            "Yellow",
-            "Blue"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "gs10005",
-      "name": "小米MAX智能安卓6.4吋大屏双卡手机包邮Xiaomi/小米 小米Max 64GB",
-      "mainImg": "/path/to/img",
-      "price": "2499.00",
-      "hasSold": 1983,
-      "inStock": 12,
-      "kuas": [
-        {
-          "name": "型号",
-          "key": [
-            "AB",
-            "CD",
-            "EFG",
-            "HI",
-            "J"
-          ]
-        },
-        {
-          "name": "颜色",
-          "key": [
-            "Red",
-            "Yellow",
-            "Blue"
-          ]
+          "id": 2042,
+          "name": "system 04-2",
+          "keyprop": "icos.fire",
+          "url": "sys/2042",
+          "child": []
         }
       ]
     }

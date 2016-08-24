@@ -7,22 +7,6 @@ export default {
     }`
 };
 
-export const goodsDetailQuery = {
-  goodsDetail: () => Relay.QL`
-    query {
-      goodsDetail(id: $goodsid)
-    }
-  `
-}
-
-export const goodsOrderQuery = {
-  goodsDetail: () => Relay.QL`
-    query {
-      goodsDetail(id: $goodsid)
-    }
-  `
-}
-
 // get viewer by component
 // export default {
 //   viewer: (component) => Relay.QL`

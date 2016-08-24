@@ -2,33 +2,12 @@ schema {
   query: Query
 }
 
-type Banner {
+type Menu {
+  id: String
+  name: String
+  keyprop: String
   url: String
-  title: String
-  linkTo: String
-  isMarketing: Boolean
-}
-
-type Goods {
-  id: String
-  name: String
-  mainImg: String
-  price: Int
-  hasSold: Int
-  inStock: Int
-}
-
-type GoodsDetail {
-  id: String
-  name: String
-  price: Int
-  hasSold: Int
-  kuas: [Kua]
-}
-
-type Kua {
-  name: String
-  key: [String]
+  child: [Menu]
 }
 
 interface Node {
@@ -37,19 +16,9 @@ interface Node {
 
 type Query {
   node(id: ID!): Node
-  user: User
   viewer: Viewer
 }
 
-type User {
-  id: String
-  name: String
-  phoneNumber: String
-  address: Boolean
-}
-
 type Viewer {
-  banner: [Banner]
-  goodsDetail(id: String): GoodsDetail
-  goods: [Goods]
+  menu: [Menu]
 }

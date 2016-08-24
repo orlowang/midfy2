@@ -7,6 +7,7 @@
     "start": "NODE_ENV=development gulp 'rundev' --gulpfile ./core/compiler/make_app_dev.babel.js",
     "build:dlls": "NODE_ENV=development gulp 'webpack:Build DLLs' --gulpfile ./core/compiler/make_app_dev.babel.js",
     "build:schema": "NODE_ENV=development gulp 'webpack:Build Schema' --gulpfile ./core/compiler/make_app_dev.babel.js",
+    "start:simplesrv": "NODE_ENV=production babel-node ./core/simplesrv.js",
     "watch": "NODE_ENV=development webpack-dev --display-chunks --profile --color --config ./core/compiler/make_app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
