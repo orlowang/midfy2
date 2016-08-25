@@ -1,20 +1,16 @@
 <!DOCTYPE html>
-<html lang="<%= htmlWebpackPlugin.options.lang %>" debug="<%= htmlWebpackPlugin.options.debug %>">
+<html lang="<%= htmlWebpackPlugin.options.lang %>">
   <head>
     <title><%= htmlWebpackPlugin.options.title %></title>
     <meta charset="UTF-8">
     <script>
-      var DEBUG = true, OUTPUT = '';
-      var _dpr = window.devicePixelRatio;
-      var _scale = 1 / _dpr;
-      var _font_size = _dpr + 'px';
-      if (!document.getElementsByTagName('html')[0].getAttribute('debug')){
-        OUTPUT += navigator.platform.match('Win|Mac|X11') != null && '<meta name="viewport" content="initial-scale=' + _scale + ',  maximum-scale=' + _scale + ', user-scalable=no">';
-      } else {
-        OUTPUT += '<meta name="viewport" content="initial-scale=' + _scale + ',  maximum-scale=' + _scale + ', user-scalable=no">';
-      }
-      OUTPUT += '<style type="text/css">html{min-height:100%;font-size:' + _font_size + '}</style>';
-      document.write(OUTPUT)
+      (function(){
+        var _dpr = window.devicePixelRatio;
+        var _scale = 1 / _dpr;
+        var _font_size = _dpr + 'px';
+        var OUTPUT = navigator.platform.match('Win|Mac|X11') == null ? '<meta name="viewporåt" content="initial-scale=' + _scale + ',  maximum-scale=' + _scale + ', user-scalable=no"><style type="text/css">html{min-height:100%;font-size:' + _font_size + '}</style>' : '<style type="text/css">html{min-height:100%;font-size:1px}</style>';
+        document.write(OUTPUT)
+      })()
     </script>
   </head>
   <body>

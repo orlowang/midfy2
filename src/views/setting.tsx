@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as Relay from "react-relay";
 const skeleton = require('../assets/css/skeleton.styl');
 import {
   MountAnima
@@ -36,7 +37,7 @@ const keys = [
 export interface SettingProps {
 };
 
-export default class Setting extends React.Component<SettingProps, {}>{
+class Setting extends React.Component<SettingProps, {}>{
 
   componentDidMount(){
 
@@ -82,3 +83,24 @@ export default class Setting extends React.Component<SettingProps, {}>{
     </MountAnima>;
   }
 }
+
+export default Relay.createContainer(Setting, {
+  fragments: {
+    viewer: () => Relay.QL`
+      fragments on Viewer {
+        menu {
+          id,
+          name,
+          keyprop,
+          url,
+          child {
+            id,
+            name,
+            keyprop,
+            url,
+          }
+        }
+      }
+    `
+  }
+})

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as Relay from "react-relay";
 import {
   Userarea
 } from '../../vender.src/components/UserareaComp';
@@ -9,7 +10,7 @@ const skeleton = require('../assets/css/sign.styl');
 
 export interface SigninProps {};
 
-export default class Signin extends React.Component<SigninProps, {}>{
+class Signin extends React.Component<SigninProps, {}>{
 
   componentDidMount(){
 
@@ -24,3 +25,24 @@ export default class Signin extends React.Component<SigninProps, {}>{
     </div>;
   }
 }
+
+export default Relay.createContainer(SignIn, {
+  fragments: {
+    viewer: () => Relay.QL`
+      fragments on Viewer {
+        menu {
+          id,
+          name,
+          keyprop,
+          url,
+          child {
+            id,
+            name,
+            keyprop,
+            url,
+          }
+        }
+      }
+    `
+  }
+})

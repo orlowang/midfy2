@@ -59,9 +59,6 @@ export class Menu extends React.Component<MenuProps, MenuState>{
         list.child.map((sublist, index) => {
           return <li key={sublist.id}>
             <Link to={`/${sublist.url}`} activeClassName={`active`}>
-              <svg className={`${styl.icon} elm-svg`} viewBox="0 0 32 32">{sublist.icon.map((d) => {
-                return <path key={index} d={d}></path>
-              })}</svg>
               <Title className={styl.titleComp}>
                 {sublist.name}
               </Title>
@@ -72,17 +69,11 @@ export class Menu extends React.Component<MenuProps, MenuState>{
 
       return <li key={list.id}>
         {list.child ? <a onClick={this.openSubmenu.bind(this, list.id)}>
-          <svg className={`${styl.icon} elm-svg`} viewBox="0 0 32 32">{list.icon.map((d) => {
-            return <path key={index} d={d}></path>
-          })}</svg>
           <Title className={styl.titleComp}>
             {list.name}
           </Title>
           <ArrowS1 className={styl.arrs}></ArrowS1>
         </a> : <Link to={`/${list.url}`} activeClassName={`active`}>
-          <svg className={`${styl.icon} elm-svg`} viewBox="0 0 32 32">{list.icon.map((d) => {
-            return <path key={index} d={d}></path>
-          })}</svg>
           <Title className={styl.titleComp}>
             {list.name}
           </Title>

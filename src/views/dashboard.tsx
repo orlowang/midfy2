@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as Relay from "react-relay";
-import { browserHistory } from 'react-router'
+import { hashHistory } from 'react-router'
 const skeleton = require('../assets/css/skeleton.styl');
 import {
   Userarea
@@ -75,11 +75,17 @@ const mock: any[] = [
 export interface DashboardProps {};
 
 class Dashboard extends React.Component<DashboardProps, {}>{
+  componentWillupdate(){
+    let signToken = localStorage.getItem('SIGNTOKEN');
+    if(!signToken){
+      hashHistory.push('/signin')
+    }
+  }
 
   componentWillMount(){
     let signToken = localStorage.getItem('SIGNTOKEN');
     if(!signToken){
-      browserHistory.push('/signin')
+      hashHistory.push('/signin')
     }
   }
 
@@ -107,17 +113,19 @@ class Dashboard extends React.Component<DashboardProps, {}>{
 
 export default Relay.createContainer(Dashboard, {
   fragments: {
-    Menu: () => Relay.QL`
-      fragments on Menu {
-        id,
-        name,
-        keyprop,
-        url,
-        child {
+    viewer: () => Relay.QL`
+      fragments on Viewer {
+        menu {
           id,
           name,
           keyprop,
           url,
+          child {
+            id,
+            name,
+            keyprop,
+            url,
+          }
         }
       }
     `

@@ -112,7 +112,7 @@ const webpackConfig = {
                 minifyURLs: true,
             },
             inject: true,
-            debug: !!Midfy.ENV_DEVELOPMENT
+            debug: Midfy.compile.enableMobileModule
         }),
     ],
     postcss: () => {
