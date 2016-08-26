@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Link } from 'react-router';
 const styl = require('./style.styl');
 
 export interface TitleProps {
@@ -12,6 +13,23 @@ export class Title extends React.Component<TitleProps, {}>{
     let _classname = this.props.className ? ' ' + this.props.className : '';
     return <div className={`${styl.titleComp}${_classname} titleComp`}>
       <span>{this.props.children}</span>
+    </div>; 
+  }
+}
+
+export interface ButtonProps {
+  className?: string;
+  cilck?: Function;
+  to?: string;
+};
+/**
+ * Button
+ */
+export class Button extends React.Component<ButtonProps, {}>{
+  render(){
+    let _classname = this.props.className ? ' ' + this.props.className : '';
+    return <div onClick={!this.props.to && this.props.cilck ? this.props.cilck : () => {}} className={`${styl.buttonComp}${_classname} buttonComp`}>
+      {this.props.to ? <Link to={this.props.to}>{this.props.children}</Link> : this.props.children}
     </div>; 
   }
 }

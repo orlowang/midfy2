@@ -26,7 +26,7 @@ const tagsType = new GraphQLObjectType({
   name: 'Tags',
   fields: {
     Id: {type: GraphQLString},
-    Name: {type: GraphQLString}
+    Name: {type: GraphQLString},
   }
 })
 

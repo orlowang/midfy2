@@ -47,6 +47,7 @@ class Detail extends React.Component<DetailProps, DetailStatus>{
         orderSession: JSON.parse(localStorage[orderSessionID])
       })
     }
+    document.body.style.backgroundColor = skeleton.mainBgColor;
   }
 
   render(){

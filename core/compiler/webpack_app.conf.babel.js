@@ -65,13 +65,9 @@ const webpackConfig = {
                 loaders: [
                     'file?hash=sha512&digest=hex&name=[hash].[ext]',
                     `image-webpack?{
-                        progressive:${Midfy.compile.image.encoding == "progressive"},
+                        progressive: ${Midfy.compile.image.encoding == "progressive"},
                         optimizationLevel: ${Midfy.compile.image.optimizationLevel},
-                        interlaced: ${Midfy.compile.image.encoding == "progressive"},
-                        pngquant:{
-                            quality: ${Midfy.compile.image.quality},
-                            speed: ${Midfy.compile.image.speed}
-                        }
+                        interlaced: ${Midfy.compile.image.encoding == "progressive"}
                     }`,
                 ],
             },

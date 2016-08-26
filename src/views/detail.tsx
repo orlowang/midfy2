@@ -29,7 +29,7 @@ export interface DetailProps {};
 class Detail extends React.Component<DetailProps, {}>{
 
   componentWillMount(){
-    
+    document.body.style.backgroundColor = skeleton.mainBgColor;
   }
 
   componentDidMount(){
@@ -51,6 +51,9 @@ class Detail extends React.Component<DetailProps, {}>{
         __html: page
       }
     };
+    goods_detail.Tags.map((tag) => {
+      tag.Name = <img src={require(`../assets/img/sun_icon.svg`)} alt=""/>
+    })
     let data_goods_info = {
       goodsImage: null,
       goodsPrice: goods_detail.Price,

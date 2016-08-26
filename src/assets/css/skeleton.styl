@@ -1,4 +1,4 @@
-@import 'styleguide';
+@import 'common';
 
 .root{
   height: 100%;
@@ -16,31 +16,46 @@
 
   .banner{
     width: 100%;
-    height: 14.83333rem;
+    height: 0;
+    margin-bottom: 51.46667%;
+    img{
+      width: 100%;
+    }
   }
   .goodsList{
     a{
       text-decoration: none;
     }
     .goodsItemFlat{
-      padding: 1.33333rem;
       box-sizing: border-box;
-      border-bottom: 1px solid $IOSborderColor;
+
+      // border-bottom: 1px solid $IOSborderColor;
+      
+      position: relative;
+      z-index: 1;
+      background-color: #fff;
+      padding: 0.66667rem;
+      margin: 0.66667rem;
+      border-radius: 0.16667rem;
+      box-shadow: 0 0.08333rem 0.33333rem 0 rgba(0, 0, 0, .14);
+
       :global(.split){
         width: 1.33333rem;
       }
       :global(.titleComp){
-        font-size: 1.66667rem;
+        font-size: 1.16667rem;
       }
       :global(.textComp){
         margin-top: 0.33333rem;
-        margin-bottom: 0.66667rem;
+        margin-bottom: 0.33333rem;
         line-height: 1.66667rem;
         font-size: 1rem;
+        font-weight: 200;
         color: $subFrontBgColor;
       }
       :global(.price){
         font-size: 1.5rem;
+        margin-bottom: 0.33333rem;
         color: $mainColor;
       }
       :global(.sign){
@@ -50,9 +65,52 @@
       :global(.wrap){
         align-items: flex-end;
       }
-      img{
-        width: 13.66667rem;
-        height: 13.66667rem;
+      :global(.avatar){
+        width: (calc(50% - 1.33333rem));
+        height: 0;
+        overflow: hidden;
+        padding-bottom: (calc(50% - 1.33333rem));
+      }
+      :global(.actionBtn){
+        width: 6rem;
+        height: 1.5rem;
+        line-height: 1.5rem;
+        font-size: 0.83333rem;
+        color: #fff;
+        background-color: $mainColor;
+        text-align: center;
+        margin: 0 auto;
+        border-radius: 0.16667rem;
+      }
+      .decoration{
+        position: absolute;
+      }
+      :global(.goodsWrap){
+        position: relative;
+      }
+      .keyprop{
+        img{
+          position: absolute;
+          &:first-child{
+            width: 1.16667rem;
+            top: 0;
+            right: 0;
+          }
+          &:last-child{
+            width: 2.25rem;
+            bottom: -0.33333rem;
+          }
+        }
+        &.down{
+          img:last-child{
+            left: -0.33333rem;
+          }
+        }
+        &.up{
+          img:last-child{
+            right: -0.33333rem;
+          }
+        }
       }
     }
   }
@@ -75,6 +133,7 @@
       margin-top: 0.33333rem;
       margin-bottom: 0.66667rem;
       line-height: 1.66667rem;
+      font-weight: 200;
       font-size: 1.16667rem;
       color: $subFrontBgColor;
     }
@@ -252,7 +311,6 @@
 }
 
 .address{
-  padding-top: 1.33333rem;
   .itemList{
     border-top: 1px solid $IOSborderColor;
     border-bottom: 1px solid $IOSborderColor;
@@ -264,6 +322,9 @@
       padding: 1.33333rem;
       font-size: 1.16667rem;
       color: $therdFontColor;
+    }
+    &:first-child{
+      margin-top: 1.33333rem;
     }
   }
   :global(.itemIOS){
@@ -293,6 +354,9 @@
 }
 
 :global(.slideTouch){
+  img{
+    width: 100%;
+  }
   :global(.status){
     position: relative;
     z-index: 1;
@@ -307,5 +371,13 @@
     :global(.on){
       background-color: $mainColor;
     }
+  }
+}
+
+:global(.tagOne){
+  height: 2.5rem;
+  img{
+    width: 4.5rem;
+    margin-top: -0.3rem;
   }
 }

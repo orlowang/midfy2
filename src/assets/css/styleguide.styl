@@ -1,7 +1,8 @@
 
 $mainColor = #f39800
 $mainFontColor = #393939
-$mainBgColor = #faf8f5
+$mainBgColor = #f2f0ed
+$sipcBgColor = #f2eade
 $subBgColor = #f2f0ed
 $subFrontBgColor = #909090
 $IOSborderColor = #e6e4e1
@@ -28,6 +29,8 @@ $uploadViewSize = 96rem
   usrImgBorderSize: $usrImgBorderSize;
   switchSize: $switchSize;
   uploadViewSize: $uploadViewSize;
+  mainBgColor: $mainBgColor;
+  sipcBgColor: $sipcBgColor;
 }
 
 // menu stylesheet
@@ -40,36 +43,3 @@ $loginWidth = 320rem;
 // ==============================================================
 // 去掉移动端可点击元素在点击是的半透明背景
 tap0hightlight{-webkit-tap-highlight-color: rgba(0,0,0,0)}
-
-:global(.easeDown-enter){
-  opacity: 0.01;
-}
-:global(.easeDown-enter.easeDown-enter-active){
-  opacity: 1;
-  transition: opacity 500ms ease-in;
-}
-:global(.easeDown-leave){
-  opacity: 1;
-}
-:global(.easeDown-leave.easeDown-leave-active){
-  opacity: 0.01;
-  transition: opacity 300ms ease-in;
-}
-
-@import '../../../node_modules/normalize.css/normalize.css';
-
-body{
-  font-size: 1.33333rem;
-  user-select: none; 
-  font-family: "Myriad Set Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  background-color: $mainBgColor;
-  color: $mainFontColor;
-  outline: none;
-  -webkit-tap-highlight-color: rgba(0,0,0,0);
-  -webkit-text-size-adjust: none;
-}
-a{
-  outline: none;
-  color: $mainFontColor;
-}
-

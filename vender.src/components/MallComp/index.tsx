@@ -2,7 +2,8 @@ import * as React from 'react';
 import { Link } from 'react-router';
 import {
   Text,
-  Title
+  Title,
+  Button
 } from "../TextComp";
 const styl = require('./style.styl');
 
@@ -165,6 +166,7 @@ export interface GoodsItemFlatProps {
   goodsInfo: GoodsType;
   imagePosition?: string;
   typesetting?: string;
+  isButton?: boolean;
 };
 
 export class GoodsItemFlat extends React.Component<GoodsItemFlatProps, {}>{
@@ -175,23 +177,28 @@ export class GoodsItemFlat extends React.Component<GoodsItemFlatProps, {}>{
       goodsSubTitle: null,
       tags: []
     },
-    imagePosition: 'left'
+    imagePosition: 'left',
+    isButton: false
   }
 
   render(){
+    console.log(this.props.goodsInfo.tags)
     let _classname = this.props.className ? ` ${this.props.className}` : '';
     let _order_classname = this.props.imagePosition == 'left' || this.props.imagePosition == 'up' ? styl.front : styl.end;
     let _direction_classname = this.props.imagePosition == 'left' || this.props.imagePosition == 'right' ? styl.level : styl.vertical;
     return <div className={`${styl.goodsItemFlat}${_classname} goodsItemFlat`}>
-      {this.props.goodsInfo.goodsImage && <img className={_order_classname} src={this.props.goodsInfo.goodsImage} alt=""/>}
+      {this.props.goodsInfo.goodsImage && <div className={`${styl.avatar} ${_order_classname} avatar`}>
+        <img src={this.props.goodsInfo.goodsImage} alt=""/>
+      </div>}
       {this.props.goodsInfo.goodsImage && <div className={`${styl.split} split`}></div>}
-      <div className={`${_direction_classname} ${styl.goodsWrap}`}>
-        {(this.props.goodsInfo.tags && this.props.goodsInfo.tags.length == 1) && <span className={`${styl[`tag${this.props.goodsInfo.tags[0].id}`]} tag`}>
-          {this.props.goodsInfo.tags[0].name}
+      <div className={`${_direction_classname} ${styl.goodsWrap} goodsWrap`}>
+        {(this.props.goodsInfo.tags && this.props.goodsInfo.tags.length == 1) && <span className={`${styl.tagOne} tagOne`}>
+          {this.props.goodsInfo.tags[0].Name}
         </span>}
         <Title className={styl.title}>{this.props.children}</Title>
         <Text lineClamp={2}>{this.props.goodsInfo.goodsSubTitle}</Text>
         <span className={`${styl.price} price`}>￥{this.props.goodsInfo.goodsPrice}</span>
+        {this.props.isButton && <Button className={`${styl.actionBtn} actionBtn`}>去看看</Button>}
       </div>
     </div>; 
   }

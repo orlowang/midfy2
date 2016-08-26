@@ -15,6 +15,10 @@ export interface AddressProps {};
 
 class Address extends React.Component<AddressProps, {}>{
 
+  componentWillMount(){
+    document.body.style.backgroundColor = skeleton.mainBgColor;
+  }
+
   componentDidMount(){
 
   }

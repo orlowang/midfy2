@@ -19,6 +19,8 @@ const Midfycfg = {
     ENV_PROJECTPATH: projectpath,
     compile: {
         image: {
+            floyd: 0.5,
+            nofs: false,
             encoding: "progressive",
             optimizationLevel: 7,
             quality: "65-90",
@@ -30,6 +32,9 @@ const Midfycfg = {
     },
     server: {
         devport: 8088
+    },
+    SIMPLE_GRAPHQL_SRV: {
+        port: 8089
     },
     AUTOPREFIXER_BROWSERS: [
         'Android 2.3',

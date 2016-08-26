@@ -1,5 +1,6 @@
 import * as React from 'react';
-import * as Relay from "react-relay";
+import * as Relay from 'react-relay';
+import * as InlineSVG from 'react-inlinesvg';
 const skeleton = require('../assets/css/skeleton.styl');
 import { Link } from 'react-router';
 import {
@@ -12,10 +13,15 @@ import {
 export interface MallProps {};
 
 class Mall extends React.Component<MallProps, {}>{
-
+  componentWillMount(){
+    document.body.style.backgroundColor = skeleton.sipcBgColor;
+  }
 
   render(){
     let ui_good_list = this.props.viewer.goodsList.map((goods, index) => {
+      goods.Tags.map((tag) => {
+        tag.Name = <img src={require(`../assets/img/sun_icon.svg`)} alt=""/>
+      })
       let data = {
         goodsImage: goods.mainPhoto,
         goodsPrice: goods.Price,
@@ -24,15 +30,22 @@ class Mall extends React.Component<MallProps, {}>{
         inStock: goods.inStock,
         tags: goods.Tags,
       };
+      console.log(data)
       return <Link key={index} to={`/detail/${goods.Id}`}>
-        <GoodsItemFlat imagePosition={index%2 ? 'down' : 'up'} className={skeleton.goodsItemFlat} goodsInfo={data}>
+        <GoodsItemFlat isButton={true} imagePosition={index%2 ? 'down' : 'up'} className={skeleton.goodsItemFlat} goodsInfo={data}>
           {goods.Name}
+          <div className={`${skeleton.keyprop}${index%2 ? ` ${skeleton.down}` : ` ${skeleton.up}`}`}>
+            <img src={require('../assets/img/bg1.svg')} alt=""/>
+            <img src={require('../assets/img/bg2.svg')} alt=""/>
+          </div>
         </GoodsItemFlat>
       </Link>;
     });
     return <MountAnimaShow>
       <div className={`${skeleton.root} ${skeleton.scrollwrap} fmroot`}>
-        <div className={skeleton.banner}></div>
+        <div className={skeleton.banner}>
+          <img src={require('../assets/img/store_banner.png')} alt=""/>
+        </div>
         <div className={`${skeleton.goodsList}`}>{ui_good_list}</div>
       </div>
     </MountAnimaShow>;

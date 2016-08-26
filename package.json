@@ -7,6 +7,7 @@
     "start": "NODE_ENV=development gulp 'rundev' --gulpfile ./core/compiler/make_app_dev.babel.js",
     "build:dlls": "NODE_ENV=development gulp 'webpack:Build DLLs' --gulpfile ./core/compiler/make_app_dev.babel.js",
     "build:schema": "NODE_ENV=development gulp 'webpack:Build Schema' --gulpfile ./core/compiler/make_app_dev.babel.js",
+    "start:simplesrv": "NODE_ENV=production babel-node ./core/simplesrv.js",
     "watch": "NODE_ENV=development webpack-dev --display-chunks --profile --color --config ./core/compiler/make_app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -90,6 +91,7 @@
     "react": "^15.1.0",
     "react-dom": "^15.1.0",
     "react-icons": "^2.2.1",
+    "react-inlinesvg": "^0.5.3",
     "react-redux": "^4.4.5",
     "react-relay": "^0.9.2",
     "react-router": "^2.4.1",
