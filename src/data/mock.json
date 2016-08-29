@@ -1,60 +1,226 @@
 {
-  "menu": [
+  "user": {
+    "Id": "u10001",
+    "Name": "蒋先生",
+    "phoneNumber": 13699998888,
+    "Address": "深圳市福田区梅林路万科大厦数据与信息中心住这儿部门"
+  },
+  "banner": [
     {
-      "id": 201,
-      "name": "system 01",
-      "keyprop": "icos.fire",
-      "url": "sys/201",
-      "child": []
-    },
+      "url": "url",
+      "title": "title",
+      "linkTo": "linkto",
+      "isMarketing": "false"
+    },{
+      "url": "url",
+      "title": "title",
+      "linkTo": "linkto",
+      "isMarketing": "false"
+    },{
+      "url": "url",
+      "title": "title",
+      "linkTo": "linkto",
+      "isMarketing": "false"
+    },{
+      "url": "url",
+      "title": "title",
+      "linkTo": "linkto",
+      "isMarketing": "false"
+    }
+  ],
+  "goods": [
     {
-      "id": 202,
-      "name": "system 02",
-      "keyprop": "icos.fire",
-      "url": null,
-      "child": [
+      "Id": "gs10001",
+      "Name": "淡绿花抽纸",
+      "subTitle": "【苏宁易购超市】清风 淡绿花抽纸2层200抽20包箱装 新老包装随机",
+      "Photos": [
+        "https://s-media-cache-ak0.pinimg.com/564x/2e/b9/1a/2eb91a76325d9c406ab97e981990ad78.jpg",
+        "http://www.33lc.com/article/UploadPic/2012-8/201282413335761587.jpg",
+        "http://pic30.nipic.com/20130622/12471897_174938533105_2.jpg",
+        "http://img13.3lian.com/201312/04/a290524b9c59f165b8d8ac87f7a4c0bf.jpg",
+        "http://pic38.nipic.com/20140306/2457331_150217053000_2.jpg"
+      ],
+      "Price": "23.00",
+      "hasSold": 1240,
+      "inStock": 2390,
+      "Tags": [
         {
-          "id": 2021,
-          "name": "system 02-1",
-          "keyprop": "icos.fire",
-          "url": "sys/2021",
-          "child": []
+          "Id": "001",
+          "Name": "../assets/img/sun_icon.svg"
+        }
+      ],
+      "SKU": [
+        {
+          "Name": "型号",
+          "Key": [
+            "AB",
+            "CD",
+            "EFG",
+            "HI",
+            "J"
+          ]
         },
         {
-          "id": 2022,
-          "name": "system 02-2",
-          "keyprop": "icos.fire",
-          "url": "sys/2022",
-          "child": []
+          "Name": "颜色",
+          "Key": [
+            "Red",
+            "Yellow",
+            "Blue"
+          ]
         }
       ]
     },
     {
-      "id": 203,
-      "name": "system 03",
-      "keyprop": "icos.fire",
-      "url": "sys/203",
-      "child": []
-    },
-    {
-      "id": 204,
-      "name": "system 04",
-      "keyprop": "icos.fire",
-      "url": null,
-      "child": [
+      "Id": "gs10002",
+      "Name": "魅蓝note3",
+      "subTitle": "发货到20点【送耳机+壳+膜】Meizu/魅族 魅蓝note3 全网通4G手机",
+      "Photos": [
+        "https://s-media-cache-ak0.pinimg.com/564x/2e/b9/1a/2eb91a76325d9c406ab97e981990ad78.jpg",
+        "http://www.33lc.com/article/UploadPic/2012-8/201282413335761587.jpg",
+        "http://pic30.nipic.com/20130622/12471897_174938533105_2.jpg",
+        "http://img13.3lian.com/201312/04/a290524b9c59f165b8d8ac87f7a4c0bf.jpg",
+        "http://pic38.nipic.com/20140306/2457331_150217053000_2.jpg"
+      ],
+      "Price": "998.00",
+      "hasSold": 55,
+      "inStock": 1000,
+      "Tags": [],
+      "SKU": [
         {
-          "id": 2041,
-          "name": "system 04-1",
-          "keyprop": "icos.fire",
-          "url": "sys/2041",
-          "child": []
+          "Name": "型号",
+          "Key": [
+            "AB",
+            "CD",
+            "EFG",
+            "HI",
+            "J"
+          ]
         },
         {
-          "id": 2042,
-          "name": "system 04-2",
-          "keyprop": "icos.fire",
-          "url": "sys/2042",
-          "child": []
+          "Name": "颜色",
+          "Key": [
+            "Red",
+            "Yellow",
+            "Blue"
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "gs10003",
+      "Name": "荣耀畅玩5X",
+      "subTitle": "源自华为honor/荣耀 荣耀畅玩5X移动版智能手机",
+      "Photos": [
+        "https://s-media-cache-ak0.pinimg.com/564x/2e/b9/1a/2eb91a76325d9c406ab97e981990ad78.jpg",
+        "http://www.33lc.com/article/UploadPic/2012-8/201282413335761587.jpg",
+        "http://pic30.nipic.com/20130622/12471897_174938533105_2.jpg",
+        "http://img13.3lian.com/201312/04/a290524b9c59f165b8d8ac87f7a4c0bf.jpg",
+        "http://pic38.nipic.com/20140306/2457331_150217053000_2.jpg"
+      ],
+      "Price": "1999.00",
+      "hasSold": 90,
+      "inStock": 2000,
+      "Tags": [],
+      "SKU": [
+        {
+          "Name": "型号",
+          "Key": [
+            "AB",
+            "CD",
+            "EFG",
+            "HI",
+            "J"
+          ]
+        },
+        {
+          "Name": "颜色",
+          "Key": [
+            "Red",
+            "Yellow",
+            "Blue"
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "gs10004",
+      "Name": "iPhone 6s",
+      "subTitle": "现货速发【送上网流量】中移动Apple/苹果 iPhone 6s 手机全网通",
+      "Photos": [
+        "https://s-media-cache-ak0.pinimg.com/564x/2e/b9/1a/2eb91a76325d9c406ab97e981990ad78.jpg",
+        "http://www.33lc.com/article/UploadPic/2012-8/201282413335761587.jpg",
+        "http://pic30.nipic.com/20130622/12471897_174938533105_2.jpg",
+        "http://img13.3lian.com/201312/04/a290524b9c59f165b8d8ac87f7a4c0bf.jpg",
+        "http://pic38.nipic.com/20140306/2457331_150217053000_2.jpg"
+      ],
+      "Price": "5499.00",
+      "hasSold": 7899,
+      "inStock": 2000,
+      "Tags": [
+        {
+          "Id": "001",
+          "Name": "../assets/img/sun_icon.svg"
+        }
+      ],
+      "SKU": [
+        {
+          "Name": "型号",
+          "Key": [
+            "AB",
+            "CD",
+            "EFG",
+            "HI",
+            "J"
+          ]
+        },
+        {
+          "Name": "颜色",
+          "Key": [
+            "Red",
+            "Yellow",
+            "Blue"
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "gs10005",
+      "Name": "小米MAX",
+      "subTitle": "小米MAX智能安卓6.4吋大屏双卡手机包邮Xiaomi/小米 小米Max 64GB",
+      "Photos": [
+        "https://s-media-cache-ak0.pinimg.com/564x/2e/b9/1a/2eb91a76325d9c406ab97e981990ad78.jpg",
+        "http://www.33lc.com/article/UploadPic/2012-8/201282413335761587.jpg",
+        "http://pic30.nipic.com/20130622/12471897_174938533105_2.jpg",
+        "http://img13.3lian.com/201312/04/a290524b9c59f165b8d8ac87f7a4c0bf.jpg",
+        "http://pic38.nipic.com/20140306/2457331_150217053000_2.jpg"
+      ],
+      "Price": "2499.00",
+      "hasSold": 1983,
+      "inStock": 12,
+      "Tags": [
+        {
+          "Id": "001",
+          "Name": "../assets/img/sun_icon.svg"
+        }
+      ],
+      "SKU": [
+        {
+          "Name": "型号",
+          "Key": [
+            "AB",
+            "CD",
+            "EFG",
+            "HI",
+            "J"
+          ]
+        },
+        {
+          "Name": "颜色",
+          "Key": [
+            "Red",
+            "Yellow",
+            "Blue"
+          ]
         }
       ]
     }
