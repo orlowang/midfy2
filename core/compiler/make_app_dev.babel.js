@@ -1,4 +1,5 @@
 import gulp from 'gulp';
+import https from 'https';
 import shell from 'gulp-shell';
 import path from 'path';
 import fs from 'fs';
@@ -94,4 +95,17 @@ gulp.task("webpack:Build POLYFILL", function(callback){
 
 gulp.task("webpack:Build VENDOR", function(callback){
 
+})
+
+gulp.task("Start HTTPS server", function(callback){
+  const privateKey = fs.readFileSync('', 'utf8');
+  const certificate = fs.readFileSync('', 'utf8');
+  const serv = express();
+
+  let credentials = {key: privateKey, cert: certificate};
+  let HTTPS = https.createServer(credentials, serv);
+
+  HTTPS.listen(8443);
+  console.log(chalk.bgWhite("HTTPS server start on https://dev.local:8443"))
+  callback()
 })

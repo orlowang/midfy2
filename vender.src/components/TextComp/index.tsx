@@ -130,3 +130,80 @@ export class TextInput extends React.Component<TextInputProps, TextInputState>{
     </div>; 
   }
 }
+
+interface TextInputNormalProps {
+  className?: string;
+  type?: string;
+  placeholder?: string;
+  filter?: string;
+  verification?: string;
+  default?: string;
+};
+
+interface TextInputNormalState {
+  notice?: string;
+  isinput?: boolean;
+  value?: string;
+}
+/**
+ * TextInputNormal
+ */
+export class TextInputNormal extends React.Component<TextInputNormalProps, TextInputNormalState>{
+  constructor(props){
+    super(props);
+    this.state = {
+      isinput: !!this.props.default,
+      value: this.props.default,
+      notice: ''
+    };
+  };
+
+  refs : {
+    [key: string]: (Element);
+    text: (HTMLInputElement)
+  }
+
+  componentDidMount(){
+    this.activeInput
+  }
+
+  textFilter(){
+
+  }
+
+  textVerify(){
+    const input = this.refs.text;
+    this.setInputState(input.value != '')
+  }
+
+  activeInput(){
+    this.setInputState(true)
+  }
+
+  setInputState(state){
+    this.setState({
+      isinput: state
+    })
+  }
+
+  handleChange(e){
+    this.setState({
+      value: e.target.value
+    })
+  }
+
+  render(){
+    let _classname = this.props.className ? ' ' + this.props.className : '';
+    let _input_status = this.state.isinput ? ` ${styl.active} active` : '';
+    return <div className={`${styl.textInputNormal}${_classname}${_input_status} textInputNormalComp`}>
+      <input ref="text" type={this.props.type || 'text'} 
+        onFocus={this.activeInput.bind(this)}
+        onInput={this.props.filter && this.textFilter.bind(this)}
+        onBlur={this.textVerify.bind(this)} 
+        onChange={this.handleChange.bind(this)}
+        value={this.state.value}
+      />
+      {this.props.placeholder && <span className={`${styl.placeholder} placeholder`} data-placeholder={this.props.placeholder}></span>}
+    </div>; 
+  }
+}

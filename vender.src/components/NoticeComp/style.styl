@@ -1,0 +1,24 @@
+.SquareArrow{
+  display: flex;
+  .arrow{
+    display: flex;
+    align-items: center;
+    padding-top: 35.355%;
+    width: 100%;
+    &>i{
+      width: 100%;
+      border-top-style: solid;
+      &:first-child{
+        transform: rotate(45deg);
+        transform-origin: 100% 100%;
+      }
+      &:last-child{
+        transform: rotate(-45deg);
+        transform-origin: 0 100%;
+      }
+    }
+    &.right{
+      transform: rotate(-90deg);
+    }
+  }
+}

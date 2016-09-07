@@ -11,3 +11,9 @@
 
 1. 若需要在父组件中定义子组件样式，则尽量准确
 2. 可以给予组件结构详细的类名，然后在css modules中使用:global直接调用(类名不转化)
+
+### Install
+
+npm i -g node-sass babel-cli typescript typings webpack gulp
+npm i
+typings install

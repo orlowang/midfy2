@@ -42,6 +42,38 @@
   }
 }
 
+.textInputNormal{
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  input{
+    outline: none;
+    width: 100%;
+    transition: all 200ms;
+  }
+  .placeholder{
+    position: absolute;
+    right: 0;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    transform: translateY(0%);
+    transition: all 200ms;
+
+    &:before{
+      content: (attr(data-placeholder));
+    }
+  }
+  &.active{
+    .placeholder{
+      font-size: 0.65em;
+      transform: translateY(-100%);
+      height: calc(65% - 8rem);
+    }
+  }
+}
+
 .textComp{
   word-break: break-all;
   line-height: 1.4;

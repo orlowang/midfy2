@@ -1,4 +1,8 @@
 import * as React from 'react';
+import {
+  Component,
+  Props
+} from 'react';
 import * as Relay from "react-relay";
 import { Link } from 'react-router';
 import {
@@ -22,9 +26,11 @@ import {
 } from '../../vender.src/components/ItemIOSComp';
 const skeleton = require('../assets/css/skeleton.styl');
 
-const mock_detail = `<div>sfsfssfsfs<br/>sfsfssfsfs<br/>sfsfssfsfs<br/>sfsfssfsfs<br/>sfsfssfsfs<br/>sfsfssfsfs<br/>sfsfssfsfs<br/>sfsfssfsfs<br/>sfsfssfsfs<br/>sfsfssfsfs<br/>sfsfssfsfs<br/>sfsfssfsfs<br/>sfsfssfsfs<br/>sfsfssfsfs<br/>sfsfssfsfs<br/>sfsfssfsfs<br/>sfsfssfsfs<br/>sfsfssfsfs<br/>sfsfssfsfs<br/>sfsfssfsfs<br/>sfsfssfsfs<br/></div>`;
-
-export interface DetailProps {};
+interface DetailProps extends Props<Detail>{
+  viewer: {
+    Goods: any;
+  }
+};
 
 class Detail extends React.Component<DetailProps, {}>{
 
@@ -33,15 +39,7 @@ class Detail extends React.Component<DetailProps, {}>{
   }
 
   componentDidMount(){
-    let goods_detail = this.props.viewer.Goods;
-    let orderSessionID = `order-${goods_detail.Id}`;
-    if (!localStorage[orderSessionID]) {
-      let data = {}, data_string;
-      goods_detail.SKU.map((sku) => {
-        data[sku.Name] = ''
-      })
-      localStorage.setItem(orderSessionID, JSON.stringify(data))
-    }
+    
   }
 
   render(){
@@ -52,11 +50,11 @@ class Detail extends React.Component<DetailProps, {}>{
       }
     };
     goods_detail.Tags.map((tag) => {
-      tag.Name = <img src={require(`../assets/img/sun_icon.svg`)} alt=""/>
+      tag.Value = <img src={require(`../assets/img/sun_icon.svg`)} alt=""/>
     })
     let data_goods_info = {
       goodsImage: null,
-      goodsPrice: goods_detail.Price,
+      goodsPrice: `${goods_detail.minPrice} - ${goods_detail.maxPrice}`,
       goodsSubTitle: goods_detail.subTitle,
       tags: goods_detail.Tags
     };
@@ -77,12 +75,17 @@ class Detail extends React.Component<DetailProps, {}>{
           </MountAnimaShow>
           <MountAnima>
             <DetailStaticWrap title={'产品描述'}>
-              <div dangerouslySetInnerHTML={ui_detail('safafasfsasfasfasfsafsfsafsfsfsfsfsaf')}></div>
+              <div dangerouslySetInnerHTML={ui_detail(goods_detail.Detail)}></div>
             </DetailStaticWrap>
           </MountAnima>
           <MountAnima delay={200}>
-            <DetailStaticWrap title={'图文详情'}>
-              <div dangerouslySetInnerHTML={ui_detail('safafasfsasfasfasfsafsfsafsfsfsfsfsaf')}></div>
+            <DetailStaticWrap className={skeleton.detailWrap} title={'图文详情'}>
+              {goods_detail.imgDetail.map((detail, index) => {
+                return <div key={index}>
+                  <img src={detail.Value} alt=""/>
+                  <p>{detail.Key}</p>
+                </div>
+              })}
             </DetailStaticWrap>
           </MountAnima>
         </div>
@@ -103,16 +106,34 @@ export default Relay.createContainer(Detail, {
           Id,
           Name,
           Photos,
-          Price,
+          mainPhoto,
+          minPrice,
+          maxPrice,
           subTitle,
+          Products{
+            productId,
+            Price,
+            Stock,
+            Property
+          },
+          inStock,
           Tags{
-            Id,
-            Name
+            Key,
+            Value
           },
           SKU{
             Name,
-            Key
-          }
+            Key{
+              Key,
+              Value
+            }
+          },
+          Detail,
+          imgDetail{
+            Key,
+            Value
+          },
+          Shiping
         }
       }
     `

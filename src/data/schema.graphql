@@ -1,5 +1,6 @@
 schema {
   query: Query
+  mutation: Mutation
 }
 
 type Goods {
@@ -7,42 +8,102 @@ type Goods {
   Name: String
   subTitle: String
   Photos: [String]
-  mainPhoto(index: Int = 0): String
-  Price: Int
-  hasSold: Int
+  mainPhoto: String
+  minPrice: String
+  maxPrice: String
   inStock: Int
-  Tags: [Tags]
+  Tags: [SimpleKV]
   SKU: [Sku]
+  Products: [Product]
+  Detail: String
+  imgDetail: [SimpleKV]
+  Shiping: Int
+}
+
+type GoodsList {
+  Id: String
+  Name: String
+  subTitle: String
+  mainPhoto: String
+  Price: String
+  Tags: [SimpleKV]
+}
+
+input GoodsMutation {
+  goods_id: String
+  product_id: String
+  num: Int
+  price: Int
+}
+
+type Mutation {
+  order(input: UpdateOrderInput!): UpdateOrderPayload
 }
 
 interface Node {
   id: ID!
 }
 
+input Order {
+  goods: [GoodsMutation]
+  goods_num: String
+  shiping: Int
+  order_price: Int
+  consignee: String
+  mobile: String
+  address: String
+  pay_type: String
+}
+
+type Product {
+  productId: String
+  Price: Int
+  Stock: Int
+  Property: [Int]
+}
+
 type Query {
   node(id: ID!): Node
-  user: User
   viewer: Viewer
+}
+
+type SimpleKV {
+  Key: String
+  Value: String
+}
+
+type SimpleUserInfo {
+  name: String
+  sex: String
+  nickname: String
+  mobile: String
+  province: String
+  city: String
+  district: String
+  road: String
+  project_name: String
+  building_name: String
+  address: String
 }
 
 type Sku {
   Name: String
-  Key: [String]
+  Key: [SimpleKV]
 }
 
-type Tags {
-  Id: String
-  Name: String
+input UpdateOrderInput {
+  detail: Order
+  clientMutationId: String!
 }
 
-type User {
-  Id: String
-  Name: String
-  phoneNumber: String
-  Address: Boolean
+type UpdateOrderPayload {
+  orderId: String
+  price: Int
+  clientMutationId: String!
 }
 
 type Viewer {
   Goods(id: String!): Goods
-  goodsList: [Goods]
+  goodsList: [GoodsList]
+  userInfo: SimpleUserInfo
 }

@@ -1,6 +1,9 @@
 import * as React from 'react';
+import {
+  Component,
+  Props
+} from 'react';
 import * as Relay from 'react-relay';
-import * as InlineSVG from 'react-inlinesvg';
 const skeleton = require('../assets/css/skeleton.styl');
 import { Link } from 'react-router';
 import {
@@ -10,9 +13,13 @@ import {
   MountAnimaShow
 } from '../../vender.src/components/Animate';
 
-export interface MallProps {};
+interface MallProps extends Props<Mall>{
+  viewer: {
+    goodsList: any;
+  }
+};
 
-class Mall extends React.Component<MallProps, {}>{
+class Mall extends Component<MallProps, {}>{
   componentWillMount(){
     document.body.style.backgroundColor = skeleton.sipcBgColor;
   }
@@ -20,7 +27,7 @@ class Mall extends React.Component<MallProps, {}>{
   render(){
     let ui_good_list = this.props.viewer.goodsList.map((goods, index) => {
       goods.Tags.map((tag) => {
-        tag.Name = <img src={require(`../assets/img/sun_icon.svg`)} alt=""/>
+        tag.Value = tag.Value ? <img src={require(`../assets/img/sun_icon.svg`)} alt=""/> : ''
       })
       let data = {
         goodsImage: goods.mainPhoto,
@@ -30,7 +37,6 @@ class Mall extends React.Component<MallProps, {}>{
         inStock: goods.inStock,
         tags: goods.Tags,
       };
-      console.log(data)
       return <Link key={index} to={`/detail/${goods.Id}`}>
         <GoodsItemFlat isButton={true} imagePosition={index%2 ? 'down' : 'up'} className={skeleton.goodsItemFlat} goodsInfo={data}>
           {goods.Name}
@@ -63,8 +69,8 @@ export default Relay.createContainer(Mall, {
           mainPhoto,
           Price,
           Tags {
-            Id,
-            Name
+            Key,
+            Value
           },
         }
       }

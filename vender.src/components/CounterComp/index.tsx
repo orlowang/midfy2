@@ -21,7 +21,7 @@ export class Counter extends React.Component<CounterProps, CounterStatus>{
   constructor(props){
     super(props);
     this.state = {
-       count: this.props.current || 3
+       count: this.props.current || 1
     };
   };
 

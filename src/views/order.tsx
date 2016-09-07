@@ -1,6 +1,13 @@
 import * as React from 'react';
+import {
+  Component,
+  Props
+} from 'react';
 import * as Relay from "react-relay";
-import { Link } from 'react-router';
+import { 
+  Link,
+  hashHistory
+ } from 'react-router';
 import {
   ItemIOS,
   ItemIOSLink
@@ -8,9 +15,6 @@ import {
 import {
   Counter
 } from '../../vender.src/components/CounterComp';
-import {
-  Banner
-} from '../../vender.src/components/BannerComp';
 import {
   MountAnima,
   MountAnimaShow
@@ -23,31 +27,127 @@ import {
   GoodsSKUSimple,
   BigBtn
 } from "../../vender.src/components/MallComp";
+import ReverseContains from '../helper/ReverseContains';
+import OrderMutation from './orderMutation';
+import 'whatwg-fetch';
 const skeleton = require('../assets/css/skeleton.styl');
 
-class DetailStatus {
-  orderSession: Object;
+interface OrderStatus {
+  orderSession?: Object;
+  skuMap?: Map<any, any>;
+  skuStatus?: Map<any, any>;
 }
 
-export interface DetailProps {};
+interface OrderProps extends Props<Order>{
+  relay: any;
+  viewer: {
+    Goods: any;
+    userInfo: any;
+  }
+};
 
-class Detail extends React.Component<DetailProps, DetailStatus>{
+class Order extends React.Component<OrderProps, OrderStatus>{
   constructor(props){
     super(props);
     this.state = {
-      orderSession: {}
+      orderSession: {},
+      skuMap: ReverseContains(this.props.viewer.Goods.Products, 'Property')
     };
   };
 
   componentWillMount(){
     let goods_detail = this.props.viewer.Goods;
     let orderSessionID = `order-${goods_detail.Id}`;
-    if (localStorage[orderSessionID]) {
+    this.createOrder(orderSessionID)
+    document.body.style.backgroundColor = skeleton.mainBgColor;
+  }
+
+  componentWillUnmount(){
+    let goods_detail = this.props.viewer.Goods;
+    let orderSessionID = `order-${goods_detail.Id}`;
+    // this.removeOrder(orderSessionID)
+  }
+
+  createOrder(SID){
+    if (!localStorage[SID]) {
+      let data = {
+        goods: null,
+        goods_num: null,
+        goods_sku: null,
+        shiping: null,
+        order_price: null,
+        consignee: null,
+        mobile: null,
+        address: null,
+        pay_type: null
+      };
+      localStorage.setItem(SID, JSON.stringify(data))
+    } else {
       this.setState({
-        orderSession: JSON.parse(localStorage[orderSessionID])
+        orderSession: JSON.parse(localStorage[SID])
       })
     }
-    document.body.style.backgroundColor = skeleton.mainBgColor;
+  }
+
+  setOrder(sku, key){
+    let products = this.props.viewer.Goods.Products;
+    let sku_map = this.state.skuMap;
+    let session = JSON.parse(localStorage[`order-${this.props.viewer.Goods.Id}`]);
+
+    
+    console.log(session)
+    products.map((product) => {
+      let stock = product.Stock;
+      let skus = product.Property;
+      let sku = products.SKU;
+      if(stock == 0){
+        this.setState({
+          skuStatus: new Map()  
+        })
+      }
+    })
+  }
+
+  removeOrder(SID){
+    localStorage[SID] && localStorage.removeItem(SID)
+  }
+
+  sendOrder(){
+    let session = JSON.parse(localStorage[`order-${this.props.viewer.Goods.Id}`]);
+    let onSuccess = (data) => {
+      console.log(data)
+      console.log('SUccess!');
+
+      // 拉起支付,(fetch或者router跳转)location
+      if (data.order && data.order.orderId) {
+        location.href = `/pay?data={"method":"SPay","content":{"orderId":"${data.order.orderId},"orderPrice":${data.order.price}}}`;
+      }
+    }
+    let onFailure = (transaction) => {
+      let err = transaction.getError() || new Error('Mutation failed.');
+      console.log(err)
+    }
+
+    session.goods = {
+      goods_id: "{type: GraphQLString}",
+      product_id: "{type: GraphQLString}",
+      num: 234,
+      price: 234
+    }
+
+    this.props.relay.commitUpdate(
+      new OrderMutation({
+        goods: session.goods,
+        goods_num: session.goods_num,
+        shiping: session.shiping,
+        order_price: session.order_price,
+        consignee: session.consignee,
+        mobile: session.mobile,
+        address: session.address,
+        pay_type: session.pay_type
+      }), 
+      {onFailure, onSuccess}
+    )
   }
 
   render(){
@@ -58,15 +158,16 @@ class Detail extends React.Component<DetailProps, DetailStatus>{
         className={`${skeleton.goodsSKU}`} 
         key={index} 
         sku={sku.Key}
-        current={currentSKU}>
+        current={currentSKU} 
+        doSelected={this.setOrder.bind(this, sku.Name)}>
         {sku.Name}
       </GoodsSKUSimple>;
     });
     let data_goods = {
       goodsImage: goods_detail.mainPhoto,
-      goodsPrice: goods_detail.Price,
+      goodsPrice: `${goods_detail.minPrice} - ${goods_detail.maxPrice}`,
       goodsSubTitle: goods_detail.subTitle,
-      inStock: goods_detail.inStock
+      inStock: goods_detail.Products.length == 1 && goods_detail.Products.Stock
     };
     return <div className={`${skeleton.order} order`}>
       <div className={skeleton.root}>
@@ -79,16 +180,16 @@ class Detail extends React.Component<DetailProps, DetailStatus>{
             </div>
             {ui_sku}
             <ItemIOS className={skeleton.fare} title="运费">
-              <span>￥12.00</span>
-              <span>0.00</span>
+              <span></span>
+              <span>￥{goods_detail.Shiping}</span>
             </ItemIOS>
             <ItemIOS className={skeleton.itemIOS} title='数量'>
-              <Counter></Counter>
+              <Counter current={1}></Counter>
             </ItemIOS>
-            <ItemIOSLink link={'/address/1'}>
-              <span>收货人：{`蒋先生`}</span>
-              <span className={skeleton.phone}>{`13966668888`}</span>
-              <p>收货地址：{`深圳市福田区梅林路万科大厦数据与信息中心住这儿部门`}</p>
+            <ItemIOSLink link={`/address/${goods_detail.Id}`}>
+              <span>收货人：{this.props.viewer.userInfo.name}</span>
+              <span className={skeleton.phone}>{this.props.viewer.userInfo.mobile}</span>
+              <p>收货地址：{this.state.orderSession['address'] || this.props.viewer.userInfo.address}</p>
             </ItemIOSLink>
             <ItemIOS className={skeleton.weixin} title="付款方式">
               <span>微信支付</span>
@@ -99,12 +200,12 @@ class Detail extends React.Component<DetailProps, DetailStatus>{
           </MountAnima>
         </div>
       </div>
-      <BigBtn to={`/order/${goods_detail.Id}`}>付款</BigBtn>
+      <BigBtn even={this.sendOrder.bind(this)}>付款</BigBtn>
     </div>;
   }
 }
 
-export default Relay.createContainer(Detail, {
+export default Relay.createContainer(Order, {
   initialVariables: {
     goodsid: null
   },
@@ -115,13 +216,37 @@ export default Relay.createContainer(Detail, {
           Id,
           Name,
           mainPhoto,
-          Price,
+          minPrice,
+          maxPrice,
           subTitle,
+          Products{
+            productId,
+            Price,
+            Stock,
+            Property
+          },
           inStock,
           SKU{
             Name,
-            Key
-          }
+            Key{
+              Key,
+              Value
+            }
+          },
+          Shiping
+        },
+        userInfo{
+          name,
+          sex,
+          nickname,
+          mobile,
+          province,
+          city,
+          district,
+          road,
+          project_name,
+          building_name,
+          address,
         }
       }
     `

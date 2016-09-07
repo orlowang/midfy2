@@ -1,0 +1,145 @@
+{
+  "goods/list": {
+    "code": 0,
+    "result": [
+      {
+        "goods_id": 123123123,
+        "img": "/2016/08/09/t059yzl9jr5jzi07.jpg",
+        "name": "iphone7",
+        "title": "万科物业独家首发，限量10台，不能错过！",
+        "min_price": 4688,
+        "sunshine_community": true
+      },
+      {
+        "goods_id": 123123123,
+        "img": "/2016/08/09/t059yzl9jr5jzi07.jpg",
+        "name": "iphone7",
+        "title": "万科物业独家首发，限量10台，不能错过！",
+        "min_price": 4688,
+        "sunshine_community": true
+      },
+      {
+        "goods_id": 123123123,
+        "img": "/2016/08/09/t059yzl9jr5jzi07.jpg",
+        "name": "iphone7",
+        "title": "万科物业独家首发，限量10台，不能错过！",
+        "min_price": 4688,
+        "sunshine_community": true
+      }
+    ]
+  },
+  "goods/detail": {
+    "code": 0,
+    "result": {
+      "goods_id": "123123123",
+      "head_imgs": [
+        "https://dn-static-vanke-app.qbox.me/static/images/dashboard/zhuzher.png",
+        "https://dn-static-vanke-app.qbox.me/static/images/dashboard/zhuzher.png",
+        "https://dn-static-vanke-app.qbox.me/static/images/dashboard/zhuzher.png"
+      ],
+      "name": "iphone7",
+      "title": "万科物业独家首发",
+      "text_detail": "苹果最新手机，XXXXXXXXXXXXXXXXXXX",
+      "img_detail": [
+        {
+          "img": "https://dn-static-vanke-app.qbox.me/static/images/dashboard/zhuzher.png",
+          "text": "图片描述1111"
+        },
+        {
+          "img": "https://dn-static-vanke-app.qbox.me/static/images/dashboard/zhuzher.png",
+          "text": "图片描述2222"
+        }
+      ],
+      "min_price": 6788,
+      "max_price": 6888,
+      "sunshine_comminity": true,
+      "extend_product": true,
+      "specs": [
+        {
+          "spec_id": 1,
+          "name": "颜色",
+          "entrys": [
+            {
+              "entry_id": 111,
+              "value": "银色"
+            },
+            {
+              "entry_id": 121,
+              "value": "金色"
+            }
+          ]
+        },
+        {
+          "spec_id": 2,
+          "name": "容量",
+          "entrys": [
+            {
+              "entry_id": 122,
+              "value": "银色"
+            },
+            {
+              "entry_id": 123,
+              "value": "金色"
+            }
+          ]
+        }
+      ],
+      "products": [
+        {
+          "product_id": "200001123",
+          "price": 6788,
+          "stock": 89,
+          "property": [
+            111,
+            122
+          ]
+        },
+        {
+          "product_id": "200001124",
+          "price": 6888,
+          "stock": 79,
+          "property": [
+            111,
+            123
+          ]
+        },
+        {
+          "product_id": "200001124",
+          "price": 6788,
+          "stock": 69,
+          "property": [
+            121,
+            122
+          ]
+        },
+        {
+          "product_id": "200001124",
+          "price": 6888,
+          "stock": 59,
+          "property": [
+            121,
+            123
+          ]
+        }
+      ],
+      "shiping": 10
+    }
+  },
+  "addr/detail": {
+    "code": 0,
+    "result": {
+      "name": "张三",
+      "nickname": null,
+      "sex": 0,
+      "mobile": 13333333333,
+      "province": "广东省",
+      "city": "深圳市",
+      "district": "福田区",
+      "road": "梅林路63号",
+      "project_name": "万科大厦",
+      "building_name": "1号楼1单元101",
+      "address": "广东省深圳市梅林路63号万科大厦1号楼1单元101"
+    }
+  },
+  "order/create": {}
+}
