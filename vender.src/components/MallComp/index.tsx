@@ -89,9 +89,9 @@ export class GoodsItemSimple extends React.Component<GoodsItemSimpleProps, {}>{
   }
 }
 
-interface KVType {
-  Key?: string;
-  Value?: string;
+export interface KVType {
+  Key?: any;
+  Value?: any;
 }
 
 class goodsSKUSimpleStatus {

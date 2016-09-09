@@ -5,6 +5,7 @@ export interface CounterProps {
   className?: string;
   current?: number;
   max?: number;
+  complete?: Function;
 };
 
 interface CounterStatus {
@@ -88,6 +89,7 @@ export class Counter extends React.Component<CounterProps, CounterStatus>{
         minLimit: false
       })
     }
+    this.props.complete(this.refs.counter.value)
   }
 
   render(){

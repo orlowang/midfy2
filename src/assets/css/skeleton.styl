@@ -264,6 +264,17 @@
       margin-bottom: 0;
     }
   }
+  .flexwrap{
+    display: flex;
+    &>span{
+      &:first-child{
+        margin-right: 1.6rem;
+        span{
+          white-space: nowrap;
+        }
+      }
+    }
+  }
   :global(.goodsItem){
     img{
       width: 6rem;
@@ -335,6 +346,9 @@
       text-align: right;
       outline: none;
     }
+  }
+  .textInput{
+    width: 100%;
   }
   :global(.itemIOS){
     border-top: 1px solid $IOSborderColor;

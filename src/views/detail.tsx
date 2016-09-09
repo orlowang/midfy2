@@ -3,7 +3,6 @@ import {
   Component,
   Props
 } from 'react';
-import * as Relay from "react-relay";
 import { Link } from 'react-router';
 import {
   SlideTouch
@@ -24,41 +23,79 @@ import {
 import {
   ItemIOS
 } from '../../vender.src/components/ItemIOSComp';
+import {
+  getByREST
+} from '../helper/Fetch';
+import {
+  goodsListType
+} from '../helper/Types';
 const skeleton = require('../assets/css/skeleton.styl');
+
+
+interface DetailState {
+  data: goodsListType;
+}
 
 interface DetailProps extends Props<Detail>{
   viewer: {
     Goods: any;
-  }
+  },
+  params: string;
 };
 
-class Detail extends React.Component<DetailProps, {}>{
-
+export default class Detail extends React.Component<DetailProps, DetailState>{
+  constructor(props){
+    super(props);
+    this.state = {
+      data: {
+        goods_id: null,
+        head_imgs: [],
+        name: null,
+        title: null,
+        min_price: null,
+        max_price: null,
+        text_detail: null,
+        img_detail: [],
+        sunshine_community: null,
+        extend_product: null,
+        specs: [],
+        shiping: null,
+        products: []
+      }
+    };
+  };
   componentWillMount(){
     document.body.style.backgroundColor = skeleton.mainBgColor;
   }
 
   componentDidMount(){
-    
+    let that = this;
+    getByREST(`goods/detail/${this.props.params.goodsid}`, (data) => {
+      that.setState({
+        data: data.result
+      })
+    });
   }
 
   render(){
-    let goods_detail = this.props.viewer.Goods, goods_photos = [];
+    console.log(this.state.data)
+    let goods_detail = this.state.data, goods_photos = [],
+      g_min_p = goods_detail.min_price, g_max_p = goods_detail.max_price;
     let ui_detail = (page) => {
       return {
         __html: page
       }
     };
-    goods_detail.Tags.map((tag) => {
-      tag.Value = <img src={require(`../assets/img/sun_icon.svg`)} alt=""/>
-    })
     let data_goods_info = {
       goodsImage: null,
-      goodsPrice: `${goods_detail.minPrice} - ${goods_detail.maxPrice}`,
-      goodsSubTitle: goods_detail.subTitle,
-      tags: goods_detail.Tags
+      goodsPrice: g_min_p == g_max_p ? g_min_p : `${g_min_p} - ${g_max_p}`,
+      goodsSubTitle: goods_detail.title,
+      tags: [{
+        Key: goods_detail.sunshine_community,
+        Value: <img src={require(`../assets/img/sun_icon.svg`)} alt=""/>
+      }]
     };
-    goods_detail.Photos.map((photo) => {
+    goods_detail.head_imgs.map((photo) => {
       goods_photos.push({
         url: photo
       })
@@ -70,72 +107,27 @@ class Detail extends React.Component<DetailProps, {}>{
           <MountAnimaShow>
             <SlideTouch className={skeleton.slideTouch} imgList={goods_photos}></SlideTouch>
             <GoodsItemFlat className={skeleton.goodsInfoFlat} goodsInfo={data_goods_info} imagePosition="up">
-              {goods_detail.Name}
+              {goods_detail.name}
             </GoodsItemFlat>
           </MountAnimaShow>
           <MountAnima>
             <DetailStaticWrap title={'产品描述'}>
-              <div dangerouslySetInnerHTML={ui_detail(goods_detail.Detail)}></div>
+              <div dangerouslySetInnerHTML={ui_detail(goods_detail.text_detail)}></div>
             </DetailStaticWrap>
           </MountAnima>
           <MountAnima delay={200}>
             <DetailStaticWrap className={skeleton.detailWrap} title={'图文详情'}>
-              {goods_detail.imgDetail.map((detail, index) => {
+              {goods_detail.img_detail.map((detail, index) => {
                 return <div key={index}>
-                  <img src={detail.Value} alt=""/>
-                  <p>{detail.Key}</p>
+                  <img src={detail.img} alt=""/>
+                  <p>{detail.text}</p>
                 </div>
               })}
             </DetailStaticWrap>
           </MountAnima>
         </div>
       </div>
-      <BigBtn to={`/order/${goods_detail.Id}`}>立即购买</BigBtn>
+      <BigBtn to={`/order/${goods_detail.goods_id}`}>立即购买</BigBtn>
     </div>;
   }
 }
-
-export default Relay.createContainer(Detail, {
-  initialVariables: {
-    goodsid: null
-  },
-  fragments: {
-    viewer: () => Relay.QL`
-      fragments on Viewer {
-        Goods(id: $goodsid){
-          Id,
-          Name,
-          Photos,
-          mainPhoto,
-          minPrice,
-          maxPrice,
-          subTitle,
-          Products{
-            productId,
-            Price,
-            Stock,
-            Property
-          },
-          inStock,
-          Tags{
-            Key,
-            Value
-          },
-          SKU{
-            Name,
-            Key{
-              Key,
-              Value
-            }
-          },
-          Detail,
-          imgDetail{
-            Key,
-            Value
-          },
-          Shiping
-        }
-      }
-    `
-  }
-})

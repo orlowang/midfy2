@@ -14,11 +14,11 @@ import {
   mutationWithClientMutationId
 } from 'graphql-relay'
 import fetch from 'node-fetch'
+import reqwest from 'reqwest'
 
-let APIORIGIN = 3, API;
+let APIORIGIN = 0, API;
 const API_URL_PRODUCTION = `http://blackpearl.4009515151.com/interfaces/`; // 1
 const API_URL_TEST = `http://test.blackpearl.4009515151.com/interfaces/`;  // 2
-const API_URL_TEST_SIMPLE = `http://test.blackpearl.4009515151.com/interfaces/test/`;  // 3
 const API_URL_DEVELOPMENT = `http://dev.local:3000/`;                      // 0
 
 switch (APIORIGIN) {
@@ -36,15 +36,19 @@ switch (APIORIGIN) {
     break;
 }
 
-function fetchByUrl(params) {
-  return fetch(`${API}${params}`, {
-    credentials: 'include',
-    headers: {
-      'Authorization': "Bearer HzDkZSSZs1V6FSIdPBe7LnKxgISfMc",
-      'Content-Type': "application/x-www-form-urlencoded"
-    }
-  }).then(res => {console.log(res.json());return res.json()})
+function checkStatus(res) {
+    console.log(res.headers);
+    return res
 }
+
+function fetchByUrl(params) {
+  return fetch(`http://test.blackpearl.4009515151.com/interfaces/${params}`, {
+    credentials: 'include'
+  }).then(checkStatus)
+    .then(res => res.json())
+}
+
+
 
 const SimpleKVType = new GraphQLObjectType({
   name: 'SimpleKV',
@@ -298,7 +302,15 @@ let viewerType = new GraphQLObjectType({
     },
     goodsList: {
       type: new GraphQLList(goodsListType),
-      resolve: (_) => fetchByUrl('goods/list')
+      resolve: (_) => {
+        console.log(fetchByUrl('http://test.blackpearl.4009515151.com/interfaces/goods/list'))
+        return fetchByUrl('http://test.blackpearl.4009515151.com/interfaces/goods/list')
+        // fetch(`${API}goods/list`, {
+        //     credentials: "include"
+        //   })
+        //     .then(res => res.json())
+        //     .then(json => json.result)
+      }
     },
     userInfo: {
       type: simpleUserInfoType,

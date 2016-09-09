@@ -1,8 +1,10 @@
 import express from 'express'
 import graphqlHTTP from 'express-graphql'
+import { maskErrors } from 'graphql-errors'
 import morgan from 'morgan'
 import env from './config'
 import cors from 'cors'
+import schema from '../src/data/schema'
 
 const graphQLServ = express()
 
@@ -27,13 +29,14 @@ let corsOptionsDelegate = function(req, callback){
   }
   // credentials 设置为true，当使用fetch时只设置Access-Control-Allow-Origin无法通过安全校验
   corsOptions.credentials = true;
-  console.log(corsOptions)
   callback(null, corsOptions);
 };
 
-graphQLServ.use(morgan(`combined`))
+maskErrors(schema)
+
+// graphQLServ.use(morgan(`combined`))
 graphQLServ.use('/graphql', cors(corsOptionsDelegate), graphqlHTTP({
-  schema: require('../src/data/schema').default,
+  schema: schema,
   graphiql: true,
   pretty: true,
   formatError: error => ({

@@ -26,8 +26,6 @@ let CreateRoutes = [];
 export const MallRoutes = {
   path: '/',
   component: Mall,
-  queries: ViewerQuery,
-  render: Unexpected(Mall)
 }
 CreateRoutes.push(MallRoutes)
 
@@ -38,8 +36,7 @@ export const DetailRoutes = {
       const Detail = require('../views/detail').default
       cb(null, Detail)
     }, 'Detail')
-  },
-  queries: ViewerQuery,
+  }
 }
 CreateRoutes.push(DetailRoutes)
 
@@ -50,8 +47,7 @@ export const OrderRoutes = {
       const Order = require('../views/order').default
       cb(null, Order)
     }, 'Order')
-  },
-  queries: ViewerQuery,
+  }
 }
 CreateRoutes.push(OrderRoutes)
 
@@ -62,8 +58,7 @@ export const AddressRoutes = {
       const Address = require('../views/Address').default
       cb(null, Address)
     }, 'Address')
-  },
-  queries: ViewerQuery,
+  }
 }
 CreateRoutes.push(AddressRoutes)
 

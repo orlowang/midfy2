@@ -3,15 +3,32 @@ import {
   Component,
   Props
 } from 'react';
-import * as Relay from 'react-relay';
 const skeleton = require('../assets/css/skeleton.styl');
 import { Link } from 'react-router';
 import {
   GoodsItemFlat
 } from '../../vender.src/components/MallComp';
 import {
+  MountAnima,
   MountAnimaShow
 } from '../../vender.src/components/Animate';
+import {
+  getByREST
+} from '../helper/Fetch';
+import 'whatwg-fetch';
+
+interface goodsListType {
+  goods_id: string;
+  img: string;
+  name: string;
+  title: string;
+  min_price: string;
+  sunshine_community: string;
+}
+
+interface MallState {
+  data: goodsListType[];
+}
 
 interface MallProps extends Props<Mall>{
   viewer: {
@@ -19,27 +36,42 @@ interface MallProps extends Props<Mall>{
   }
 };
 
-class Mall extends Component<MallProps, {}>{
+export default class Mall extends Component<MallProps, MallState>{
+  constructor(props){
+    super(props);
+    this.state = {
+      data: []
+    };
+  };
   componentWillMount(){
     document.body.style.backgroundColor = skeleton.sipcBgColor;
   }
 
-  render(){
-    let ui_good_list = this.props.viewer.goodsList.map((goods, index) => {
-      goods.Tags.map((tag) => {
-        tag.Value = tag.Value ? <img src={require(`../assets/img/sun_icon.svg`)} alt=""/> : ''
+  componentDidMount(){
+    let that = this;
+    getByREST('goods/list', (data) => {
+      that.setState({
+        data: data.result
       })
+    });
+  }
+
+  render(){
+    let ui_good_list = this.state.data.map((goods, index) => {
       let data = {
-        goodsImage: goods.mainPhoto,
-        goodsPrice: goods.Price,
-        goodsSubTitle: goods.subTitle,
-        hasSold: goods.hasSold,
-        inStock: goods.inStock,
-        tags: goods.Tags,
+        goodsImage: goods.img,
+        goodsPrice: goods.min_price,
+        goodsSubTitle: goods.title,
+        hasSold: null,
+        inStock: null,
+        tags: [{
+          Key: true,
+          Value: <img src={require(`../assets/img/sun_icon.svg`)} alt=""/>
+        }],
       };
-      return <Link key={index} to={`/detail/${goods.Id}`}>
+      return <Link key={index} to={`/detail/${goods.goods_id}`}>
         <GoodsItemFlat isButton={true} imagePosition={index%2 ? 'down' : 'up'} className={skeleton.goodsItemFlat} goodsInfo={data}>
-          {goods.Name}
+          {goods.name}
           <div className={`${skeleton.keyprop}${index%2 ? ` ${skeleton.down}` : ` ${skeleton.up}`}`}>
             <img src={require('../assets/img/bg1.svg')} alt=""/>
             <img src={require('../assets/img/bg2.svg')} alt=""/>
@@ -52,28 +84,10 @@ class Mall extends Component<MallProps, {}>{
         <div className={skeleton.banner}>
           <img src={require('../assets/img/store_banner.png')} alt=""/>
         </div>
-        <div className={`${skeleton.goodsList}`}>{ui_good_list}</div>
+        <div className={`${skeleton.goodsList}`}>
+          {ui_good_list}
+        </div>
       </div>
     </MountAnimaShow>;
   }
 }
-
-export default Relay.createContainer(Mall, {
-  fragments: {
-    viewer: () => Relay.QL`
-      fragments on Viewer {
-        goodsList {
-          Id,
-          Name,
-          subTitle,
-          mainPhoto,
-          Price,
-          Tags {
-            Key,
-            Value
-          },
-        }
-      }
-    `
-  }
-})

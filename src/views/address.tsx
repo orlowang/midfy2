@@ -14,20 +14,53 @@ import {
 import {
   BigBtn
 } from "../../vender.src/components/MallComp";
+import {
+  TextInputNormal
+} from "../../vender.src/components/TextComp";
+import {
+  userInfoType
+} from '../helper/Types';
+
+import {
+  getByREST
+} from '../helper/Fetch';
 const skeleton = require('../assets/css/skeleton.styl');
+
+interface AddressState {
+  user?: userInfoType;
+  usertmp?: string;
+}
 
 interface AddressProps extends Props<Address>{
   orderId: string;
-  viewer: {
-    userInfo: any;
-  }
+  params: string;
 };
 
-class Address extends React.Component<AddressProps, {}>{
+export default class Address extends React.Component<AddressProps, AddressState>{
+  constructor(props){
+    super(props);
+    this.state = {
+      user: {
+        name: null,
+        nickname: null,
+        sex: null,
+        mobile: null,
+        province: null,
+        city: null,
+        district: null,
+        road: null,
+        project_name: null,
+        building_name: null,
+        address: null,
+      },
+      usertmp: ':'
+    };
+  };
 
   refs : {
     [key: string]: (Element);
-    roomId: (HTMLInputElement)
+    roomId: (HTMLInputElement);
+    user: (HTMLInputElement);
   }
 
   componentWillMount(){
@@ -35,51 +68,65 @@ class Address extends React.Component<AddressProps, {}>{
   }
 
   componentDidMount(){
+    let that = this;
+    getByREST(`addr/detail`, (data) => {
+      that.setState({
+        user: data.result
+      }, () => {
+        const username = this.badCodeSetName();
+        !localStorage['usertmp'] && localStorage.setItem('usertmp', `${username}:${this.state.user.building_name}`)
+        that.setState({
+          usertmp: localStorage.getItem('usertmp')
+        })
+      })
+    });
+  }
 
+  badCodeSetName(){
+    let user = this.state.user;
+    return user.name ? (user.sex == 2 ? `${user.nickname}女士` : `${user.nickname}先生`) : user.nickname;
   }
 
   saveUserInfo(){
-    console.log(this.props.orderId)
-    let session = JSON.parse(localStorage[`order-${this.props.orderId}`]);
-    console.log(session)
-    session['address'] = `${this.props.viewer.userInfo.province}${this.props.viewer.userInfo.city}${this.props.viewer.userInfo.district}${this.props.viewer.userInfo.road}${this.props.viewer.userInfo.project_name}${this.refs.roomId.value}`;
-    
-    localStorage.setItem(`order-${this.props.orderId}`, JSON.stringify(session));
-    hashHistory.push(`/order/${this.props.orderId}`)
+    let session = JSON.parse(localStorage[`order-${this.props.params.orderId}`]);
+    let badCodeUserSession = localStorage['usertmp'].split(":");
+    session["consignee"] = badCodeUserSession[0];
+    session["address"] = `${this.state.user.province}${this.state.user.city}${this.state.user.district}${this.state.user.road}${this.state.user.project_name}${badCodeUserSession[1]}`;
+    localStorage.setItem(`order-${this.props.params.orderId}`, JSON.stringify(session));
+    hashHistory.push(`/order/${this.props.params.orderId}`)
+  }
+
+  getInputValue(component, value){
+    if(localStorage.getItem('usertmp')){
+      let session = localStorage.getItem('usertmp').split(":");
+      let newSession = `${component == 'consignee' ? value : session[0]}:${component == 'address' ? value : session[1]}`;
+      localStorage.setItem(`usertmp`, newSession);
+    }
   }
 
   render(){
-    let ui_name;
-    let first_name = this.props.viewer.userInfo.name;
-    let sex = this.props.viewer.userInfo.sex;
-    let session = JSON.parse(localStorage[`order-${this.props.orderId}`]);
-
-    if (sex && first_name) {
-      ui_name = sex == 2 ? `${first_name}女士` : `${first_name}先生`;
-    }
-
     return <div className={`${skeleton.address} address`}>
       <div className={skeleton.root}>
         <div className={skeleton.rootwrap}>
           <MountAnima>
             <div className={skeleton.itemList}>
               <ItemIOS title="收货人">
-                <input type="text" defaultValue={ui_name || this.props.viewer.userInfo.nickname}/>
+                <TextInputNormal className={skeleton.textInput} name="consignee" complete={this.getInputValue.bind(this)} default={this.state.usertmp.split(":")[0]}></TextInputNormal>
               </ItemIOS>
               <ItemIOS title="联系电话">
-                <span>{this.props.viewer.userInfo.mobile}</span>
+                <span>{this.state.user.mobile}</span>
               </ItemIOS>
               <ItemIOS title="省市">
-                <span>{this.props.viewer.userInfo.province}</span>
+                <span>{this.state.user.province}</span>
               </ItemIOS>
               <ItemIOS title="社区">
-                <span>{this.props.viewer.userInfo.project_name}</span>
+                <span>{this.state.user.project_name}</span>
               </ItemIOS>
             </div>
             <p>如当前房屋地址有误，请修改房号信息，以便收货</p>
             <div className={skeleton.itemList}>
               <ItemIOS title="门牌号">
-                <input ref="roomId" type="text" defaultValue={this.props.viewer.userInfo.building_name}/>
+                <TextInputNormal className={skeleton.textInput} name="address" complete={this.getInputValue.bind(this)} default={this.state.usertmp.split(":")[1]}></TextInputNormal>
               </ItemIOS>
             </div>
           </MountAnima>
@@ -89,25 +136,3 @@ class Address extends React.Component<AddressProps, {}>{
     </div>;
   }
 }
-
-export default Relay.createContainer(Address, {
-  fragments: {
-    viewer: () => Relay.QL`
-      fragments on Viewer {
-        userInfo{
-          name,
-          sex,
-          nickname,
-          mobile,
-          province,
-          city,
-          district,
-          road,
-          project_name,
-          building_name,
-          address,
-        }
-      }
-    `
-  }
-})

@@ -133,11 +133,14 @@ export class TextInput extends React.Component<TextInputProps, TextInputState>{
 
 interface TextInputNormalProps {
   className?: string;
+  name: string;
   type?: string;
   placeholder?: string;
   filter?: string;
   verification?: string;
   default?: string;
+  ref?: Object;
+  complete?: Function;
 };
 
 interface TextInputNormalState {
@@ -153,18 +156,29 @@ export class TextInputNormal extends React.Component<TextInputNormalProps, TextI
     super(props);
     this.state = {
       isinput: !!this.props.default,
-      value: this.props.default,
+      value: this.props.default || '',
       notice: ''
     };
   };
-
+  
   refs : {
     [key: string]: (Element);
     text: (HTMLInputElement)
   }
 
   componentDidMount(){
-    this.activeInput
+    this.activeInput;
+    this.props.complete(this.props.default);
+  }
+
+  componentWillReceiveProps(nextProps){
+    if (this.props != nextProps) {
+      this.setState({
+        isinput: !!nextProps.default,
+        value: nextProps.default || '',
+        notice: nextProps.notice
+      })
+    }
   }
 
   textFilter(){
@@ -173,7 +187,8 @@ export class TextInputNormal extends React.Component<TextInputNormalProps, TextI
 
   textVerify(){
     const input = this.refs.text;
-    this.setInputState(input.value != '')
+    this.setInputState(input.value != '');
+    this.props.complete(this.props.name, this.state.value)
   }
 
   activeInput(){
@@ -189,7 +204,7 @@ export class TextInputNormal extends React.Component<TextInputNormalProps, TextI
   handleChange(e){
     this.setState({
       value: e.target.value
-    })
+    });
   }
 
   render(){
