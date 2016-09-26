@@ -36,14 +36,14 @@ export class Counter extends React.Component<CounterProps, CounterStatus>{
       this.setState({
         count: this.state.count + 1,
         minLimit: false
-      })
+      }, () => this.props.complete(this.refs.counter.value))
     } else {
       if (this.state.count < this.props.max) {
         this.setState({
           count: this.state.count + 1,
           minLimit: false,
           maxLimit: this.state.count >= this.props.max - 1 && true
-        })
+        }, () => this.props.complete(this.refs.counter.value))
       }
     }
   }
@@ -54,7 +54,7 @@ export class Counter extends React.Component<CounterProps, CounterStatus>{
         count: this.state.count - 1,
         maxLimit: false,
         minLimit: this.state.count <= 2 && true
-      })
+      }, () => this.props.complete(this.refs.counter.value))
     }
   }
 
@@ -62,18 +62,18 @@ export class Counter extends React.Component<CounterProps, CounterStatus>{
     if(!this.props.max){
       this.setState({
         count: e.target.value != '' ? parseInt(e.target.value.replace(/[^\d]/g,'')) : e.target.value
-      })
+      }, () => this.props.complete(this.refs.counter.value))
     } else {
       if(e.target.value >= this.props.max){
         this.setState({
           count: this.props.max,
           maxLimit: true
-        })
+        }, () => this.props.complete(this.refs.counter.value))
       } else {
         this.setState({
           count: e.target.value != '' ? parseInt(e.target.value.replace(/[^\d]/g,'')) : e.target.value,
           maxLimit: false,
-        })
+        }, () => this.props.complete(this.refs.counter.value))
       }
     }
   }
@@ -89,7 +89,6 @@ export class Counter extends React.Component<CounterProps, CounterStatus>{
         minLimit: false
       })
     }
-    this.props.complete(this.refs.counter.value)
   }
 
   render(){

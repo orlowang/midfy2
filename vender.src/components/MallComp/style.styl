@@ -18,20 +18,22 @@
 }
 
 .goodsSKUSimple{
-  display: flex;
-  align-items: center;
-  &>div{
-    flex: 1;
-    justify-content: flex-end;
-  }
-  .wrap{
-    span{
-      text-align: center;
+  .goodsSKUSimpleList{
+    display: flex;
+    align-items: center;
+    &>div{
+      flex: 1;
+      justify-content: flex-end;
     }
-  }
+    .wrap{
+      span{
+        text-align: center;
+      }
+    }
 
-  .active{
-    
+    .active{
+      
+    }
   }
 }
 
@@ -87,6 +89,21 @@
     order: 4;
     & + .split{
       order: 3
+    }
+  }
+  .spec{
+    border-top: 1px solid #e6e4e1;
+    color: #909090;
+    font-weight: 200;
+    font-size: 1.16667rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    text-align: center;
+    span{
+      color: #f39800;
+    }
+    a{
+      color: #f39800;
     }
   }
 }

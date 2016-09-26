@@ -62,4 +62,15 @@ export const AddressRoutes = {
 }
 CreateRoutes.push(AddressRoutes)
 
+export const DeliveryRoutes = {
+  path: '/delivery/:name/:id',
+  getComponent (nextState, cb) {
+    require.ensure([], (require) => {
+      const Delivery = require('../views/Delivery').default
+      cb(null, Delivery)
+    }, 'Delivery')
+  }
+}
+CreateRoutes.push(DeliveryRoutes)
+
 export default CreateRoutes

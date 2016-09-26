@@ -8,6 +8,7 @@
     "build:dlls": "NODE_ENV=development gulp 'webpack:Build DLLs' --gulpfile ./core/compiler/make_app_dev.babel.js",
     "build:schema": "NODE_ENV=development gulp 'webpack:Build Schema' --gulpfile ./core/compiler/make_app_dev.babel.js",
     "start:simplesrv": "NODE_ENV=production babel-node ./core/simplesrv.js",
+    "build:app": "NODE_ENV=production gulp 'webpack:Build App' --gulpfile ./core/compiler/make_app_prd.babel.js",
     "start:https": "NODE_ENV=production babel-node ./core/httpssrv.js",
     "start:json": "NODE_ENV=production babel-node ./core/jsonsrv.js",
     "watch": "NODE_ENV=development webpack-dev --display-chunks --profile --color --config ./core/compiler/make_app.js",

@@ -33,7 +33,8 @@ const skeleton = require('../assets/css/skeleton.styl');
 
 
 interface DetailState {
-  data: goodsListType;
+  data?: goodsListType;
+  layerState?: boolean;
 }
 
 interface DetailProps extends Props<Detail>{
@@ -57,11 +58,13 @@ export default class Detail extends React.Component<DetailProps, DetailState>{
         text_detail: null,
         img_detail: [],
         sunshine_community: null,
+        sunshine_price: null,
         extend_product: null,
         specs: [],
         shiping: null,
         products: []
-      }
+      },
+      layerState: false
     };
   };
   componentWillMount(){
@@ -75,10 +78,59 @@ export default class Detail extends React.Component<DetailProps, DetailState>{
         data: data.result
       })
     });
+    document.title = "商品详情";
+    //解决IOS下title不生效问题
+    const mobile = navigator.userAgent.toLowerCase();
+    const length = document.querySelectorAll('iframe').length;
+    if (/iphone|ipad|ipod/.test(mobile) && !length) {
+      const iframe = document.createElement('iframe');
+      iframe.style.cssText = 'display: none; width: 0; height: 0;';
+      iframe.setAttribute('src', 'about:blank');
+      iframe.addEventListener('load', () => {
+        setTimeout(() => {
+          iframe.removeEventListener('load', false);
+          document.body.removeChild(iframe);
+        }, 0);
+      });
+      document.body.appendChild(iframe);
+    }
+  }
+
+  isVersionOutdate(current, standard){
+    let cargs = current.split('.');
+    let sargs = standard.split('.');
+    for(let i = 0; i < sargs.length; i++){
+      if (parseInt(sargs[i]) > parseInt(cargs[i])) {
+        return true
+      }
+    }
+  }
+
+  checkAppVersion(){
+    let app_env = window.appEnvironment;
+    let current_version_android = '3.1.0';
+    let current_version_ios = '3.1.0';
+    console.log(app_env)
+    let check = window.setInterval(()=>{
+      if (app_env) {
+        let standard_version = app_env.platform != 'Android' ? current_version_ios : current_version_android;
+        if (this.isVersionOutdate(app_env.appVersion, standard_version)) {
+          let timer = setTimeout(() => {
+            this.setState({
+              layerState: true
+            }, () => {
+              clearTimeout(timer);
+              clearInterval(check)
+            })
+          }, 100)
+        }
+      } else {
+        clearInterval(check)
+      }
+    }, 200);
   }
 
   render(){
-    console.log(this.state.data)
     let goods_detail = this.state.data, goods_photos = [],
       g_min_p = goods_detail.min_price, g_max_p = goods_detail.max_price;
     let ui_detail = (page) => {
@@ -90,15 +142,16 @@ export default class Detail extends React.Component<DetailProps, DetailState>{
       goodsImage: null,
       goodsPrice: g_min_p == g_max_p ? g_min_p : `${g_min_p} - ${g_max_p}`,
       goodsSubTitle: goods_detail.title,
-      tags: [{
-        Key: goods_detail.sunshine_community,
-        Value: <img src={require(`../assets/img/sun_icon.svg`)} alt=""/>
-      }]
+      tags: []
     };
     goods_detail.head_imgs.map((photo) => {
       goods_photos.push({
         url: photo
       })
+    })
+    let all_stock = 0;
+    goods_detail.products.map(prd => {
+      all_stock += prd.stock
     })
 
     return <div className={`${skeleton.info} info`}>
@@ -106,7 +159,7 @@ export default class Detail extends React.Component<DetailProps, DetailState>{
         <div className={skeleton.rootwrap}>
           <MountAnimaShow>
             <SlideTouch className={skeleton.slideTouch} imgList={goods_photos}></SlideTouch>
-            <GoodsItemFlat className={skeleton.goodsInfoFlat} goodsInfo={data_goods_info} imagePosition="up">
+            <GoodsItemFlat className={skeleton.goodsInfoFlat} goodsInfo={data_goods_info} imagePosition="up" spec={goods_detail.sunshine_community && goods_detail.sunshine_price}>
               {goods_detail.name}
             </GoodsItemFlat>
           </MountAnimaShow>
@@ -127,7 +180,8 @@ export default class Detail extends React.Component<DetailProps, DetailState>{
           </MountAnima>
         </div>
       </div>
-      <BigBtn to={`/order/${goods_detail.goods_id}`}>立即购买</BigBtn>
+      // {this.checkAppVersion() ? <span className={skeleton.noStockBtn}>版本低无法购买</span> : (all_stock == 0 ? <span className={skeleton.noStockBtn}>已售罄</span> : <BigBtn to={`/order/${goods_detail.goods_id}`}>立即购买</BigBtn>)}
+      {all_stock == 0 ? <span className={skeleton.noStockBtn}>已售罄</span> : <BigBtn to={`/order/${goods_detail.goods_id}`}>立即购买</BigBtn>}
     </div>;
   }
 }

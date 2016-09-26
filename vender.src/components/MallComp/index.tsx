@@ -13,7 +13,7 @@ interface GoodsType {
   goodsSubTitle?: string;
   inStock?: string;
   hasSold?: string;
-  tags?: string[];
+  tags?: Object[];
   sku?: string[];
 }
 
@@ -43,7 +43,7 @@ export class GoodsItem extends React.Component<GoodsItemProps, {}>{
         ui_sign = this.props.goodsInfo.hasSold && `${this.props.goodsInfo.hasSold}人付款`;
         break;
       case 'inStock':
-        ui_sign = this.props.goodsInfo.inStock && `库存${this.props.goodsInfo.inStock}件`;
+        ui_sign = this.props.goodsInfo.inStock != null && `库存${this.props.goodsInfo.inStock}件`;
         break;
     }
     return <div className={`${styl.goodsItem}${_classname} goodsItem`}>
@@ -89,18 +89,13 @@ export class GoodsItemSimple extends React.Component<GoodsItemSimpleProps, {}>{
   }
 }
 
-export interface KVType {
-  Key?: any;
-  Value?: any;
-}
-
 class goodsSKUSimpleStatus {
-  selected: string;
+  selected: Map<any, any>;
 };
 
 export interface GoodsSKUSimpleProps {
   className?: string;
-  sku: KVType[];
+  sku: Map<any, any>;
   sessionId?: string;
   current?: string;
   doSelected: Function;
@@ -113,37 +108,47 @@ export class GoodsSKUSimple extends React.Component<GoodsSKUSimpleProps, goodsSK
   constructor(props){
     super(props);
     this.state = {
-      selected: this.props.current || ''
+      selected: new Map()
     };
   };
 
   handleSelect(sku){
-    this.setState({
-      selected: this.state.selected == sku ? '' : sku
-    });
-    let session = localStorage.getItem(this.props.sessionId);
-    if (this.props.sessionId && session) {
-      let data = JSON.parse(session);
-      data[String(this.props.children)] = this.state.selected == sku ? '' : sku;
-      this.setState({
-        selected: this.state.selected == sku ? '' : sku
-      })
-      localStorage.setItem(this.props.sessionId, JSON.stringify(data))
+    if (sku.exist){
+      let types = this.mapTo();
+      sku.active = !sku.active;
+      this.props.doSelected(sku, types)
     }
-    this.props.doSelected(sku)
+    // let session = localStorage.getItem(this.props.sessionId);
+    // if (this.props.sessionId && session) {
+    //   let data = JSON.parse(session);
+    //   data[String(this.props.children)] = this.state.selected == sku ? '' : sku;
+    //   this.setState({
+    //     selected: this.state.selected == sku ? '' : sku
+    //   })
+    //   localStorage.setItem(this.props.sessionId, JSON.stringify(data))
+    // }
+  }
+
+  mapTo(){
+    let sku_list = new Map();
+    this.props.sku.forEach((sku, index) => {
+      sku_list.has(sku.type) ? sku_list.get(sku.type).push(sku) : sku_list.set(sku.type, [sku]);
+    })
+    return sku_list;
   }
 
   render(){
-    let _classname = this.props.className ? ' ' + this.props.className : '';
-    let ui_sku = this.props.sku.map((sku, index) => {
-      let _activeclass = this.state.selected == sku.Value ? `active` : ''
-      return <span className={_activeclass} key={index} onClick={this.handleSelect.bind(this, sku.Value)}>{sku.Key}</span> 
-    })
+    let _classname = this.props.className ? ' ' + this.props.className : '', ui_sku_list = [];
+    this.mapTo().forEach((value, index) => {
+      ui_sku_list.push(<div key={index} className={`${styl.goodsSKUSimpleList} goodsSKUSimpleList`}>
+        <span>{index}</span>
+        <div className={`${styl.wrap} wrap`}>
+          {value.map((sku, i) => <span className={`${sku.exist ? 'normal' : 'disable'} ${sku.active ? 'active' : ''} ${sku.has ? 'has' : ''}`} key={i} onClick={this.handleSelect.bind(this, sku)}>{sku.name}</span>)}
+        </div>
+      </div>)
+    });
     return <div className={`${styl.goodsSKUSimple}${_classname} goodsSKUSimple`}>
-      <span>{this.props.children}</span>
-      <div className={`${styl.wrap} wrap`}>
-        {ui_sku}
-      </div>
+      {ui_sku_list}
     </div>; 
   }
 }
@@ -175,6 +180,8 @@ export interface GoodsItemFlatProps {
   imagePosition?: string;
   typesetting?: string;
   isButton?: boolean;
+
+  spec?:number;
 };
 
 export class GoodsItemFlat extends React.Component<GoodsItemFlatProps, {}>{
@@ -195,16 +202,17 @@ export class GoodsItemFlat extends React.Component<GoodsItemFlatProps, {}>{
     let _direction_classname = this.props.imagePosition == 'left' || this.props.imagePosition == 'right' ? styl.level : styl.vertical;
     return <div className={`${styl.goodsItemFlat}${_classname} goodsItemFlat`}>
       {this.props.goodsInfo.goodsImage && <div className={`${styl.avatar} ${_order_classname} avatar`}>
-        <img src={this.props.goodsInfo.goodsImage} alt=""/>
+        <img src={`${this.props.goodsInfo.goodsImage}?imageView2/2/format/jpg/q/80`} alt=""/>
       </div>}
       {this.props.goodsInfo.goodsImage && <div className={`${styl.split} split`}></div>}
       <div className={`${_direction_classname} ${styl.goodsWrap} goodsWrap`}>
-        {(this.props.goodsInfo.tags && this.props.goodsInfo.tags.length == 1) && <span className={`${styl.tagOne} tagOne`}>
+        {(this.props.goodsInfo.tags && this.props.goodsInfo.tags.length == 1 && this.props.goodsInfo.tags[0].Key) && <span className={`${styl.tagOne} tagOne`}>
           {this.props.goodsInfo.tags[0].Value}
         </span>}
         <Title className={styl.title}>{this.props.children}</Title>
         <Text lineClamp={2}>{this.props.goodsInfo.goodsSubTitle}</Text>
         <span className={`${styl.price} price`}>￥{this.props.goodsInfo.goodsPrice}</span>
+        {this.props.spec && <div className={styl.spec}>此商品每笔销售将有<span>{this.props.spec}</span>元捐赠到<a href={`http://blackpearl.4009515151.com/login?request_uri=http%3a%2f%2fblackpearl.4009515151.com%2fassets%2fh5%2fylplan.html`}>友邻计划</a></div>}
         {this.props.isButton && <Button className={`${styl.actionBtn} actionBtn`}>去看看</Button>}
       </div>
     </div>; 

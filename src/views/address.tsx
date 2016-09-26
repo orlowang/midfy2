@@ -33,7 +33,9 @@ interface AddressState {
 
 interface AddressProps extends Props<Address>{
   orderId: string;
-  params: string;
+  params: {
+    orderId: string
+  };
 };
 
 export default class Address extends React.Component<AddressProps, AddressState>{
@@ -65,6 +67,22 @@ export default class Address extends React.Component<AddressProps, AddressState>
 
   componentWillMount(){
     document.body.style.backgroundColor = skeleton.mainBgColor;
+    document.title = "收货地址";
+    //解决IOS下title不生效问题
+    const mobile = navigator.userAgent.toLowerCase();
+    const length = document.querySelectorAll('iframe').length;
+    if (/iphone|ipad|ipod/.test(mobile) && !length) {
+      const iframe = document.createElement('iframe');
+      iframe.style.cssText = 'display: none; width: 0; height: 0;';
+      iframe.setAttribute('src', 'about:blank');
+      iframe.addEventListener('load', () => {
+        setTimeout(() => {
+          iframe.removeEventListener('load', false);
+          document.body.removeChild(iframe);
+        }, 0);
+      });
+      document.body.appendChild(iframe);
+    }
   }
 
   componentDidMount(){
@@ -88,11 +106,17 @@ export default class Address extends React.Component<AddressProps, AddressState>
   }
 
   saveUserInfo(){
-    let session = JSON.parse(localStorage[`order-${this.props.params.orderId}`]);
-    let badCodeUserSession = localStorage['usertmp'].split(":");
-    session["consignee"] = badCodeUserSession[0];
-    session["address"] = `${this.state.user.province}${this.state.user.city}${this.state.user.district}${this.state.user.road}${this.state.user.project_name}${badCodeUserSession[1]}`;
-    localStorage.setItem(`order-${this.props.params.orderId}`, JSON.stringify(session));
+    if(localStorage.getItem('usertmp')){
+      let session = localStorage.getItem('usertmp').split(":");
+      if (!session[0]) {
+        alert('收货人名称不能为空！')
+        return
+      }
+      if(!session[1]) {
+        alert('问牌号不能为空！')
+        return
+      }
+    }
     hashHistory.push(`/order/${this.props.params.orderId}`)
   }
 

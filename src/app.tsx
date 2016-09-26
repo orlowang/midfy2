@@ -1,6 +1,5 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import * as Relay from "react-relay";
 import {
   browserHistory,
   hashHistory,
@@ -13,6 +12,12 @@ const remoteIP = '10.39.230.12';
 const remoteIPhome = '192.168.1.107';
 
 // fix a:active can't be work. 
+// window.appEnvironment = {
+//   appName: 'zhuzhuer',
+//   appVersion: '3.0.0',
+//   language: 'en',
+//   platform: 'Android'
+// };
 document.body.addEventListener('touchstart', ()=>{})
 ReactDOM.render(
   <Router 

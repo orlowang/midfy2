@@ -31,6 +31,7 @@ export interface goodsListType {
   text_detail: string;
   img_detail: contextType[];
   sunshine_community: boolean;
+  sunshine_price: number;
   extend_product?: boolean;
   specs?: SKUType[];
   shiping: string;
