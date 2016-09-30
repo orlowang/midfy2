@@ -1,7 +1,7 @@
 import 'whatwg-fetch';
 
 export const getByREST = (args, callback) => {
-  fetch(`http://blackpearl.4009515151.com/interfaces/${args}`, {
+  fetch(`http://test.blackpearl.4009515151.com/interfaces/${args}`, {
       credentials: 'include'
       // method: 'GET',
       // mode: 'no-cors', 
@@ -11,7 +11,7 @@ export const getByREST = (args, callback) => {
 };
 
 export const postByREST = (args, data, callback) => {
-  fetch(`http://blackpearl.4009515151.com/interfaces/${args}`, {
+  fetch(`http://test.blackpearl.4009515151.com/interfaces/${args}`, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -26,7 +26,7 @@ export const postByREST = (args, data, callback) => {
 
 
 export const getDelivery = (args, callback) => {
-  fetch(`http://pay.4009515151.com/services/delivery/query?${args}`, {
+  fetch(`http://test.pay.4009515151.com/services/delivery/query?${args}`, {
       
     }).then(res => res.json())
       .then(data => callback(data))

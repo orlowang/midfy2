@@ -163,15 +163,15 @@ export default class Detail extends React.Component<DetailProps, DetailState>{
               {goods_detail.name}
             </GoodsItemFlat>
           </MountAnimaShow>
-          <MountAnima>
+          {goods_detail.text_detail != '' && <MountAnima>
             <DetailStaticWrap title={'产品描述'}>
-              <div dangerouslySetInnerHTML={ui_detail(goods_detail.text_detail)}></div>
+              <pre style={{whiteSpace: 'pre-wrap', wordWrap: 'break-word'}} dangerouslySetInnerHTML={ui_detail(goods_detail.text_detail)}></pre>
             </DetailStaticWrap>
-          </MountAnima>
+          </MountAnima>}
           <MountAnima delay={200}>
             <DetailStaticWrap className={skeleton.detailWrap} title={'图文详情'}>
               {goods_detail.img_detail.map((detail, index) => {
-                return <div key={index}>
+                return <div key={index} style={{textAlign: 'center'}}>
                   <img src={detail.img} alt=""/>
                   <p>{detail.text}</p>
                 </div>
@@ -180,7 +180,6 @@ export default class Detail extends React.Component<DetailProps, DetailState>{
           </MountAnima>
         </div>
       </div>
-      // {this.checkAppVersion() ? <span className={skeleton.noStockBtn}>版本低无法购买</span> : (all_stock == 0 ? <span className={skeleton.noStockBtn}>已售罄</span> : <BigBtn to={`/order/${goods_detail.goods_id}`}>立即购买</BigBtn>)}
       {all_stock == 0 ? <span className={skeleton.noStockBtn}>已售罄</span> : <BigBtn to={`/order/${goods_detail.goods_id}`}>立即购买</BigBtn>}
     </div>;
   }

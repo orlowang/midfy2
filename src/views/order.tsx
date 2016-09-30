@@ -150,7 +150,7 @@ export default class Order extends React.Component<OrderProps, OrderStatus>{
           session['goods'] = [{
             product_id: this.state.data.products[0].product_id,
             goods_id: this.state.data.goods_id,
-            price: this.state.data.products[0].price,
+            price: (this.state.data.products[0].price).replace(',', ''),
             num: 1
           }];
           session['order_price'] = parseFloat((this.state.data.products[0].price).replace(',', '')) + parseFloat(this.state.data.shiping);
@@ -204,7 +204,7 @@ export default class Order extends React.Component<OrderProps, OrderStatus>{
         // 创建完整订单, 有些(etc.运费、付款方式、手机号)暂时无法修改，故子再此使用初始化值 ---02
         session['mobile'] = this.state.user.mobile;
         session['consignee'] = (usrInfo && usrInfo[0]) || this.badCodeSetName();
-        session['address'] = ((usrInfo && usrInfo[1]) && `${this.state.user.province}${this.state.user.city}${this.state.user.district}${this.state.user.road}${this.state.user.project_name}${usrInfo[1]}`) || this.state.user.address;
+        session['address'] = ((usrInfo && usrInfo[1]) && `${this.state.user.province}${this.state.user.city}${this.state.user.district}${this.state.user.road}${this.state.user.project_name}${usrInfo[1]}`) || `${this.state.user.address}${this.state.user.building_name}`;
         that.updateOrderSession(sessionId, session);
       })
     });
@@ -300,7 +300,7 @@ export default class Order extends React.Component<OrderProps, OrderStatus>{
       updateorder.goods = [{
         goods_id: this.state.data.goods_id,
         product_id: isOne[0].product_id,
-        price: isOne[0].price,
+        price: (isOne[0].price).replace(',', ''),
         num: updateorder.goods_num,
       }];
       if (updateorder.goods_num >= 1) {
@@ -400,7 +400,6 @@ export default class Order extends React.Component<OrderProps, OrderStatus>{
 
   removeOrder(SID){
     localStorage[SID] && localStorage.removeItem(SID)
-    localStorage['usertmp'] && localStorage.removeItem('usertmp')
     localStorage['skutmp'] && localStorage.removeItem('skutmp')
     localStorage['usrselect'] && localStorage.removeItem('usrselect')
     localStorage['usrselectmp'] && localStorage.removeItem('usrselectmp')

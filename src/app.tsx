@@ -14,7 +14,7 @@ const remoteIPhome = '192.168.1.107';
 // fix a:active can't be work. 
 // window.appEnvironment = {
 //   appName: 'zhuzhuer',
-//   appVersion: '3.0.0',
+//   appVersion: '3.0.10',
 //   language: 'en',
 //   platform: 'Android'
 // };

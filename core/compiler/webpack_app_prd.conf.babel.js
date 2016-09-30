@@ -100,7 +100,7 @@ const webpackConfig = {
 
         // Merge all duplicate modules
         // new webpack.optimize.DedupePlugin(),
-
+        
         // Minify and optimize the index.html
         new HtmlWebpackPlugin({
             template: `${Midfy.ENV_BASEPATH}/core/templates/index.html`,
