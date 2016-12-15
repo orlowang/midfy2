@@ -14,8 +14,8 @@ const webpackConfig = {
     },
     output: {
         // Don't use hashes in dev mode for better performance
-        filename: '[name].js',
-        chunkFilename: '[name].chunk.js',
+        filename: '[name].[chunkhash].js',
+        chunkFilename: '[name].chunk.[chunkhash].js',
         path: Midfy.app.output
     },
     resolve: {

@@ -26,44 +26,26 @@ import {
 } from '../helper/Fetch';
 const skeleton = require('../assets/css/skeleton.styl');
 
-interface AddressState {
-  user?: userInfoType;
-  usertmp?: string;
+interface HomeKeeperState {
+  keeper?: any;
+  keepertmp?: any;
 }
 
-interface AddressProps extends Props<Address>{
+interface HomeKeeperProps extends Props<HomeKeeper>{
   orderId: string;
   params: {
     orderId: string
   };
 };
 
-export default class Address extends React.Component<AddressProps, AddressState>{
+export default class HomeKeeper extends React.Component<HomeKeeperProps, HomeKeeperState>{
   constructor(props){
     super(props);
     this.state = {
-      user: {
-        name: null,
-        nickname: null,
-        sex: null,
-        mobile: null,
-        province: null,
-        city: null,
-        district: null,
-        road: null,
-        project_name: null,
-        building_name: null,
-        address: null,
-      },
-      usertmp: ':'
+      keeper: [],
+      keepertmp: []
     };
   };
-
-  refs : {
-    [key: string]: (Element);
-    roomId: (HTMLInputElement);
-    user: (HTMLInputElement);
-  }
 
   componentWillMount(){
     document.body.style.backgroundColor = skeleton.mainBgColor;
@@ -94,22 +76,26 @@ export default class Address extends React.Component<AddressProps, AddressState>
   componentDidMount(){
     let that = this;
     
-    getByREST(`order/list?`, (data) => {
+    getByREST(`keeper/list?`, (data) => {
       that.setState({
-        user: data.result
+        keeper: data.result
       }, () => {
-        const username = this.badCodeSetName();
-        !localStorage['usertmp'] && localStorage.setItem('usertmp', `${username}:${this.state.user.building_name}`)
+        let _keeper = [];
+        this.state.keeper.map((keeper, index) => {
+          _keeper[index] = {
+            keeper_id: _keeper.id,
+            keeper_fullname: _keeper.fullname,
+            keeper_mobile: _keeper.mobile,
+            keeper_grid_code: _keeper.grid_code,
+            keeper_grid_name: _keeper.grid_name,
+            user_select: false
+          }
+        })
         that.setState({
-          usertmp: localStorage.getItem('usertmp')
+          keepertmp: _keeper
         })
       })
-    }, { Mobile_ShowShareButton: "No" });
-  }
-
-  badCodeSetName(){
-    let user = this.state.user;
-    return user.name ? (user.sex == 2 ? `${user.name}女士` : `${user.name}先生`) : user.nickname;
+    }, {});
   }
 
   saveUserInfo(){
@@ -130,34 +116,24 @@ export default class Address extends React.Component<AddressProps, AddressState>
   getInputValue(component, value){
     if(localStorage.getItem('usertmp')){
       let session = localStorage.getItem('usertmp').split(":");
-      let newSession = `${component == 'consignee' ? value : session[0]}:${component == 'address' ? value : session[1]}`;
+      let newSession = `${component == 'consignee' ? value : session[0]}:${component == 'HomeKeeper' ? value : session[1]}`;
       localStorage.setItem(`usertmp`, newSession);
     }
   }
 
   render(){
-    return <div className={`${skeleton.address} address`}>
+    return <div className={`${skeleton.address} HomeKeeper`}>
       <div className={`${skeleton.root} ${navigator.userAgent.indexOf('VKStaffAssistant') >= 0 && skeleton.hastitlebar}`}>
         <div className={skeleton.rootwrap}>
           <MountAnima>
+            <p className={skeleton.titlep}>请选择收获地址所属管家</p>
             <div className={skeleton.itemList}>
-              <ItemIOS title="收货人">
-                <TextInputNormal className={skeleton.textInput} name="consignee" complete={this.getInputValue.bind(this)} default={this.state.usertmp.split(":")[0]}></TextInputNormal>
-              </ItemIOS>
-              <ItemIOS title="联系电话">
-                <span>{this.state.user.mobile}</span>
-              </ItemIOS>
-              <ItemIOS title="省市">
-                <span>{this.state.user.province}</span>
-              </ItemIOS>
-              <ItemIOS title="社区">
-                <span>{this.state.user.project_name}</span>
-              </ItemIOS>
-            </div>
-            <p>如当前房屋地址有误，请修改房号信息，以便收货</p>
-            <div className={skeleton.itemList}>
-              <ItemIOS title="门牌号">
-                <TextInputNormal className={skeleton.textInput} name="address" complete={this.getInputValue.bind(this)} default={this.state.usertmp.split(":")[1]}></TextInputNormal>
+              {this.state.keeper.map(keeper => <ItemIOS title={keeper.fullname}
+                click={() => {}}>
+                <div className={`${skeleton.selecti} ${skeleton.on}`}>√</div>
+              </ItemIOS>)}
+              <ItemIOS title="不清楚管家是谁">
+                <div className={skeleton.selecti}>√</div>
               </ItemIOS>
             </div>
           </MountAnima>
@@ -166,7 +142,7 @@ export default class Address extends React.Component<AddressProps, AddressState>
       <BigBtn even={this.saveUserInfo.bind(this)}>提交</BigBtn>
       {navigator.userAgent.indexOf('VKStaffAssistant') >= 0 && <div className={skeleton.titlebar}>
         <div onClick={() => {history.go(-1)}}>返回</div>
-        <div>收货地址</div>
+        <div>选择管家</div>
       </div>}
     </div>;
   }

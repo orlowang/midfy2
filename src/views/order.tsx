@@ -15,6 +15,9 @@ import {
   Counter
 } from '../../vender.src/components/CounterComp';
 import {
+  TextInputNormal
+} from "../../vender.src/components/TextComp";
+import {
   MountAnima,
   MountAnimaShow
 } from '../../vender.src/components/Animate';
@@ -31,7 +34,8 @@ import {
 } from '../helper/ReverseContains';
 import {
   getByREST,
-  postByREST
+  postByREST,
+  getToken
 } from '../helper/Fetch';
 import {
   goodsListType,
@@ -96,7 +100,8 @@ export default class Order extends React.Component<OrderProps, OrderStatus>{
       updateInfo: {
         price: null,
         stock: null,
-        orderPrice: null
+        orderPrice: null,
+        limit: null
       },
       text: '付款'
     };
@@ -105,21 +110,27 @@ export default class Order extends React.Component<OrderProps, OrderStatus>{
   componentWillMount(){
     document.body.style.backgroundColor = skeleton.mainBgColor;
     this.updateOrderSession(`order-${this.props.params.goodsid}`);
-    document.title = "订单详情";
     //解决IOS下title不生效问题
     const mobile = navigator.userAgent.toLowerCase();
     const length = document.querySelectorAll('iframe').length;
     if (/iphone|ipad|ipod/.test(mobile) && !length) {
-      const iframe = document.createElement('iframe');
-      iframe.style.cssText = 'display: none; width: 0; height: 0;';
-      iframe.setAttribute('src', 'about:blank');
-      iframe.addEventListener('load', () => {
-        setTimeout(() => {
-          iframe.removeEventListener('load', false);
-          document.body.removeChild(iframe);
-        }, 0);
-      });
-      document.body.appendChild(iframe);
+      setTimeout(function(){
+        //利用iframe的onload事件刷新页面
+        document.title = '订单详情';
+        var iframe = document.createElement('iframe');
+        iframe.style.visibility = 'hidden';
+        iframe.style.width = '1px';
+        iframe.style.height = '1px';
+        iframe.src = '/favicon.ico';
+        iframe.onload = function () {
+            setTimeout(function () {
+                document.body.removeChild(iframe);
+            }, 0);
+        };
+        document.body.appendChild(iframe);
+      },0);
+    } else {
+      document.title = '订单详情';
     }
 
     let check = setInterval(() => {
@@ -133,10 +144,31 @@ export default class Order extends React.Component<OrderProps, OrderStatus>{
   }
 
   componentDidMount(){
+    getToken({ Mobile_ShowShareButton: "No" });
     let that = this;
+    //解决IOS下title不生效问题
+    const mobile = navigator.userAgent.toLowerCase();
+    const length = document.querySelectorAll('iframe').length;
+    if (/iphone|ipad|ipod/.test(mobile) && !length) {
+      setTimeout(function(){
+        //利用iframe的onload事件刷新页面
+        document.title = '订单详情';
+        var iframe = document.createElement('iframe');
+        iframe.style.visibility = 'hidden';
+        iframe.style.width = '1px';
+        iframe.style.height = '1px';
+        iframe.src = '/favicon.ico';
+        iframe.onload = function () {
+            setTimeout(function () {
+                document.body.removeChild(iframe);
+            }, 0);
+        };
+        document.body.appendChild(iframe);
+      },0);
+    }
     const sessionId = `order-${this.props.params.goodsid}`;
     const usrSessionId = 'usertmp';
-    getByREST(`goods/detail/${this.props.params.goodsid}`, (data) => {
+    getByREST(`goods/detail/${this.props.params.goodsid}?`, (data) => {
       that.setState({
         data: data.result
       }, () => {
@@ -186,14 +218,15 @@ export default class Order extends React.Component<OrderProps, OrderStatus>{
           updateInfo: {
             price: statedata.min_price == statedata.max_price ? statedata.min_price : `${statedata.min_price} - ${statedata.max_price}`,
             stock: (session.goods && session.goods.length == 1) ? this.state.data.products[0].stock : null,
-            orderPrice: session.order_price
+            orderPrice: session.order_price,
+            limit: (session.goods && session.goods.length == 1) ? this.state.data.products[0].limit_buy_num : null
           }
         })
         localStorage.setItem('usrselectmp', JSON.stringify(this.state.data.products));
       })
-    });
+    }, {});
     
-    getByREST(`addr/detail`, (data) => {
+    getByREST(`addr/detail?`, (data) => {
       that.setState({
         user: data.result
       }, () => {
@@ -204,10 +237,10 @@ export default class Order extends React.Component<OrderProps, OrderStatus>{
         // 创建完整订单, 有些(etc.运费、付款方式、手机号)暂时无法修改，故子再此使用初始化值 ---02
         session['mobile'] = this.state.user.mobile;
         session['consignee'] = (usrInfo && usrInfo[0]) || this.badCodeSetName();
-        session['address'] = ((usrInfo && usrInfo[1]) && `${this.state.user.province}${this.state.user.city}${this.state.user.district}${this.state.user.road}${this.state.user.project_name}${usrInfo[1]}`) || `${this.state.user.address}${this.state.user.building_name}`;
+        session['address'] = ((usrInfo && usrInfo[1]) && `${this.state.user.province}${this.state.user.city}${this.state.user.district}${this.state.user.road}${usrInfo[1]}`) || `${this.state.user.address}${this.state.user.building_name}`;
         that.updateOrderSession(sessionId, session);
       })
-    });
+    }, {});
   }
 
   componentWillUnmount(){
@@ -219,7 +252,7 @@ export default class Order extends React.Component<OrderProps, OrderStatus>{
 
   badCodeSetName(){
     let user = this.state.user;
-    return user.name ? (user.sex == 2 ? `${user.nickname}女士` : `${user.nickname}先生`) : user.nickname;
+    return user.name ? (user.sex == 2 ? `${user.name}女士` : `${user.name}先生`) : user.nickname;
   }
 
   updateOrderSession(SID, data?: any){
@@ -303,17 +336,28 @@ export default class Order extends React.Component<OrderProps, OrderStatus>{
         price: (isOne[0].price).replace(',', ''),
         num: updateorder.goods_num,
       }];
+      console.log(isOne[0].limit_buy_num);
+      
       if (updateorder.goods_num >= 1) {
         this.setState({
           updateInfo: {
             price: isOne[0].price,
             stock: isOne[0].stock,
-            orderPrice: (parseFloat((isOne[0].price).replace(',', '')) * parseFloat(updateorder.goods_num) + parseFloat(updateorder.shiping)).toFixed(2)
+            orderPrice: (parseFloat((isOne[0].price).replace(',', '')) * parseFloat(updateorder.goods_num) + parseFloat(updateorder.shiping)).toFixed(2),
+            limit: isOne[0].limit_buy_num
           }
         })
       }
     } else {
-      updateorder.goods = []
+      updateorder.goods = [];
+      this.setState({
+        updateInfo: {
+          price: this.state.data.min_price == this.state.data.max_price ? this.state.data.min_price : `${this.state.data.min_price} - ${this.state.data.max_price}`,
+          stock: null,
+          orderPrice: null,
+          limit: null
+        }
+      })
     }
 
     this.updateOrderSession(orderSessionID, updateorder);
@@ -333,7 +377,8 @@ export default class Order extends React.Component<OrderProps, OrderStatus>{
         updateInfo: {
           price: session.goods[0].price,
           stock: parseInt(isOne[0].stock),
-          orderPrice: (parseFloat(session.goods[0].price) * parseFloat(session.goods_num) + parseFloat(session.shiping)).toFixed(2)
+          orderPrice: (parseFloat(session.goods[0].price) * parseFloat(session.goods_num) + parseFloat(session.shiping)).toFixed(2),
+          limit: isOne[0].limit_buy_num
         }
       })
       session['goods'][0]['num'] = value;
@@ -362,7 +407,7 @@ export default class Order extends React.Component<OrderProps, OrderStatus>{
       console.log(info)
       // 拉起支付,(fetch或者router跳转)location
       if(info.code != 0){
-        alert('订单提交失败');
+        alert(info.result || '订单提交失败');
         return;
       }
       if (info.result && info.result.order_id) {
@@ -392,14 +437,15 @@ export default class Order extends React.Component<OrderProps, OrderStatus>{
         alert('订单提交失败');
         return;
       }
-    })
+    }, {})
 
     // 删除本地订单缓存
-    this.removeOrder(sessionId)
+    // this.removeOrder(sessionId)
   }
 
   removeOrder(SID){
     localStorage[SID] && localStorage.removeItem(SID)
+    // localStorage['usertmp'] && localStorage.removeItem('usertmp')
     localStorage['skutmp'] && localStorage.removeItem('skutmp')
     localStorage['usrselect'] && localStorage.removeItem('usrselect')
     localStorage['usrselectmp'] && localStorage.removeItem('usrselectmp')
@@ -426,9 +472,19 @@ export default class Order extends React.Component<OrderProps, OrderStatus>{
       inStock: this.state.updateInfo.stock
     };
     let user = this.state.user, usr_name;
-    usr_name = user.name ? (user.sex == 2 ? `${user.nickname}女士` : `${user.nickname}先生`) : user.nickname;
+    let homekeeper;
+    if (this.state.user) {
+      if (!this.state.user.is_virtual || this.state.user.is_virtual == 'false'){
+       homekeeper = <ItemIOSLink link={`/homekeeper/${goods_detail.goods_id}`}>
+          <span>管家</span>
+          <span></span>
+        </ItemIOSLink>;
+      }
+    }
+    
+    usr_name = user.name ? (user.sex == 2 ? `${user.name}女士` : `${user.name}先生`) : user.nickname;
     return <div className={`${skeleton.order} order`}>
-      <div className={skeleton.root}>
+      <div className={`${skeleton.root} ${navigator.userAgent.indexOf('VKStaffAssistant') >= 0 && skeleton.hastitlebar}`}>
         <div className={skeleton.rootwrap}>
           <MountAnima>
             <div className={`${skeleton.detail} detail`}>
@@ -446,7 +502,7 @@ export default class Order extends React.Component<OrderProps, OrderStatus>{
               <span>￥{goods_detail.shiping}</span>
             </ItemIOS>
             <ItemIOS className={skeleton.itemIOS} title='数量'>
-              <Counter complete={this.getCount.bind(this)} current={1} max={this.state.updateInfo.stock}></Counter>
+              <Counter complete={this.getCount.bind(this)} notice={this.state.updateInfo.limit} current={1} max={this.state.updateInfo.limit || this.state.updateInfo.stock}></Counter>
             </ItemIOS>
             <ItemIOSLink link={`/address/${goods_detail.goods_id}`}>
               <div className={skeleton.flexwrap}>
@@ -455,6 +511,11 @@ export default class Order extends React.Component<OrderProps, OrderStatus>{
               </div>
               <p>收货地址：{session.address}</p>
             </ItemIOSLink>
+            <ItemIOS className={skeleton.fare} title="留言">
+              <span></span>
+              <TextInputNormal className={skeleton.textInput} name="comment" complete={()=>{}} default={''}></TextInputNormal>
+            </ItemIOS>
+            {homekeeper}
             <ItemIOS className={skeleton.weixin} title="付款方式">
               <span>微信支付</span>
             </ItemIOS>
@@ -465,6 +526,10 @@ export default class Order extends React.Component<OrderProps, OrderStatus>{
         </div>
       </div>
       <BigBtn even={this.sendOrder.bind(this)}>{this.state.text}</BigBtn>
+      {navigator.userAgent.indexOf('VKStaffAssistant') >= 0 && <div className={skeleton.titlebar}>
+        <div onClick={() => {history.go(-1)}}>返回</div>
+        <div>订单详情</div>
+      </div>}
     </div>;
   }
 }

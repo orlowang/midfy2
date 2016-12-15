@@ -8,6 +8,7 @@ const styl = require('./style.styl');
 
 export interface ItemIOSProps {
   className?: string;
+  click?: any;
   title: string;
 };
 
@@ -17,7 +18,7 @@ export interface ItemIOSProps {
 export class ItemIOS extends React.Component<ItemIOSProps, {}>{
   render(){
     let _classname = this.props.className ? ' ' + this.props.className : '';
-    return <div className={`${styl.itemIOS}${_classname} itemIOS`}>
+    return <div className={`${styl.itemIOS}${_classname} itemIOS`} onClick={this.props.click}>
       <span>{this.props.title}</span>
       <div className={styl.wrap}>{this.props.children}</div>
     </div>; 

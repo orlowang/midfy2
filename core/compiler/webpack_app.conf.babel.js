@@ -8,17 +8,26 @@ import Midfy from '../config';
 
 const usercfg = require(`${Midfy.ENV_PROJECTPATH}/config.json`);
 const webpackConfig = {
-    entry: usercfg.app.entry || Midfy.app.entry,
+    entry: {
+        app: usercfg.app.entry || Midfy.app.entry,
+        vendor: ['react', 'react-dom', 'whatwg-fetch']
+    },
     output: {
         // Don't use hashes in dev mode for better performance
-        filename: '[name].js',
-        chunkFilename: '[name].chunk.js',
+        filename: '[name].[chunkhash].js',
+        chunkFilename: '[name].chunk.[chunkhash].js',
         path: Midfy.app.output
     },
     resolve: {
-        extensions: ["", ".webpack.js", ".web.js", ".ts", ".tsx", ".js"]
+        extensions: ["", ".webpack.js", ".web.js", ".ts", ".tsx", ".js"],
+        alias: {
+            'react': `${Midfy.ENV_BASEPATH}/node_modules/react/dist/react.min.js`,
+            'react-dom': `${Midfy.ENV_BASEPATH}/node_modules/react-dom/dist/react-dom.min.js`,
+            'whatwg-fetch': `${Midfy.ENV_BASEPATH}/node_modules/whatwg-fetch/fetch.js`
+        }
     },
     module: {
+        noParse: ['react', 'react-dom', 'whatwg-fetch'],
         loaders: [
             {
                 test: /\.tsx?$/,
@@ -91,7 +100,7 @@ const webpackConfig = {
 
         // Merge all duplicate modules
         // new webpack.optimize.DedupePlugin(),
-
+        
         // Minify and optimize the index.html
         new HtmlWebpackPlugin({
             template: `${Midfy.ENV_BASEPATH}/core/templates/index.html`,
@@ -130,6 +139,15 @@ if (!Midfy.ENV_DEVELOPMENT) {
                 drop_debugger: true,
                 drop_console: true
             }
+        })
+    )
+}
+
+if (!Midfy.ENV_DEVELOPMENT) {
+    webpackConfig.plugins.push(
+        new webpack.optimize.CommonsChunkPlugin({
+            name: 'vendor',
+            filename: '[name].[chunkhash].js'
         })
     )
 }

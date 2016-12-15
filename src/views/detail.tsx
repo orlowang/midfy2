@@ -69,31 +69,37 @@ export default class Detail extends React.Component<DetailProps, DetailState>{
   };
   componentWillMount(){
     document.body.style.backgroundColor = skeleton.mainBgColor;
-  }
-
-  componentDidMount(){
-    let that = this;
-    getByREST(`goods/detail/${this.props.params.goodsid}`, (data) => {
-      that.setState({
-        data: data.result
-      })
-    });
-    document.title = "商品详情";
     //解决IOS下title不生效问题
     const mobile = navigator.userAgent.toLowerCase();
     const length = document.querySelectorAll('iframe').length;
     if (/iphone|ipad|ipod/.test(mobile) && !length) {
-      const iframe = document.createElement('iframe');
-      iframe.style.cssText = 'display: none; width: 0; height: 0;';
-      iframe.setAttribute('src', 'about:blank');
-      iframe.addEventListener('load', () => {
-        setTimeout(() => {
-          iframe.removeEventListener('load', false);
-          document.body.removeChild(iframe);
-        }, 0);
-      });
-      document.body.appendChild(iframe);
+      setTimeout(function(){
+        //利用iframe的onload事件刷新页面
+        document.title = '商品详情';
+        var iframe = document.createElement('iframe');
+        iframe.style.visibility = 'hidden';
+        iframe.style.width = '1px';
+        iframe.style.height = '1px';
+        iframe.src = '/favicon.ico';
+        iframe.onload = function () {
+            setTimeout(function () {
+                document.body.removeChild(iframe);
+            }, 0);
+        };
+        document.body.appendChild(iframe);
+      },0);
+    } else {
+      document.title = '商品详情';
     }
+  }
+
+  componentDidMount(){
+    let that = this;
+    getByREST(`goods/detail/${this.props.params.goodsid}?`, (data) => {
+      that.setState({
+        data: data.result
+      })
+    }, { Mobile_ShowShareButton: "Yes" });
   }
 
   isVersionOutdate(current, standard){
@@ -142,8 +148,12 @@ export default class Detail extends React.Component<DetailProps, DetailState>{
       goodsImage: null,
       goodsPrice: g_min_p == g_max_p ? g_min_p : `${g_min_p} - ${g_max_p}`,
       goodsSubTitle: goods_detail.title,
-      tags: []
+      tags: [],
+      flashSale: false,
+      endTime: goods_detail.end_time
     };
+    console.log(data_goods_info);
+    
     goods_detail.head_imgs.map((photo) => {
       goods_photos.push({
         url: photo
@@ -155,11 +165,11 @@ export default class Detail extends React.Component<DetailProps, DetailState>{
     })
 
     return <div className={`${skeleton.info} info`}>
-      <div className={skeleton.root}>
+      <div className={`${skeleton.root} ${navigator.userAgent.indexOf('VKStaffAssistant') >= 0 && skeleton.hastitlebar}`}>
         <div className={skeleton.rootwrap}>
           <MountAnimaShow>
             <SlideTouch className={skeleton.slideTouch} imgList={goods_photos}></SlideTouch>
-            <GoodsItemFlat className={skeleton.goodsInfoFlat} goodsInfo={data_goods_info} imagePosition="up" spec={goods_detail.sunshine_community && goods_detail.sunshine_price}>
+            <GoodsItemFlat lock={true} isButton={!data_goods_info.flashSale} className={skeleton.goodsInfoFlat} goodsInfo={data_goods_info} imagePosition="up" spec={goods_detail.sunshine_community && goods_detail.sunshine_price}>
               {goods_detail.name}
             </GoodsItemFlat>
           </MountAnimaShow>
@@ -168,19 +178,23 @@ export default class Detail extends React.Component<DetailProps, DetailState>{
               <pre style={{whiteSpace: 'pre-wrap', wordWrap: 'break-word'}} dangerouslySetInnerHTML={ui_detail(goods_detail.text_detail)}></pre>
             </DetailStaticWrap>
           </MountAnima>}
-          <MountAnima delay={200}>
+          {!(goods_detail.img_detail == null || goods_detail.img_detail.length == 0) && <MountAnima delay={200}>
             <DetailStaticWrap className={skeleton.detailWrap} title={'图文详情'}>
               {goods_detail.img_detail.map((detail, index) => {
                 return <div key={index} style={{textAlign: 'center'}}>
-                  <img src={detail.img} alt=""/>
-                  <p>{detail.text}</p>
+                  <img src={detail.img} alt="" style={{float: 'left'}}/>
+                  {detail.text && <p style={{float: 'left'}}>`△ ${detail.text}`</p>}
                 </div>
               })}
             </DetailStaticWrap>
-          </MountAnima>
+          </MountAnima>}
         </div>
       </div>
       {all_stock == 0 ? <span className={skeleton.noStockBtn}>已售罄</span> : <BigBtn to={`/order/${goods_detail.goods_id}`}>立即购买</BigBtn>}
+      {navigator.userAgent.indexOf('VKStaffAssistant') >= 0 && <div className={skeleton.titlebar}>
+        <div onClick={() => {history.go(-1)}}>返回</div>
+        <div>商品详情</div>
+      </div>}
     </div>;
   }
 }

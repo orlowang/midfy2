@@ -85,9 +85,9 @@
       .decoration{
         position: absolute;
       }
-      :global(.goodsWrap){
-        position: relative;
-      }
+      // :global(.goodsWrap){
+      //   position: relative;
+      // }
       .keyprop{
         img{
           position: absolute;
@@ -146,7 +146,7 @@
   }
   .detailWrap{
     img{
-      max-width: 100%;
+      width: 100%;
     }
   }
   .noStockBtn{
@@ -163,11 +163,35 @@
   }
 }
 
+.titlebar{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3.66667rem;
+  background-color: #faf8f5;
+  z-index: 99;
+
+  div{
+    &:first-child{
+      padding-left: 1rem;
+      float: left;
+      color: #f39800;
+      position: absolute;
+    }
+    height: 100%;
+    line-height: 3.66667rem;
+    color: #393939;
+    text-align: center;
+  }
+}
+
 // Counter Component style
 :global(.counter){
   float: right;
   a{
     &:first-child{
+      margin-left: 1rem;
       border-radius: 0.16667rem 0 0 0.16667rem;
     }
     &:last-child{
@@ -232,7 +256,7 @@
         line-height: 1.66667rem;
         background-color: $subBgColor;
         color: $therdFontColor;
-        margin-left: 0.66667rem;
+        margin: 0.33333rem 0 0.33333rem 0.66667rem;
       }
       :global(.active){
         color: #fff;
@@ -341,6 +365,29 @@
 }
 
 .address{
+  .titlep{
+    margin-top: 0;
+    margin-bottom: 0;
+    padding: 1.33333rem;
+    font-size: 1.16667rem;
+    color: $therdFontColor;
+  }
+  .selecti{
+    width: 1.4rem;
+    height: 1.4rem;
+    border-radius: 1rem;
+    border: 1px solid #909090;
+    color: #fff;
+    text-align: center;
+    font-size: 1rem;
+    line-height: 1.4rem;
+    font-weight: 700;
+
+    &.on{
+      border-color: $mainColor;
+      background-color: $mainColor;
+    }
+  }
   .itemList{
     border-top: 1px solid $IOSborderColor;
     border-bottom: 1px solid $IOSborderColor;
@@ -378,7 +425,7 @@
 
 :global(.goodsSKUSimple){
   :global(.goodsSKUSimpleList){
-    height: 4.66667rem;
+    min-height: 4.66667rem;
     :global(.disable){
       background-color: #faf8f5 !important;
       color: #cccccc !important;
@@ -613,4 +660,9 @@
     display: block;
     font-size: 1rem;
   }
+}
+
+.hastitlebar{
+  top: 3.66667rem;
+  height: calc(100% - 7rem);
 }

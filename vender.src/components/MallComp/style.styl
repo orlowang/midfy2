@@ -24,6 +24,7 @@
     &>div{
       flex: 1;
       justify-content: flex-end;
+      flex-wrap: wrap;
     }
     .wrap{
       span{
@@ -49,6 +50,7 @@
 
 .goodsItemFlat{
   display: flex;
+  border: .25rem solid #fff;
   .goodsWrap{
     text-align: center;
     display: flex;
@@ -111,5 +113,22 @@
 .detailStaticWrap{
   &>div{
     overflow: hidden;
+  }
+}
+.countime{
+  font-size: 1rem;
+  border-radius: 1rem;
+  color: #fff;
+  background-color: #be75fe;
+  padding: 0.3rem 0.5rem;
+  display: inline-table;
+  margin: 0.8rem auto 0;
+
+  span{
+    background-color: #fff;
+    color: #be75fe;
+    padding: 0 .1rem;
+    margin: 0 .1rem;
+    border-radius: .1rem;
   }
 }

@@ -35,21 +35,28 @@ export default class Delivery extends React.Component<DeliveryProps, DeliverySta
 
   componentWillMount(){
     document.body.style.backgroundColor = skeleton.mainBgColor;
-    document.title = "物流信息";
+    
     //解决IOS下title不生效问题
     const mobile = navigator.userAgent.toLowerCase();
     const length = document.querySelectorAll('iframe').length;
     if (/iphone|ipad|ipod/.test(mobile) && !length) {
-      const iframe = document.createElement('iframe');
-      iframe.style.cssText = 'display: none; width: 0; height: 0;';
-      iframe.setAttribute('src', 'about:blank');
-      iframe.addEventListener('load', () => {
-        setTimeout(() => {
-          iframe.removeEventListener('load', false);
-          document.body.removeChild(iframe);
-        }, 0);
-      });
-      document.body.appendChild(iframe);
+      setTimeout(function(){
+        //利用iframe的onload事件刷新页面
+        document.title = '物流信息';
+        var iframe = document.createElement('iframe');
+        iframe.style.visibility = 'hidden';
+        iframe.style.width = '1px';
+        iframe.style.height = '1px';
+        iframe.src = '/favicon.ico';
+        iframe.onload = function () {
+            setTimeout(function () {
+                document.body.removeChild(iframe);
+            }, 0);
+        };
+        document.body.appendChild(iframe);
+      },0);
+    } else {
+      document.title = '物流信息';
     }
   }
 
@@ -93,7 +100,7 @@ export default class Delivery extends React.Component<DeliveryProps, DeliverySta
     list.set('HYLSD', '好来运快递');
     list.set('JD', '京东快递');
     list.set('JJKY', '京广速递');
-    list.set('ANE', '佳吉快运');
+    list.set('JJKY', '佳吉快运');
     list.set('JTKD', '捷特快递');
     list.set('JXD', '急先达');
     list.set('JYKD', '晋越快递');
@@ -152,7 +159,7 @@ export default class Delivery extends React.Component<DeliveryProps, DeliverySta
       </div>
     </li>);
     return <div className={`${skeleton.Delivery} Delivery`}>
-      <div className={skeleton.root}>
+      <div className={`${skeleton.root} ${navigator.userAgent.indexOf('VKStaffAssistant') >= 0 && skeleton.hastitlebar}`}>
         {!this.state.delivery.msg ? <div className={skeleton.rootwrap}>
           <div className={skeleton.title}>
             <table>
@@ -173,6 +180,10 @@ export default class Delivery extends React.Component<DeliveryProps, DeliverySta
           </div>
         </div> : <span>{this.state.delivery.msg}</span>}
       </div>
+      {navigator.userAgent.indexOf('VKStaffAssistant') >= 0 && <div className={skeleton.titlebar}>
+        <div onClick={() => {history.go(-1)}}>返回</div>
+        <div>物流信息</div>
+      </div>}
     </div>;
   }
 }

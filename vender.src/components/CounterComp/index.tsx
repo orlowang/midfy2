@@ -6,6 +6,7 @@ export interface CounterProps {
   current?: number;
   max?: number;
   complete?: Function;
+  notice?: number;
 };
 
 interface CounterStatus {
@@ -95,7 +96,10 @@ export class Counter extends React.Component<CounterProps, CounterStatus>{
     let _classname = this.props.className ? ' ' + this.props.className : '';
     let _min_limit_classname = this.state.minLimit ? `${styl.noaction} noaction` : '';
     let _max_limit_classname = this.state.maxLimit ? `${styl.noaction} noaction` : '';
+    console.log(!!(this.props.notice && this.props.notice != 0));
+    
     return <div className={`${styl.counter}${_classname} counter`}>
+      {!!(this.props.notice && this.props.notice != 0) && `限购${this.props.notice}件`}
       <a onClick={this.handleReduce.bind(this)} className={_min_limit_classname}>-</a>
       <input onChange={this.handleChange.bind(this)} onBlur={this.handleLeaveCheck.bind(this)} ref="counter" type="tel" value={this.state.count}/>
       <a onClick={this.handlePlus.bind(this)} className={_max_limit_classname}>+</a>

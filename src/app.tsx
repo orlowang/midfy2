@@ -14,10 +14,11 @@ const remoteIPhome = '192.168.1.107';
 // fix a:active can't be work. 
 // window.appEnvironment = {
 //   appName: 'zhuzhuer',
-//   appVersion: '3.0.10',
+//   appVersion: '3.0.9',
 //   language: 'en',
 //   platform: 'Android'
 // };
+
 document.body.addEventListener('touchstart', ()=>{})
 ReactDOM.render(
   <Router 

@@ -18,6 +18,7 @@ export interface productType {
   product_id: string;
   price: string;
   stock: number;
+  limit_buy_num: number;
   property: string[];
 }
 

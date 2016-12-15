@@ -65,31 +65,38 @@ export default class Mall extends Component<MallProps, MallState>{
   };
   componentWillMount(){
     document.body.style.backgroundColor = skeleton.sipcBgColor;
-    document.title = "商品列表";
+    
     //解决IOS下title不生效问题
     const mobile = navigator.userAgent.toLowerCase();
     const length = document.querySelectorAll('iframe').length;
     if (/iphone|ipad|ipod/.test(mobile) && !length) {
-      const iframe = document.createElement('iframe');
-      iframe.style.cssText = 'display: none; width: 0; height: 0;';
-      iframe.setAttribute('src', 'about:blank');
-      iframe.addEventListener('load', () => {
-        setTimeout(() => {
-          iframe.removeEventListener('load', false);
-          document.body.removeChild(iframe);
-        }, 0);
-      });
-      document.body.appendChild(iframe);
+      setTimeout(function(){
+        //利用iframe的onload事件刷新页面
+        document.title = '友邻市集';
+        var iframe = document.createElement('iframe');
+        iframe.style.visibility = 'hidden';
+        iframe.style.width = '1px';
+        iframe.style.height = '1px';
+        iframe.src = '/favicon.ico';
+        iframe.onload = function () {
+            setTimeout(function () {
+                document.body.removeChild(iframe);
+            }, 0);
+        };
+        document.body.appendChild(iframe);
+      },0);
+    } else {
+      document.title = '友邻市集';
     }
   }
 
   componentDidMount(){
     let that = this;
-    getByREST('category/list', (data) => {
+    getByREST('category/list?', (data) => {
       that.setState({
         categorys: data.result
       }, () => {
-        getByREST(`goods/list?cat=${this.state.categorys[0].categoryId}&page=0&per_page=10`, (data) => {
+        getByREST(`goods/list?cat=${this.state.categorys[0].categoryId}&page=0&per_page=10&`, (data) => {
           that.setState({
             data: data.result
           }, () => {
@@ -104,7 +111,7 @@ export default class Mall extends Component<MallProps, MallState>{
                 !this.state.cateState.isLast ? localStorage.setItem('page', `${page[0]}:${parseInt(page[1])+1}`) : localStorage.setItem('page', `${page[0]}:${parseInt(page[1])}`);
                 let newPage = localStorage.getItem('page').split(':');
                 console.log(this.state.cateState.isLast)
-                getByREST(`goods/list?cat=${newPage[0]}&page=${newPage[1]}&per_page=10`, (data) => {
+                getByREST(`goods/list?cat=${newPage[0]}&page=${newPage[1]}&per_page=10&`, (data) => {
                   if (data.result.length >= 1) {
                     console.log(data.result.length)
                     that.setState({
@@ -120,13 +127,13 @@ export default class Mall extends Component<MallProps, MallState>{
           })
         });
       })
-    });
-    getByREST('statistics/sunshine/ranking', (data) => {
+    }, {Mobile_ShowShareButton: "No"});
+    getByREST('statistics/sunshine/ranking?', (data) => {
       that.setState({
         fkad: data.result
       })
-    })
-    this.checkAppVersion()
+    }, {})
+    // this.checkAppVersion()
   }
 
   componentWillUnmount(){
@@ -175,7 +182,10 @@ export default class Mall extends Component<MallProps, MallState>{
             // //如果是web通过与原生的连接桥,来调用原生暴露的接口
             //   nativeBridge.invoke('updateApp');
             // }
-            location.href = 'http://api.local/native_service?data={"method":"closeWeb"}';
+            // location.href = 'http://api.local/native_service?data={"method":"closeWeb"}';
+            this.setState({
+              layerState: false
+            })
           };
         }
         console.log(this.isVersionOutdate(app_env.appVersion, standard_version))
@@ -190,14 +200,7 @@ export default class Mall extends Component<MallProps, MallState>{
         }
         clearInterval(check)
       } else {
-        console.log('here')
         const mobile = navigator.userAgent.toLowerCase();
-        let goto;
-        if (/iphone|ipad|ipod/.test(mobile)) {
-          goto = 'itms-apps://itunes.apple.com/us/app/zhu-zhe-er-ye-zhu-bi-bei/id732660211?ls=1&mt=8'
-        } else {
-          goto = 'http://api.local/native_service?data={"method":"closeWeb"}'
-        }
         let timer = setTimeout(() => {
           this.setState({
             layerState: ()=>{this.setState({
@@ -214,7 +217,7 @@ export default class Mall extends Component<MallProps, MallState>{
 
   setCategory(cid, index){
     let that = this;
-    getByREST(`goods/list?cat=${cid}&page=0&per_page=10`, (data) => {
+    getByREST(`goods/list?cat=${cid}&page=0&per_page=10&`, (data) => {
       localStorage.setItem('page', `${cid}:0`);
       that.setState({
         cateState: {
@@ -238,26 +241,29 @@ export default class Mall extends Component<MallProps, MallState>{
         hasSold: null,
         inStock: null,
         tags: [{
-          Key: false // goods.sunshine_community,
+          Key: goods.sunshine_community //false,
           Value: goods.sunshine_community && <img src={require(`../assets/img/sun_icon.svg`)} alt=""/>
         }],
+        flashSale: false,
+        endTime: goods.end_time
       };
       return <Link key={index} to={`/detail/${goods.goods_id}`}>
-        <GoodsItemFlat isButton={true} imagePosition={index%2 ? 'down' : 'up'} className={skeleton.goodsItemFlat} goodsInfo={data}>
+        <GoodsItemFlat isButton={!data.flashSale} imagePosition={index%2 ? 'down' : 'up'} className={skeleton.goodsItemFlat} goodsInfo={data}>
           {goods.name}
-          <div className={`${skeleton.keyprop}${index%2 ? ` ${skeleton.down}` : ` ${skeleton.up}`}`}>
-            <img src={require('../assets/img/bg1.svg')} alt=""/>
-            <img src={require('../assets/img/bg2.svg')} alt=""/>
-          </div>
+          {data.flashSale && <img style={Object.assign({
+            width: '4rem',
+            position: 'absolute',
+            top: '0.66667rem',
+          }, index%2 ? {right: '0.66667rem'}:{left: '0.66667rem'})} src={require('../assets/img/flashsale.svg')} alt=""/>}
         </GoodsItemFlat>
       </Link>;
     });
     return <MountAnimaShow>
-      <div ref="scrollbody" className={`${skeleton.root} ${skeleton.scrollwrap} fmroot`}>
+      <div ref="scrollbody" className={`${skeleton.root} ${skeleton.scrollwrap} ${navigator.userAgent.indexOf('VKStaffAssistant') >= 0 && skeleton.hastitlebar} fmroot`}>
         <div className={skeleton.banner}>
           <img src={require('../assets/img/store_banner.png')} alt=""/>
         </div>
-        <a style={{textDecoration: 'none'}} href="http://blackpearl.4009515151.com/login?request_uri=http%3a%2f%2fblackpearl.4009515151.com%2fassets%2fh5%2fylplan.html">
+        <a style={{textDecoration: 'none'}} href="./ylplan.html">
           <div className={skeleton.topcard}>
             <div>
               <div>
@@ -280,11 +286,15 @@ export default class Mall extends Component<MallProps, MallState>{
         {this.state.categorys.map((category, index) => index <= 3 && <div className={this.state.cateState.index == index ? skeleton.on : ''} onClick={this.setCategory.bind(this, category.categoryId, index)} key={category.categoryId}>{category.name}</div>)}
       </div>
       <div>
-        {this.state.layerState && <MountAnimaShow><Layer confirm={{text: `${(/iphone|ipad|ipod/).test(navigator.userAgent.toLowerCase()) ? '升级到V3.1.0 版 >>' : '知道了'}`, func: this.state.layerState}}>
+        {this.state.layerState && <MountAnimaShow><Layer confirm={{text: `我知道了`, func: this.state.layerState}}>
           <img src={require('../assets/img/banben.svg')} alt=""/>
-          {(/iphone|ipad|ipod/).test(navigator.userAgent.toLowerCase()) ? <p>友邻市集搭配“住这儿” v3.1.0 版本共同登场，快快升级，携手邻居一同加入社区友邻计划！</p> : <p>友邻市集搭配“住这儿” v3.1.0 版本共同登场，快快升级，携手邻居一同加入社区友邻计划！请在各应用市场下载更新</p>}
+          {(/iphone|ipad|ipod/).test(navigator.userAgent.toLowerCase()) ? <p>友邻市集的支付功能，需要更新至3.1.0以上版本，到AppStore升级：）</p> : <p>友邻市集的支付功能，需要更新至3.1.0以上版本，应用市场可升级：）</p>}
         </Layer></MountAnimaShow>}
       </div>
+      {navigator.userAgent.indexOf('VKStaffAssistant') >= 0 && <div className={skeleton.titlebar}>
+        <div onClick={() => {history.go(-1)}}>返回</div>
+        <div>友邻市集</div>
+      </div>}
     </MountAnimaShow>;
   }
 }

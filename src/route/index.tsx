@@ -62,6 +62,17 @@ export const AddressRoutes = {
 }
 CreateRoutes.push(AddressRoutes)
 
+export const HomeKeeperRoutes = {
+  path: '/homekeeper/:orderId',
+  getComponent (nextState, cb) {
+    require.ensure([], (require) => {
+      const HomeKeeper = require('../views/homekeeper').default
+      cb(null, HomeKeeper)
+    }, 'HomeKeeper')
+  }
+}
+CreateRoutes.push(HomeKeeperRoutes)
+
 export const DeliveryRoutes = {
   path: '/delivery/:name/:id',
   getComponent (nextState, cb) {
