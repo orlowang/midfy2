@@ -28,8 +28,7 @@ const webpackConfig = {
     },
     module: {
         noParse: ['react', 'react-dom', 'whatwg-fetch'],
-        loaders: [
-            {
+        loaders: [{
                 test: /\.tsx?$/,
                 exclude: /node_modules/,
                 loaders: [
@@ -100,7 +99,7 @@ const webpackConfig = {
 
         // Merge all duplicate modules
         // new webpack.optimize.DedupePlugin(),
-        
+
         // Minify and optimize the index.html
         new HtmlWebpackPlugin({
             template: `${Midfy.ENV_BASEPATH}/core/templates/index.html`,
@@ -119,13 +118,16 @@ const webpackConfig = {
             inject: true,
             debug: !!Midfy.ENV_DEVELOPMENT
         }),
-    ],
-    postcss: () => {
-        return [
-            precss(),
-            autoprefixer({ browsers: Midfy.AUTOPREFIXER_BROWSERS })
-        ]
-    }
+
+        new webpack.LoaderOptionsPlugin({
+            postcss: () => {
+                return [
+                    precss(),
+                    autoprefixer({ browsers: Midfy.AUTOPREFIXER_BROWSERS })
+                ]
+            }
+        })
+    ]
 };
 
 if (!Midfy.ENV_DEVELOPMENT) {

@@ -22,7 +22,8 @@ import {
 } from '../helper/Types';
 
 import {
-  getByREST
+  getByREST,
+  syncCallNative
 } from '../helper/Fetch';
 const skeleton = require('../assets/css/skeleton.styl');
 
@@ -43,72 +44,75 @@ export default class HomeKeeper extends React.Component<HomeKeeperProps, HomeKee
     super(props);
     this.state = {
       keeper: [],
-      keepertmp: []
+      keepertmp: localStorage.getItem('keeper') ? JSON.parse(localStorage.getItem('keeper'))['id'] : null
     };
   };
 
   componentWillMount(){
     document.body.style.backgroundColor = skeleton.mainBgColor;
-    //解决IOS下title不生效问题
-    const mobile = navigator.userAgent.toLowerCase();
-    const length = document.querySelectorAll('iframe').length;
-    if (/iphone|ipad|ipod/.test(mobile) && !length) {
-      setTimeout(function(){
-        //利用iframe的onload事件刷新页面
-        document.title = '收货地址';
-        var iframe = document.createElement('iframe');
-        iframe.style.visibility = 'hidden';
-        iframe.style.width = '1px';
-        iframe.style.height = '1px';
-        iframe.src = '/favicon.ico';
-        iframe.onload = function () {
-            setTimeout(function () {
-                document.body.removeChild(iframe);
-            }, 0);
-        };
-        document.body.appendChild(iframe);
-      },0);
-    } else {
-      document.title = '收货地址';
-    }
   }
 
   componentDidMount(){
     let that = this;
-    
+    syncCallNative({
+      handle: "initWithBlackpearl",
+      query: {
+        Mobile_ShowShareButton: "No",
+        Mobile_ConfigTitle: "选择管家"
+      }
+    })
     getByREST(`keeper/list?`, (data) => {
       that.setState({
-        keeper: data.result
-      }, () => {
-        let _keeper = [];
-        this.state.keeper.map((keeper, index) => {
-          _keeper[index] = {
-            keeper_id: _keeper.id,
-            keeper_fullname: _keeper.fullname,
-            keeper_mobile: _keeper.mobile,
-            keeper_grid_code: _keeper.grid_code,
-            keeper_grid_name: _keeper.grid_name,
-            user_select: false
+        keeper: data.result,
+        keepertmp: (() => {
+          let _keep = data.result;
+          if (localStorage.getItem('keeper')) {
+            return JSON.parse(localStorage.getItem('keeper'))['id']
+          } else {
+            for(let i=0; i < _keep.length; i++){
+              if (_keep[i].selected){
+                return _keep[i].id
+              }
+            }
           }
-        })
-        that.setState({
-          keepertmp: _keeper
-        })
+          
+        })()
       })
-    }, {});
+    });
+  }
+
+  selectKeeper(id) {
+    let selected = {};
+    console.log(id)
+    if (id){
+      this.setState({
+        keepertmp: id
+      })
+
+      if (id == 100) {
+        selected = {
+          id: 100,
+          fullname: '不清楚管家是谁',
+          mobile: null,
+          grid_code: null,
+          grid_name: null,
+        }
+      } else {
+        let keeper = this.state.keeper;
+        for(let i = 0; i < keeper.length; i++){
+          if(keeper[i].id == id) {
+            selected = keeper[i];
+          }
+        }
+      }
+
+      localStorage.setItem('keeper', JSON.stringify(selected));
+    }
   }
 
   saveUserInfo(){
-    if(localStorage.getItem('usertmp')){
-      let session = localStorage.getItem('usertmp').split(":");
-      if (!session[0]) {
-        alert('收货人名称不能为空！')
-        return
-      }
-      if(!session[1]) {
-        alert('问牌号不能为空！')
-        return
-      }
+    if(!localStorage.getItem('keeper')){
+      alert('请选择管家')
     }
     hashHistory.push(`/order/${this.props.params.orderId}`)
   }
@@ -122,18 +126,20 @@ export default class HomeKeeper extends React.Component<HomeKeeperProps, HomeKee
   }
 
   render(){
+    console.log(this.state.keepertmp);
+    
     return <div className={`${skeleton.address} HomeKeeper`}>
       <div className={`${skeleton.root} ${navigator.userAgent.indexOf('VKStaffAssistant') >= 0 && skeleton.hastitlebar}`}>
         <div className={skeleton.rootwrap}>
           <MountAnima>
             <p className={skeleton.titlep}>请选择收获地址所属管家</p>
             <div className={skeleton.itemList}>
-              {this.state.keeper.map(keeper => <ItemIOS title={keeper.fullname}
-                click={() => {}}>
-                <div className={`${skeleton.selecti} ${skeleton.on}`}>√</div>
+              {this.state.keeper.map(keeper => <ItemIOS className={'selection'} title={keeper.fullname}
+                click={this.selectKeeper.bind(this, keeper.id)}>
+                <div className={`${skeleton.selecti} ${(this.state.keepertmp && this.state.keepertmp == keeper.id) && skeleton.on}`}>√</div>
               </ItemIOS>)}
-              <ItemIOS title="不清楚管家是谁">
-                <div className={skeleton.selecti}>√</div>
+              <ItemIOS click={this.selectKeeper.bind(this, 100)} className={'selection'} title="不清楚管家是谁">
+                <div className={`${skeleton.selecti} ${(this.state.keepertmp && this.state.keepertmp == 100) && skeleton.on}`}>√</div>
               </ItemIOS>
             </div>
           </MountAnima>

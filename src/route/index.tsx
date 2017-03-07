@@ -29,8 +29,8 @@ export const MallRoutes = {
 }
 CreateRoutes.push(MallRoutes)
 
-export const DetailRoutes = {
-  path: '/detail/:goodsid',
+export const DetailWithCodeRoutes = {
+  path: '/detail/:goodsid/projcode/:code',
   getComponent (nextState, cb) {
     require.ensure([], (require) => {
       const Detail = require('../views/detail').default
@@ -38,7 +38,18 @@ export const DetailRoutes = {
     }, 'Detail')
   }
 }
-CreateRoutes.push(DetailRoutes)
+CreateRoutes.push(DetailWithCodeRoutes)
+
+// export const DetailRoutes = {
+//   path: '/detail/:goodsid',
+//   getComponent (nextState, cb) {
+//     require.ensure([], (require) => {
+//       const Detail = require('../views/detail').default
+//       cb(null, Detail)
+//     }, 'Detail')
+//   }
+// }
+// CreateRoutes.push(DetailRoutes)
 
 export const OrderRoutes = {
   path: '/order/:goodsid',

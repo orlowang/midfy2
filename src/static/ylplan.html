@@ -103,7 +103,8 @@
       var prj_rank = document.getElementById('id03');
       var usr_rank = document.getElementById('id04');
       var num = document.getElementById('id05');
-      fetch('//blackpearl.4009515151.com/interfaces/statistics/sunshine/ranking', {credentials: 'include'})
+      var projcode = location.search.split('projcode=')[1];
+      fetch('//blackpearl.4009515151.com/interfaces/statistics/sunshine/ranking?projectCode=' + projcode, {credentials: 'include'})
         .then(function(res){return res.json()})
         .then(function(data){
           console.log(data)

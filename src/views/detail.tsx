@@ -24,8 +24,10 @@ import {
   ItemIOS
 } from '../../vender.src/components/ItemIOSComp';
 import {
-  getByREST
+  getByREST,
+  syncCallNative
 } from '../helper/Fetch';
+import isOldVersion from '../helper/version';
 import {
   goodsListType
 } from '../helper/Types';
@@ -69,37 +71,28 @@ export default class Detail extends React.Component<DetailProps, DetailState>{
   };
   componentWillMount(){
     document.body.style.backgroundColor = skeleton.mainBgColor;
-    //解决IOS下title不生效问题
-    const mobile = navigator.userAgent.toLowerCase();
-    const length = document.querySelectorAll('iframe').length;
-    if (/iphone|ipad|ipod/.test(mobile) && !length) {
-      setTimeout(function(){
-        //利用iframe的onload事件刷新页面
-        document.title = '商品详情';
-        var iframe = document.createElement('iframe');
-        iframe.style.visibility = 'hidden';
-        iframe.style.width = '1px';
-        iframe.style.height = '1px';
-        iframe.src = '/favicon.ico';
-        iframe.onload = function () {
-            setTimeout(function () {
-                document.body.removeChild(iframe);
-            }, 0);
-        };
-        document.body.appendChild(iframe);
-      },0);
-    } else {
-      document.title = '商品详情';
-    }
+    document.title = "商品详情";
   }
 
   componentDidMount(){
-    let that = this;
-    getByREST(`goods/detail/${this.props.params.goodsid}?`, (data) => {
+
+    syncCallNative({
+      handle: "initWithBlackpearl",
+      query: {
+        Mobile_ShowShareButton: "Yes",
+        Mobile_GoodSid: this.props.params.goodsid,
+        Mobile_ConfigTitle: "商品详情"
+      }
+    })
+    let that = this,
+        fromApp = this.props.params.code == 0,
+        projcode = !fromApp ? `?projectCode=${this.props.params.code}` : '?';
+      
+    getByREST(`goods/detail/${this.props.params.goodsid}${projcode}`, (data) => {
       that.setState({
         data: data.result
       })
-    }, { Mobile_ShowShareButton: "Yes" });
+    }, !fromApp);
   }
 
   isVersionOutdate(current, standard){
@@ -137,8 +130,10 @@ export default class Detail extends React.Component<DetailProps, DetailState>{
   }
 
   render(){
+    const spec = '8fsDSU2d8fk93jsHJdmK';
     let goods_detail = this.state.data, goods_photos = [],
       g_min_p = goods_detail.min_price, g_max_p = goods_detail.max_price;
+      
     let ui_detail = (page) => {
       return {
         __html: page
@@ -153,7 +148,7 @@ export default class Detail extends React.Component<DetailProps, DetailState>{
       endTime: goods_detail.end_time
     };
     console.log(data_goods_info);
-    
+      
     goods_detail.head_imgs.map((photo) => {
       goods_photos.push({
         url: photo
@@ -163,6 +158,21 @@ export default class Detail extends React.Component<DetailProps, DetailState>{
     goods_detail.products.map(prd => {
       all_stock += prd.stock
     })
+
+    let setButton = () => {
+      if (all_stock == 0) {
+        return <span className={skeleton.noStockBtn}>已售罄</span>
+      } else {
+        if (isOldVersion && location.href.indexOf(spec) < 0) {
+          return <BigBtn to={`/order/${goods_detail.goods_id}`}>立即购买</BigBtn>
+        } else if (!isOldVersion && location.href.indexOf(spec) < 0) {
+          return (window.appEnvironment && window.appEnvironment['Html_token']) ? <BigBtn to={`/order/${goods_detail.goods_id}`}>立即购买</BigBtn>: <span className={skeleton.noStockBtn}>请注册后购买</span>
+        } else if (location.href.indexOf(spec) >= 0) {
+          return <a href="http://a.app.qq.com/o/simple.jsp?pkgname=com.vanke.activity" className={skeleton.noStockBtn}>下载“住这儿”</a>
+        }
+      }
+    }
+console.log(setButton);
 
     return <div className={`${skeleton.info} info`}>
       <div className={`${skeleton.root} ${navigator.userAgent.indexOf('VKStaffAssistant') >= 0 && skeleton.hastitlebar}`}>
@@ -183,14 +193,14 @@ export default class Detail extends React.Component<DetailProps, DetailState>{
               {goods_detail.img_detail.map((detail, index) => {
                 return <div key={index} style={{textAlign: 'center'}}>
                   <img src={detail.img} alt="" style={{float: 'left'}}/>
-                  {detail.text && <p style={{float: 'left'}}>`△ ${detail.text}`</p>}
+                  {detail.text && <p style={{float: 'left'}}>△ {detail.text}</p>}
                 </div>
               })}
             </DetailStaticWrap>
           </MountAnima>}
         </div>
       </div>
-      {all_stock == 0 ? <span className={skeleton.noStockBtn}>已售罄</span> : <BigBtn to={`/order/${goods_detail.goods_id}`}>立即购买</BigBtn>}
+      {setButton()}
       {navigator.userAgent.indexOf('VKStaffAssistant') >= 0 && <div className={skeleton.titlebar}>
         <div onClick={() => {history.go(-1)}}>返回</div>
         <div>商品详情</div>

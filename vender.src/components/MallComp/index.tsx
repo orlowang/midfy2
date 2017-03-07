@@ -228,7 +228,7 @@ export class GoodsItemFlat extends React.Component<GoodsItemFlatProps, {}>{
         <span className={`${styl.price} price`} style={{
           color: this.props.goodsInfo.flashSale ? '#be75fe': ''
         }}>￥{this.props.goodsInfo.goodsPrice}</span>
-        {this.props.spec && <div className={styl.spec}>此商品每笔销售将有<span>{this.props.spec}</span>元捐赠到<a href="./ylplan.html">友邻计划</a></div>}
+        {this.props.spec && <div className={styl.spec}>此商品每笔销售将有<span>{this.props.spec}</span>元捐赠到友邻计划</div>}
         {this.props.isButton ? (!this.props.lock && <Button className={`${styl.actionBtn} actionBtn`}>去看看</Button>) : <Livestamp end={this.props.goodsInfo.endTime} renderStamp={({ days, hours, minutes, seconds }) => (
           <div className={styl.countime}>距结束<span>{days}</span>天<span>{hours}</span>:<span>{minutes}</span>:<span>{seconds}</span></div>
         )}></Livestamp>}

@@ -15,8 +15,10 @@ import {
   MountAnima,
   MountAnimaShow
 } from '../../vender.src/components/Animate';
+import isOldVersion from '../helper/version';
 import {
-  getByREST
+  getByREST,
+  syncCallNative
 } from '../helper/Fetch';
 import 'whatwg-fetch';
 
@@ -65,32 +67,17 @@ export default class Mall extends Component<MallProps, MallState>{
   };
   componentWillMount(){
     document.body.style.backgroundColor = skeleton.sipcBgColor;
-    
-    //解决IOS下title不生效问题
-    const mobile = navigator.userAgent.toLowerCase();
-    const length = document.querySelectorAll('iframe').length;
-    if (/iphone|ipad|ipod/.test(mobile) && !length) {
-      setTimeout(function(){
-        //利用iframe的onload事件刷新页面
-        document.title = '友邻市集';
-        var iframe = document.createElement('iframe');
-        iframe.style.visibility = 'hidden';
-        iframe.style.width = '1px';
-        iframe.style.height = '1px';
-        iframe.src = '/favicon.ico';
-        iframe.onload = function () {
-            setTimeout(function () {
-                document.body.removeChild(iframe);
-            }, 0);
-        };
-        document.body.appendChild(iframe);
-      },0);
-    } else {
-      document.title = '友邻市集';
-    }
   }
 
   componentDidMount(){
+    syncCallNative({
+      handle: "initWithBlackpearl",
+      query: {
+        Mobile_ShowShareButton: "No",
+        Mobile_ConfigTitle: "友邻市集"
+      }
+    })
+    localStorage.removeItem('keeper');
     let that = this;
     getByREST('category/list?', (data) => {
       that.setState({
@@ -127,12 +114,12 @@ export default class Mall extends Component<MallProps, MallState>{
           })
         });
       })
-    }, {Mobile_ShowShareButton: "No"});
+    });
     getByREST('statistics/sunshine/ranking?', (data) => {
       that.setState({
         fkad: data.result
       })
-    }, {})
+    })
     // this.checkAppVersion()
   }
 
@@ -233,6 +220,8 @@ export default class Mall extends Component<MallProps, MallState>{
 
   render(){
     let app_env = window.appEnvironment;
+    let ua = navigator.userAgent;
+    
     let ui_good_list = this.state.data.map((goods, index) => {
       let data = {
         goodsImage: goods.img,
@@ -247,7 +236,7 @@ export default class Mall extends Component<MallProps, MallState>{
         flashSale: false,
         endTime: goods.end_time
       };
-      return <Link key={index} to={`/detail/${goods.goods_id}`}>
+      return <Link key={index} to={`/detail/${goods.goods_id}/projcode/0`}>
         <GoodsItemFlat isButton={!data.flashSale} imagePosition={index%2 ? 'down' : 'up'} className={skeleton.goodsItemFlat} goodsInfo={data}>
           {goods.name}
           {data.flashSale && <img style={Object.assign({
@@ -263,7 +252,25 @@ export default class Mall extends Component<MallProps, MallState>{
         <div className={skeleton.banner}>
           <img src={require('../assets/img/store_banner.png')} alt=""/>
         </div>
-        <a style={{textDecoration: 'none'}} href="./ylplan.html">
+        <a style={{textDecoration: 'none'}} onClick={() => {
+          if (isOldVersion) {
+            location.href = `https://blackpearl.4009515151.com/assets/h5/ylplan.html`;
+          } else {
+            if (window["appEnvironment"]["Html_token"]) {
+              if (/iPhone/.test(ua)) {
+                location.href = './#/?native_service?data={"method": "neighborPlane"}';
+              } else {
+                let i = document.createElement("iframe");
+                i.src = `${location.origin}/service/#/?native_service?data={"method": neighborPlane}`;
+                i.style.width = "0";
+                i.style.height = "0";
+                document.body.appendChild(i);
+              }
+            } else {
+              location.href = `https://blackpearl.4009515151.com/assets/h5/ylplan.html?projcode=${window["appEnvironment"]["Html_projectCode"]}`;
+            }
+          }
+        }}>
           <div className={skeleton.topcard}>
             <div>
               <div>

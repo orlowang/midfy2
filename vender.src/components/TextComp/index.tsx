@@ -207,6 +207,11 @@ export class TextInputNormal extends React.Component<TextInputNormalProps, TextI
     });
   }
 
+  handleHolderClick(){
+    this.refs.text.focus()
+    this.setInputState(true)
+  }
+
   render(){
     let _classname = this.props.className ? ' ' + this.props.className : '';
     let _input_status = this.state.isinput ? ` ${styl.active} active` : '';
@@ -218,7 +223,7 @@ export class TextInputNormal extends React.Component<TextInputNormalProps, TextI
         onChange={this.handleChange.bind(this)}
         value={this.state.value}
       />
-      {this.props.placeholder && <span className={`${styl.placeholder} placeholder`} data-placeholder={this.props.placeholder}></span>}
+      {this.props.placeholder && <span onClick={this.handleHolderClick.bind(this)} className={`${styl.placeholder} placeholder`} data-placeholder={this.props.placeholder}></span>}
     </div>; 
   }
 }

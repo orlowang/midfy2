@@ -22,7 +22,8 @@ import {
 } from '../helper/Types';
 
 import {
-  getByREST
+  getByREST,
+  syncCallNative
 } from '../helper/Fetch';
 const skeleton = require('../assets/css/skeleton.styl');
 
@@ -67,34 +68,19 @@ export default class Address extends React.Component<AddressProps, AddressState>
 
   componentWillMount(){
     document.body.style.backgroundColor = skeleton.mainBgColor;
-    //解决IOS下title不生效问题
-    const mobile = navigator.userAgent.toLowerCase();
-    const length = document.querySelectorAll('iframe').length;
-    if (/iphone|ipad|ipod/.test(mobile) && !length) {
-      setTimeout(function(){
-        //利用iframe的onload事件刷新页面
-        document.title = '收货地址';
-        var iframe = document.createElement('iframe');
-        iframe.style.visibility = 'hidden';
-        iframe.style.width = '1px';
-        iframe.style.height = '1px';
-        iframe.src = '/favicon.ico';
-        iframe.onload = function () {
-            setTimeout(function () {
-                document.body.removeChild(iframe);
-            }, 0);
-        };
-        document.body.appendChild(iframe);
-      },0);
-    } else {
-      document.title = '收货地址';
-    }
   }
 
   componentDidMount(){
     let that = this;
+    syncCallNative({
+      handle: "initWithBlackpearl",
+      query: {
+        Mobile_ShowShareButton: "No",
+        Mobile_ConfigTitle: "收货地址"
+      }
+    })
     
-    getByREST(`order/list?`, (data) => {
+    getByREST(`addr/detail?`, (data) => {
       that.setState({
         user: data.result
       }, () => {
@@ -104,7 +90,7 @@ export default class Address extends React.Component<AddressProps, AddressState>
           usertmp: localStorage.getItem('usertmp')
         })
       })
-    }, { Mobile_ShowShareButton: "No" });
+    });
   }
 
   badCodeSetName(){

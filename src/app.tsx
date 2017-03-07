@@ -5,19 +5,21 @@ import {
   hashHistory,
   Router
 } from "react-router";
+import isOldVersion, { appVersion } from './helper/version';
 import CreateRoutes from "./route";
 import "./assets/css/style.css";
+import {
+  syncCallNative
+} from './helper/Fetch';
 
-const remoteIP = '10.39.230.12';
-const remoteIPhome = '192.168.1.107';
+const slat = 'KFAdfF9dfkeIKJ';
+const spec = '8fsDSU2d8fk93jsHJdmK';
 
-// fix a:active can't be work. 
-// window.appEnvironment = {
-//   appName: 'zhuzhuer',
-//   appVersion: '3.0.9',
-//   language: 'en',
-//   platform: 'Android'
-// };
+if (isOldVersion && location.href.indexOf(spec) < 0) {
+  if (location.href.indexOf(slat) < 0 ) {
+    location.href = encodeURI(`https://blackpearl.4009515151.com/login?request_uri=https://blackpearl.4009515151.com/assets/h5/?${slat}`);
+  }
+}
 
 document.body.addEventListener('touchstart', ()=>{})
 ReactDOM.render(

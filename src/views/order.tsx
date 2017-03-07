@@ -35,7 +35,7 @@ import {
 import {
   getByREST,
   postByREST,
-  getToken
+  syncCallNative
 } from '../helper/Fetch';
 import {
   goodsListType,
@@ -52,6 +52,7 @@ interface OrderStatus {
   data?: goodsListType;
   user?: userInfoType;
   text?: string;
+  keeper?: string;
 }
 
 interface OrderProps extends Props<Order>{
@@ -103,35 +104,14 @@ export default class Order extends React.Component<OrderProps, OrderStatus>{
         orderPrice: null,
         limit: null
       },
-      text: '付款'
+      text: '付款',
+      keeper: "请选择管家"
     };
   };
 
   componentWillMount(){
     document.body.style.backgroundColor = skeleton.mainBgColor;
     this.updateOrderSession(`order-${this.props.params.goodsid}`);
-    //解决IOS下title不生效问题
-    const mobile = navigator.userAgent.toLowerCase();
-    const length = document.querySelectorAll('iframe').length;
-    if (/iphone|ipad|ipod/.test(mobile) && !length) {
-      setTimeout(function(){
-        //利用iframe的onload事件刷新页面
-        document.title = '订单详情';
-        var iframe = document.createElement('iframe');
-        iframe.style.visibility = 'hidden';
-        iframe.style.width = '1px';
-        iframe.style.height = '1px';
-        iframe.src = '/favicon.ico';
-        iframe.onload = function () {
-            setTimeout(function () {
-                document.body.removeChild(iframe);
-            }, 0);
-        };
-        document.body.appendChild(iframe);
-      },0);
-    } else {
-      document.title = '订单详情';
-    }
 
     let check = setInterval(() => {
       if (window.msg && window.msg == 'success') {
@@ -144,28 +124,14 @@ export default class Order extends React.Component<OrderProps, OrderStatus>{
   }
 
   componentDidMount(){
-    getToken({ Mobile_ShowShareButton: "No" });
     let that = this;
-    //解决IOS下title不生效问题
-    const mobile = navigator.userAgent.toLowerCase();
-    const length = document.querySelectorAll('iframe').length;
-    if (/iphone|ipad|ipod/.test(mobile) && !length) {
-      setTimeout(function(){
-        //利用iframe的onload事件刷新页面
-        document.title = '订单详情';
-        var iframe = document.createElement('iframe');
-        iframe.style.visibility = 'hidden';
-        iframe.style.width = '1px';
-        iframe.style.height = '1px';
-        iframe.src = '/favicon.ico';
-        iframe.onload = function () {
-            setTimeout(function () {
-                document.body.removeChild(iframe);
-            }, 0);
-        };
-        document.body.appendChild(iframe);
-      },0);
-    }
+    syncCallNative({
+      handle: "initWithBlackpearl",
+      query: {
+        Mobile_ShowShareButton: "No",
+        Mobile_ConfigTitle: "订单详情"
+      }
+    })
     const sessionId = `order-${this.props.params.goodsid}`;
     const usrSessionId = 'usertmp';
     getByREST(`goods/detail/${this.props.params.goodsid}?`, (data) => {
@@ -224,7 +190,22 @@ export default class Order extends React.Component<OrderProps, OrderStatus>{
         })
         localStorage.setItem('usrselectmp', JSON.stringify(this.state.data.products));
       })
-    }, {});
+    });
+
+    getByREST(`keeper/list?`, (data) => {
+      that.setState({
+        keeper: (() => {
+          let _keep = data.result;
+          console.log(_keep);
+          
+          for(let i=0; i < _keep.length; i++){
+            if (_keep[i].selected){
+              return _keep[i].fullname
+            }
+          }
+        })()
+      })
+    });
     
     getByREST(`addr/detail?`, (data) => {
       that.setState({
@@ -235,12 +216,13 @@ export default class Order extends React.Component<OrderProps, OrderStatus>{
         let usrInfo = usrSession && usrSession.split(':');
         
         // 创建完整订单, 有些(etc.运费、付款方式、手机号)暂时无法修改，故子再此使用初始化值 ---02
+        session['comment'] = null;
         session['mobile'] = this.state.user.mobile;
         session['consignee'] = (usrInfo && usrInfo[0]) || this.badCodeSetName();
         session['address'] = ((usrInfo && usrInfo[1]) && `${this.state.user.province}${this.state.user.city}${this.state.user.district}${this.state.user.road}${usrInfo[1]}`) || `${this.state.user.address}${this.state.user.building_name}`;
         that.updateOrderSession(sessionId, session);
       })
-    }, {});
+    });
   }
 
   componentWillUnmount(){
@@ -390,6 +372,17 @@ export default class Order extends React.Component<OrderProps, OrderStatus>{
     let sessionId = `order-${this.props.params.goodsid}`;
 
     let session = JSON.parse(localStorage[sessionId]);
+    let keeper = localStorage.getItem('keeper'),keppertmp = JSON.parse(keeper);
+    console.log(keppertmp);
+    
+    if (keeper){ 
+      session['keeper_id'] = keppertmp.id;
+      session['keeper_fullname'] = keppertmp.fullname;
+      session['keeper_grid_code'] = keppertmp.grid_code;
+      session['keeper_grid_name'] = keppertmp.grid_name;
+      session['keeper_mobile'] = keppertmp.mobile;
+    }
+
     if(session.goods.length != 1){
       alert('请选择商品规格！');
       return;
@@ -412,6 +405,10 @@ export default class Order extends React.Component<OrderProps, OrderStatus>{
       }
       if (info.result && info.result.order_id) {
         let ua = navigator.userAgent;
+        let _post = {
+          orderId: info.result.order_id,
+          orderPrice: session.order_price
+        };
         if (ua.indexOf('Android') >= 0 || ua.indexOf('Adr') >= 0) {
           //原生连接桥
           var nativeBridge = {
@@ -423,10 +420,10 @@ export default class Order extends React.Component<OrderProps, OrderStatus>{
           };
           //如果是原生直接有的方法
           if (window.imageListener) {
-              imageListener.WFTPayJS(JSON.stringify(info.result.order_id));
+              imageListener.WFTPayJS(JSON.stringify(_post));
           } else {
           //如果是web通过与原生的连接桥,来调用原生暴露的接口
-            nativeBridge.invoke('WFTPayJS', info.result.order_id);
+            nativeBridge.invoke('WFTPayJS', _post);
           }
         } else {
           let pay_uri = encodeURI(`/native_service?data={"method": "SPay", "content": {"orderId": ${String(info.result.order_id)}, "orderPrice": ${session.order_price}}}`);
@@ -437,7 +434,7 @@ export default class Order extends React.Component<OrderProps, OrderStatus>{
         alert('订单提交失败');
         return;
       }
-    }, {})
+    })
 
     // 删除本地订单缓存
     // this.removeOrder(sessionId)
@@ -460,6 +457,14 @@ export default class Order extends React.Component<OrderProps, OrderStatus>{
     }
   }
 
+  setComment(id, text){
+    if(text){
+      let order = JSON.parse(localStorage.getItem(`order-${this.props.params.goodsid}`));
+      order['comment'] = text;
+      localStorage.setItem(`order-${this.props.params.goodsid}`, JSON.stringify(order))
+    }
+  }
+
   render(){
     let ordersession = localStorage[`order-${this.props.params.goodsid}`];
     let session = ordersession && JSON.parse(ordersession);
@@ -472,12 +477,13 @@ export default class Order extends React.Component<OrderProps, OrderStatus>{
       inStock: this.state.updateInfo.stock
     };
     let user = this.state.user, usr_name;
-    let homekeeper;
+    let homekeeper, keeper = localStorage.getItem('keeper');
+    
     if (this.state.user) {
       if (!this.state.user.is_virtual || this.state.user.is_virtual == 'false'){
        homekeeper = <ItemIOSLink link={`/homekeeper/${goods_detail.goods_id}`}>
           <span>管家</span>
-          <span></span>
+          <span style={{float: 'right'}}>{!keeper ? this.state.keeper : JSON.parse(keeper)['fullname']}</span>
         </ItemIOSLink>;
       }
     }
@@ -513,7 +519,7 @@ export default class Order extends React.Component<OrderProps, OrderStatus>{
             </ItemIOSLink>
             <ItemIOS className={skeleton.fare} title="留言">
               <span></span>
-              <TextInputNormal className={skeleton.textInput} name="comment" complete={()=>{}} default={''}></TextInputNormal>
+              <TextInputNormal className={skeleton.textInput} name="comment" complete={this.setComment.bind(this)} placeholder={'选填：对本次交易的说明'}></TextInputNormal>
             </ItemIOS>
             {homekeeper}
             <ItemIOS className={skeleton.weixin} title="付款方式">
