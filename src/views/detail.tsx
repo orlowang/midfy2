@@ -220,8 +220,8 @@ console.log(setButton);
             </GoodsItemFlat>
           </MountAnimaShow>
           {goods_detail.text_detail != '' && <MountAnima>
-            <DetailStaticWrap title={'产品描述'}>
-              <pre style={{whiteSpace: 'pre-wrap', wordWrap: 'break-word'}} dangerouslySetInnerHTML={ui_detail(goods_detail.text_detail)}></pre>
+            <DetailStaticWrap title={'商品描述'}>
+              <pre style={{whiteSpace: 'pre-wrap', wordWrap: 'break-word', lineHeight: '2.2rem'}} dangerouslySetInnerHTML={ui_detail(goods_detail.text_detail)}></pre>
             </DetailStaticWrap>
           </MountAnima>}
           {!(goods_detail.img_detail == null || goods_detail.img_detail.length == 0) && <MountAnima delay={200}>

@@ -56,6 +56,14 @@ export let syncCallNative = (props:callNativeProps, cb?:Function) => {
   // }
 
   if (props.data) {
+    // let maybeguest = setTimeout(function() {
+    //     console.log("[ message ]: fetch token success ! token is" + window['appEnvironment']['Html_token']);
+    //     clearInterval(checker)
+    //     clearTimeout(maybeguest)
+    //     i.parentNode.removeChild(i)
+    //     // cb(window[props.data[0]])
+    //     cb(window['appEnvironment'])
+    // }, 2000);
     let checker = setInterval(() => {
       let ready = [], _data = {};
       props.data.map((data) => {
@@ -64,8 +72,6 @@ export let syncCallNative = (props:callNativeProps, cb?:Function) => {
           ready.push(!!window['appEnvironment'][data])
         }
       })
-      // console.log(ready);
-      console.log(ready);
       if (ready.Unique().length == 1 && ready.Unique()[0] == true) {
         console.log("[ message ]: fetch token success ! token is" + window['appEnvironment']['Html_token']);
         clearInterval(checker)
@@ -73,7 +79,7 @@ export let syncCallNative = (props:callNativeProps, cb?:Function) => {
         // cb(window[props.data[0]])
         cb(window['appEnvironment'])
       }
-    }, 0)
+    }, 100)
   } else {
     i.parentNode.removeChild(i)
   }

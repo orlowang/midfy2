@@ -105,8 +105,9 @@ export default class Order extends React.Component<OrderProps, OrderStatus>{
         limit: null
       },
       text: '付款',
-      keeper: "请选择管家"
+      keeper: "请选择管家",
     };
+    this.isOrderExist = false;
   };
 
   componentWillMount(){
@@ -369,6 +370,11 @@ export default class Order extends React.Component<OrderProps, OrderStatus>{
   }
 
   sendOrder(){
+    if (this.isOrderExist) {
+      alert('订单正在创建中...')
+      return
+    }
+    this.isOrderExist = true;
     let sessionId = `order-${this.props.params.goodsid}`;
 
     let session = JSON.parse(localStorage[sessionId]);
@@ -404,10 +410,11 @@ export default class Order extends React.Component<OrderProps, OrderStatus>{
         return;
       }
       if (info.result && info.result.order_id) {
+        this.isOrderExist = false;
         let ua = navigator.userAgent;
         if (ua.indexOf('Android') >= 0 || ua.indexOf('Adr') >= 0) {
           let version = ua.match(/vanke_app_version\/[0-9]+/)
-          let _post = Number(version[0].split('/')[1]) >= 64 ? {
+          let _post = Number(version[0].split('/')[1]) >= 63 ? {
             orderId: info.result.order_id,
             orderPrice: session.order_price
           } : info.result.order_id
@@ -419,12 +426,13 @@ export default class Order extends React.Component<OrderProps, OrderStatus>{
               window.location = 'js-call:' + commandName + ':' + encodeURIComponent(JSON.stringify(args));
               }
           };
+          console.log(JSON.stringify(_post))
           //如果是原生直接有的方法
           if (window.imageListener) {
-              imageListener.WFTPayJS(_post);
+              imageListener.WFTPayJS(JSON.stringify(_post));
           } else {
           //如果是web通过与原生的连接桥,来调用原生暴露的接口
-            nativeBridge.invoke('WFTPayJS', _post);
+            nativeBridge.invoke('WFTPayJS', JSON.stringify(_post));
           }
         } else {
           let pay_uri = encodeURI(`/native_service?data={"method": "SPay", "content": {"orderId": ${String(info.result.order_id)}, "orderPrice": ${session.order_price}}}`);
