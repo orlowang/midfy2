@@ -66,8 +66,8 @@ const callNative = ({ method, content }) => {
 }
 // 调用原生分享，针对android优化
 const callNativeShare = (option) => {
-    const interval = 200
-    const timeout = 5000
+    const interval = 500
+    const timeout = 2000
     let intervalCount = 0
     let timer = null
     callNative(option)
@@ -76,7 +76,7 @@ const callNativeShare = (option) => {
           console.log('shareActiviry: ', window.shareActiviry, '==> callNativeShare')
           intervalCount += interval
           callNative(option)
-          if (window.shareActiviry === 1 || intervalCount > timeout) {
+          if (window.shareActiviry || intervalCount > timeout) {
               clearInterval(timer)
           }
       }, interval)
