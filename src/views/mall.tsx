@@ -252,7 +252,8 @@ export default class Mall extends Component<MallProps, MallState>{
         </GoodsItemFlat>
       </Link>;
     });
-    return <MountAnimaShow>
+    // MountAnimaShow导致ios8.x，暂时禁用
+    return <div>
       <div ref="scrollbody" className={`${skeleton.root} ${skeleton.scrollwrap} ${navigator.userAgent.indexOf('VKStaffAssistant') >= 0 && skeleton.hastitlebar} fmroot`}>
         <div className={skeleton.banner}>
           <img src={require('../assets/img/store_banner.png')} alt=""/>
@@ -298,15 +299,15 @@ export default class Mall extends Component<MallProps, MallState>{
         {this.state.categorys.map((category, index) => index <= 3 && <div className={this.state.cateState.index == index ? skeleton.on : ''} onClick={this.setCategory.bind(this, category.categoryId, index)} key={category.categoryId}>{category.name}</div>)}
       </div>
       <div>
-        {this.state.layerState && <MountAnimaShow><Layer confirm={{text: `我知道了`, func: this.state.layerState}}>
+        {this.state.layerState && <div><Layer confirm={{text: `我知道了`, func: this.state.layerState}}>
           <img src={require('../assets/img/banben.svg')} alt=""/>
           {(/iphone|ipad|ipod/).test(navigator.userAgent.toLowerCase()) ? <p>友邻市集的支付功能，需要更新至3.1.0以上版本，到AppStore升级：）</p> : <p>友邻市集的支付功能，需要更新至3.1.0以上版本，应用市场可升级：）</p>}
-        </Layer></MountAnimaShow>}
+        </Layer></div>}
       </div>
       {navigator.userAgent.indexOf('VKStaffAssistant') >= 0 && <div className={skeleton.titlebar}>
         <div onClick={() => {history.go(-1)}}>返回</div>
         <div>友邻市集</div>
       </div>}
-    </MountAnimaShow>;
+    </div>;
   }
 }

@@ -46,6 +46,43 @@ interface DetailProps extends Props<Detail>{
   params: string;
 };
 
+// 重写调用原生方法
+const callNative = ({ method, content }) => {
+    let dataString = ''
+    try {
+        dataString = JSON.stringify({ method, content })
+    } catch (error) {}
+    if (!dataString) return
+    const url = `/service/#/?native_service?data=${dataString}`
+    let iframe = document.createElement("iframe")
+    iframe.setAttribute('src', url)
+    iframe.setAttribute('width', 0)
+    iframe.setAttribute('height', 0)
+    iframe.setAttribute('frameborder', 0)
+    document.documentElement.appendChild(iframe)
+    setTimeout(() => {
+        iframe.parentNode.removeChild(iframe)
+    }, 50)
+}
+// 调用原生分享，针对android优化
+const callNativeShare = (option) => {
+    const interval = 200
+    const timeout = 5000
+    let intervalCount = 0
+    let timer = null
+    callNative(option)
+    if (window.navigator.userAgent.indexOf('android')) {
+      timer = setInterval(() => {
+          console.log('shareActiviry: ', window.shareActiviry, '==> callNativeShare')
+          intervalCount += interval
+          callNative(option)
+          if (window.shareActiviry === 1 || intervalCount > timeout) {
+              clearInterval(timer)
+          }
+      }, interval)
+    }
+}
+
 export default class Detail extends React.Component<DetailProps, DetailState>{
   constructor(props){
     super(props);
@@ -76,9 +113,9 @@ export default class Detail extends React.Component<DetailProps, DetailState>{
 
   componentDidMount(){
 
-    syncCallNative({
-      handle: "initWithBlackpearl",
-      query: {
+    callNativeShare({
+      method: "initWithBlackpearl",
+      content: {
         Mobile_ShowShareButton: "Yes",
         Mobile_GoodSid: this.props.params.goodsid,
         Mobile_ConfigTitle: "商品详情"
