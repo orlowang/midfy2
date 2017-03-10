@@ -82,7 +82,7 @@ export let syncCallNative = (props:callNativeProps, cb?:Function) => {
 const slat = '8fsDSU2d8fk93jsHJdmK';
 export const getByREST = (args, callback, ifneed?:boolean) => {
   if (isOldVersion && location.href.indexOf(slat) < 0) {
-    fetch(`//blackpearltest.4009515151.com/interfaces/${args}`, {
+    fetch(`//blackpearl.4009515151.com/interfaces/${args}`, {
         credentials: 'include'
       }).then(res => res.json())
         .then(data => callback(data))
@@ -94,16 +94,16 @@ export const getByREST = (args, callback, ifneed?:boolean) => {
       }, (data) => {
         let filter = `projectCode=${data.Html_projectCode}`,
             headers = !data.Html_token ? {} : { "X-Auth-Token": data.Html_token };
-        console.log(`start fetch ===> //blackpearltest.4009515151.com/interfaces/${args}${filter}`);
+        console.log(`start fetch ===> //blackpearl.4009515151.com/interfaces/${args}${filter}`);
         
-        fetch(`//blackpearltest.4009515151.com/interfaces/${args}${filter}`, {
+        fetch(`//blackpearl.4009515151.com/interfaces/${args}${filter}`, {
             credentials: 'include',
             headers: headers
           }).then(res => res.json())
             .then(data => callback(data))
       });
     } else {
-      fetch(`//blackpearltest.4009515151.com/interfaces/${args}`, {
+      fetch(`//blackpearl.4009515151.com/interfaces/${args}`, {
           credentials: 'include'
         }).then(res => res.json())
           .then(data => callback(data))
@@ -114,7 +114,7 @@ export const getByREST = (args, callback, ifneed?:boolean) => {
 export const postByREST = (args, data, callback) => {
   if ((isOldVersion && location.href.indexOf(slat) < 0)) {
     setTimeout(() => {
-      fetch(`//blackpearltest.4009515151.com/interfaces/${args}`, {
+      fetch(`//blackpearl.4009515151.com/interfaces/${args}`, {
         method: 'POST',
         credentials: 'include',
         body: data
@@ -127,7 +127,7 @@ export const postByREST = (args, data, callback) => {
       handle: "setToken",
       data: ["Html_token"]
     }, (cb) => {
-      fetch(`//blackpearltest.4009515151.com/interfaces/${args}`, {
+      fetch(`//blackpearl.4009515151.com/interfaces/${args}`, {
         method: 'POST',
         headers: { "X-Auth-Token": cb['Html_token'] },
         credentials: 'include',

@@ -405,11 +405,12 @@ export default class Order extends React.Component<OrderProps, OrderStatus>{
       }
       if (info.result && info.result.order_id) {
         let ua = navigator.userAgent;
-        let _post = {
-          orderId: info.result.order_id,
-          orderPrice: session.order_price
-        };
         if (ua.indexOf('Android') >= 0 || ua.indexOf('Adr') >= 0) {
+          let version = ua.match(/vanke_app_version\/[0-9]+/)
+          let _post = Number(version[0].split('/')[1]) >= 64 ? {
+            orderId: info.result.order_id,
+            orderPrice: session.order_price
+          } : info.result.order_id
           //原生连接桥
           var nativeBridge = {
               invoke: function (commandName, args) {
@@ -420,7 +421,7 @@ export default class Order extends React.Component<OrderProps, OrderStatus>{
           };
           //如果是原生直接有的方法
           if (window.imageListener) {
-              imageListener.WFTPayJS(JSON.stringify(_post));
+              imageListener.WFTPayJS(_post);
           } else {
           //如果是web通过与原生的连接桥,来调用原生暴露的接口
             nativeBridge.invoke('WFTPayJS', _post);
@@ -522,9 +523,6 @@ export default class Order extends React.Component<OrderProps, OrderStatus>{
               <TextInputNormal className={skeleton.textInput} name="comment" complete={this.setComment.bind(this)} placeholder={'选填：对本次交易的说明'}></TextInputNormal>
             </ItemIOS>
             {homekeeper}
-            <ItemIOS className={skeleton.weixin} title="付款方式">
-              <span>微信支付</span>
-            </ItemIOS>
             <ItemIOS className={skeleton.total} title="合计金额">
               <span>{this.state.updateInfo.orderPrice ? `￥${this.state.updateInfo.orderPrice}` : ''}</span>
             </ItemIOS>

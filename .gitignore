@@ -5,7 +5,7 @@ node_modules
 
 # Cruft
 .DS_Store
-npm-debug.log
+npm-debug.log*
 .idea
 .vscode
 typings

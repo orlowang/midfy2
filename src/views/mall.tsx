@@ -48,6 +48,8 @@ interface MallProps extends Props<Mall>{
 export default class Mall extends Component<MallProps, MallState>{
   constructor(props){
     super(props);
+    // 解决ios列表重复加载问题
+    this.AJAX_LOCK = false;
     this.state = {
       data: [],
       categorys: [],
@@ -95,6 +97,8 @@ export default class Mall extends Component<MallProps, MallState>{
               let documenttop = this.refs.scrollbody.scrollTop;
               let dpr = window.devicePixelRatio;
               if(documenttop >= parseInt(documentheight - bodyheight + dpr * 12 * 3.33333)){
+                if (that.AJAX_LOCK) return 
+                that.AJAX_LOCK = true
                 !this.state.cateState.isLast ? localStorage.setItem('page', `${page[0]}:${parseInt(page[1])+1}`) : localStorage.setItem('page', `${page[0]}:${parseInt(page[1])}`);
                 let newPage = localStorage.getItem('page').split(':');
                 console.log(this.state.cateState.isLast)
@@ -108,6 +112,7 @@ export default class Mall extends Component<MallProps, MallState>{
                     this.state.cateState.isLast = true;
                     // localStorage.setItem('page', `${page[0]}:${parseInt(page[1])-1}`);
                   }
+                  that.AJAX_LOCK = false
                 });
               }
             })
