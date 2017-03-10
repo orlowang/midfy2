@@ -56,9 +56,9 @@ const callNative = ({ method, content }) => {
     const url = `/service/#/?native_service?data=${dataString}`
     let iframe = document.createElement("iframe")
     iframe.setAttribute('src', url)
-    iframe.setAttribute('width', 0)
-    iframe.setAttribute('height', 0)
-    iframe.setAttribute('frameborder', 0)
+    iframe.setAttribute('width', '0')
+    iframe.setAttribute('height', '0')
+    iframe.setAttribute('frameborder', '0')
     document.documentElement.appendChild(iframe)
     setTimeout(() => {
         iframe.parentNode.removeChild(iframe)
@@ -71,12 +71,11 @@ const callNativeShare = (option) => {
     let intervalCount = 0
     let timer = null
     callNative(option)
-    if (window.navigator.userAgent.indexOf('android')) {
+    if (navigator.userAgent.toLowerCase().indexOf('android') >= 0) {
       timer = setInterval(() => {
-          console.log('shareActiviry: ', window.shareActiviry, '==> callNativeShare')
           intervalCount += interval
           callNative(option)
-          if (window.shareActiviry || intervalCount > timeout) {
+          if (!window['appEnvironment'] || window['appEnvironment'].shareActiviry || intervalCount > timeout) {
               clearInterval(timer)
           }
       }, interval)
