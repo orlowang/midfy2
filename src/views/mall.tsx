@@ -21,6 +21,7 @@ import {
   syncCallNative
 } from '../helper/Fetch';
 import 'whatwg-fetch';
+import {dataFetch} from '../helper/Tools'
 
 interface goodsListType {
   goods_id: string;
@@ -80,14 +81,23 @@ export default class Mall extends Component<MallProps, MallState>{
       }
     })
     localStorage.removeItem('keeper');
-    let that = this;
-    getByREST('category/list?', (data) => {
-      that.setState({
-        categorys: data.result
-      }, () => {
-        getByREST(`goods/list?cat=${this.state.categorys[0].categoryId}&page=0&per_page=10&`, (data) => {
-          that.setState({
-            data: data.result
+    dataFetch('/category/list')
+      .then(res => res.json())
+      .then(res => {
+        if (res.result) {
+          this.setState({
+            categorys: res.result
+          })
+        }
+      })
+      .then(res => {
+        return dataFetch('/goods/list', {cat: this.state.categorys[0].categoryId, page: 0, per_page: 10})
+      })
+      .then(res => res.json())
+      .then(res => {
+        if (res.result) {
+          this.setState({
+            data: res.result
           }, () => {
             localStorage.setItem('page', `${this.state.categorys[0].categoryId}:0`);
             this.refs.scrollbody.addEventListener('scroll', () => {
@@ -101,31 +111,24 @@ export default class Mall extends Component<MallProps, MallState>{
                 that.AJAX_LOCK = true
                 !this.state.cateState.isLast ? localStorage.setItem('page', `${page[0]}:${parseInt(page[1])+1}`) : localStorage.setItem('page', `${page[0]}:${parseInt(page[1])}`);
                 let newPage = localStorage.getItem('page').split(':');
-                console.log(this.state.cateState.isLast)
-                getByREST(`goods/list?cat=${newPage[0]}&page=${newPage[1]}&per_page=10&`, (data) => {
-                  if (data.result.length >= 1) {
-                    console.log(data.result.length)
-                    that.setState({
-                      data: this.state.data.concat(data.result)
-                    })
-                  } else {
-                    this.state.cateState.isLast = true;
-                    // localStorage.setItem('page', `${page[0]}:${parseInt(page[1])-1}`);
-                  }
-                  that.AJAX_LOCK = false
-                });
+                dataFetch('/goods/list', {cat: newPage[0], page: newPage[1], per_page: 10})
+                  .then(res => res.json())
+                  .then(res => {
+                    if (res.result && res.result.length > 0) {
+                      this.setState({
+                        data: this.state.data.concat(res.result)
+                      })
+                    } else {
+                      this.state.cateState.isLast = true;
+                    }
+                    that.AJAX_LOCK = false
+                  })
               }
             })
           })
-        });
+        }
       })
-    });
-    getByREST('statistics/sunshine/ranking?', (data) => {
-      that.setState({
-        fkad: data.result
-      })
-    })
-    // this.checkAppVersion()
+      .catch(error => alert(error))
   }
 
   componentWillUnmount(){
