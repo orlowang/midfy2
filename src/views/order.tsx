@@ -414,7 +414,7 @@ export default class Order extends React.Component<OrderProps, OrderStatus>{
         let ua = navigator.userAgent;
         if (ua.indexOf('Android') >= 0 || ua.indexOf('Adr') >= 0) {
           let version = ua.match(/vanke_app_version\/[0-9]+/)
-          let _post = Number(version[0].split('/')[1]) >= 63 ? {
+          let _post = Number(version[0].split('/')[1]) >= 65 ? {
             orderId: info.result.order_id,
             orderPrice: session.order_price
           } : info.result.order_id
