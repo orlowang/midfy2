@@ -1,7 +1,7 @@
 // 数据接口域名
-const API_DATA_HOST = 'http://blackpearltest.4009515151.com';
+const API_DATA_HOST = '';
 // 支付接口域名
-const API_PAY_HOST = 'http://pay.4009515151.com';
+const API_PAY_HOST = 'https://pay.4009515151.com';
 // 数据接口前缀
 const API_PREFIX = '/interfaces';
 // android旧版本标记
