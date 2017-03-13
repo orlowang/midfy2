@@ -1,5 +1,5 @@
 // 数据接口域名
-const API_DATA_HOST = 'https://blackpearltest.4009515151.com';
+const API_DATA_HOST = '';
 // 支付接口域名
 const API_PAY_HOST = 'https://pay.4009515151.com';
 // 数据接口前缀
