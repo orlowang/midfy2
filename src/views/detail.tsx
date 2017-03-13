@@ -66,20 +66,10 @@ const callNative = ({ method, content }) => {
 }
 // 调用原生分享，针对android优化
 const callNativeShare = (option) => {
-    const interval = 500
-    const timeout = 2000
-    let intervalCount = 0
-    let timer = null
-    callNative(option)
-    if (navigator.userAgent.toLowerCase().indexOf('android') >= 0) {
-      timer = setInterval(() => {
-          intervalCount += interval
-          callNative(option)
-          if (!window['appEnvironment'] || window['appEnvironment'].shareActiviry || intervalCount > timeout) {
-              clearInterval(timer)
-          }
-      }, interval)
-    }
+    const timeout = 100
+    setTimeout(() => {
+      callNative(option)
+    }, timeout)
 }
 
 export default class Detail extends React.Component<DetailProps, DetailState>{
