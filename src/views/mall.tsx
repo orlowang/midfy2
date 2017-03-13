@@ -81,6 +81,8 @@ export default class Mall extends Component<MallProps, MallState>{
       }
     })
     localStorage.removeItem('keeper');
+
+    // 获取商品列表
     dataFetch('/category/list')
       .then(res => res.json())
       .then(res => {
@@ -128,7 +130,17 @@ export default class Mall extends Component<MallProps, MallState>{
           })
         }
       })
-      .catch(error => alert(error))
+      .catch(error => false)
+
+    // 获取募集总额
+    dataFetch('/statistics/sunshine/ranking')
+      .then(res => res.json())
+      .then(res => {
+        this.setState({
+          fkad: res.result
+        })
+      })
+      .catch(error => false)
   }
 
   componentWillUnmount(){
@@ -211,19 +223,20 @@ export default class Mall extends Component<MallProps, MallState>{
   }
 
   setCategory(cid, index){
-    let that = this;
-    getByREST(`goods/list?cat=${cid}&page=0&per_page=10&`, (data) => {
-      localStorage.setItem('page', `${cid}:0`);
-      that.setState({
-        cateState: {
-          id: cid,
-          index: index,
-          page: 0,
-          isLast: false
-        },
-        data: data.result
+    dataFetch('/goods/list', {cat: cid, page: 0, per_page: 10})
+      .then(res => res.json())
+      .then(res => {
+        this.setState({
+          cateState: {
+            id: cid,
+            index: index,
+            page: 0,
+            isLast: false
+          },
+          data: res.result
+        })
       })
-    });
+      .catch(error => false)
   }
 
   render(){
