@@ -66,10 +66,20 @@ const callNative = ({ method, content }) => {
 }
 // 调用原生分享，针对android优化
 const callNativeShare = (option) => {
+    const interval = 500
+    const timeout = 2000
+    let intervalCount = 0
+    let timer = null
     callNative(option)
-    setTimeout(() => {
-      callNative(option)
-    }, 100)
+    if (navigator.userAgent.toLowerCase().indexOf('android') >= 0) {
+      timer = setInterval(() => {
+          intervalCount += interval
+          callNative(option)
+          if (!window['appEnvironment'] || window['appEnvironment'].shareActiviry || intervalCount > timeout) {
+              clearInterval(timer)
+          }
+      }, interval)
+    }
 }
 
 export default class Detail extends React.Component<DetailProps, DetailState>{
@@ -102,7 +112,7 @@ export default class Detail extends React.Component<DetailProps, DetailState>{
 
   componentDidMount(){
 
-    callNativeShare({
+    callNative({
       method: "initWithBlackpearl",
       content: {
         Mobile_ShowShareButton: "Yes",
@@ -210,8 +220,8 @@ console.log(setButton);
             </GoodsItemFlat>
           </MountAnimaShow>
           {goods_detail.text_detail != '' && <MountAnima>
-            <DetailStaticWrap title={'商品描述'}>
-              <pre style={{whiteSpace: 'pre-wrap', wordWrap: 'break-word', lineHeight: '2.2rem'}} dangerouslySetInnerHTML={ui_detail(goods_detail.text_detail)}></pre>
+            <DetailStaticWrap title={'产品描述'}>
+              <pre style={{whiteSpace: 'pre-wrap', wordWrap: 'break-word'}} dangerouslySetInnerHTML={ui_detail(goods_detail.text_detail)}></pre>
             </DetailStaticWrap>
           </MountAnima>}
           {!(goods_detail.img_detail == null || goods_detail.img_detail.length == 0) && <MountAnima delay={200}>
