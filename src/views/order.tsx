@@ -528,7 +528,7 @@ export default class Order extends React.Component<OrderProps, OrderStatus>{
             </ItemIOSLink>
             <ItemIOS className={skeleton.fare} title="留言">
               {/*<span></span>*/}
-              <TextInputNormal className={skeleton.textInput} name="comment" complete={this.setComment.bind(this)} placeholder={'选填：对本次交易的说明'}></TextInputNormal>
+              <TextInputNormal className={skeleton.textInput} style={{position: 'absolute', top: 0, right: 0}} name="comment" complete={this.setComment.bind(this)} placeholder={'选填：对本次交易的说明'}></TextInputNormal>
             </ItemIOS>
             {homekeeper}
             <ItemIOS className={skeleton.total} title="合计金额">
