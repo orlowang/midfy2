@@ -96,7 +96,7 @@ export const getByREST = (args, callback, ifneed?:boolean) => {
     if (!ifneed) {
       syncCallNative({
         handle: "setToken",
-        data: ['Html_projectCode', 'Html_token']
+        data: ['Html_projectCode']
       }, (data) => {
         let filter = `projectCode=${data.Html_projectCode}`,
             headers = !data.Html_token ? {} : { "X-Auth-Token": data.Html_token };
