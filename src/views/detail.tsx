@@ -66,10 +66,10 @@ const callNative = ({ method, content }) => {
 }
 // 调用原生分享，针对android优化
 const callNativeShare = (option) => {
-    const timeout = 100
+    callNative(option)
     setTimeout(() => {
       callNative(option)
-    }, timeout)
+    }, 100)
 }
 
 export default class Detail extends React.Component<DetailProps, DetailState>{

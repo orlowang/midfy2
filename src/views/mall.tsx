@@ -109,8 +109,8 @@ export default class Mall extends Component<MallProps, MallState>{
               let documenttop = this.refs.scrollbody.scrollTop;
               let dpr = window.devicePixelRatio;
               if(documenttop >= parseInt(documentheight - bodyheight + dpr * 12 * 3.33333)){
-                if (that.AJAX_LOCK) return 
-                that.AJAX_LOCK = true
+                if (this.AJAX_LOCK) return 
+                this.AJAX_LOCK = true
                 !this.state.cateState.isLast ? localStorage.setItem('page', `${page[0]}:${parseInt(page[1])+1}`) : localStorage.setItem('page', `${page[0]}:${parseInt(page[1])}`);
                 let newPage = localStorage.getItem('page').split(':');
                 dataFetch('/goods/list', {cat: newPage[0], page: newPage[1], per_page: 10})
@@ -123,14 +123,17 @@ export default class Mall extends Component<MallProps, MallState>{
                     } else {
                       this.state.cateState.isLast = true;
                     }
-                    that.AJAX_LOCK = false
+                    this.AJAX_LOCK = false
                   })
               }
             })
           })
         }
       })
-      .catch(error => false)
+      .catch(error => {
+        console.log('datafetch ERROR :: ', error)
+        return false
+      })
 
     // 获取募集总额
     dataFetch('/statistics/sunshine/ranking')
@@ -140,7 +143,10 @@ export default class Mall extends Component<MallProps, MallState>{
           fkad: res.result
         })
       })
-      .catch(error => false)
+      .catch(error => {
+        console.log('datafetch ERROR :: ', error)
+        return false
+      })
   }
 
   componentWillUnmount(){
@@ -236,7 +242,10 @@ export default class Mall extends Component<MallProps, MallState>{
           data: res.result
         })
       })
-      .catch(error => false)
+      .catch(error => {
+        console.log('datafetch ERROR :: ', error)
+        return false
+      })
   }
 
   render(){
