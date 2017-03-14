@@ -374,7 +374,6 @@ export default class Order extends React.Component<OrderProps, OrderStatus>{
       alert('订单正在创建中...')
       return
     }
-    this.isOrderExist = true;
     let sessionId = `order-${this.props.params.goodsid}`;
 
     let session = JSON.parse(localStorage[sessionId]);
@@ -402,6 +401,7 @@ export default class Order extends React.Component<OrderProps, OrderStatus>{
     //   text: '付款中...'
     // })
     console.log(localStorage[sessionId])
+    this.isOrderExist = true;
     postByREST('order/create', localStorage[sessionId], (info) => {
       console.log(info)
       // 拉起支付,(fetch或者router跳转)location
