@@ -21,6 +21,7 @@ if (isOldVersion && location.href.indexOf(spec) < 0) {
   }
 }
 
+localStorage.clear()
 document.body.addEventListener('touchstart', ()=>{})
 ReactDOM.render(
   <Router 
