@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>友邻计划</title>
+    <style type="text/css">
+      html,body{width:100%;height:100%;}
+      body{margin:0;font-size:16px;font-family: "Myriad Set Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;outline: none;}
+      p{margin:0;padding:0;}
+      a{-webkit-tap-highlight-color: rgba(0,0,0,0);}
+      img{width: 100%;float: left;}
+      .top{text-align:center;background: url('assets/youlinbg.png') no-repeat;background-size:100% auto;width:100%;height:0;padding-bottom:77.96666%;position:relative;}
+      .top span{font-size:12px;color:#fff;display: block;padding-top: 15%;}
+      .top p{text-shadow: 0 2px 0 rgba(197,123,1,.5);color:#fff;}
+      .top p.p1{font-size:48px;}
+      .top p.p2{font-size:24px;}
+      .top .listc{width:100%;position:absolute;bottom:0;height:30%;}
+      .top .list{width:50%;text-align:center;float:left;height:100%;position:relative;}
+      .users{padding: 20px;}
+      .userlist{display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-justify-content: space-between;
+  -ms-justify-content: space-between;
+  justify-content: space-between;
+          -webkit-flex-wrap: wrap;
+          -ms-flex-wrap: wrap;}
+      .userlist>*{width:10%;height:10%;margin-bottom:16px;}
+      .userlist>img{border-radius: 24px;}
+      .users p{font-size:12px;color:#909090;font-weight:200;text-align:center;}
+      .users p span{font-size:16px;color:#f39800;}
+      a.btn{display:block;background: -moz-linear-gradient(top, #f39800 0%, #fda91c 100%); background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f39800), color-stop(100%,#fda91c)); background: -webkit-linear-gradient(top, #f39800 0%,#fda91c 100%); background: -o-linear-gradient(top, #f39800 0%,#fda91c 100%); background: -ms-linear-gradient(top, #f39800 0%,#fda91c 100%); background: linear-gradient(to bottom, #f39800 0%,#fda91c 100%);color:#fff;margin: 0 16px 16px;border-radius: 2px;text-decoration: none;text-align:center;height:46px;line-height:46px;}
+      .titleline{display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+      margin: 0 16px;}
+      .titleline:before{content:'';display:block;border-bottom: 1px solid #e6e4e1;width:50%;}
+      .titleline:after{content:'';display:block;border-bottom: 1px solid #e6e4e1;width:50%;}
+      .titleline span{color:#909090;width: 34%;text-align: center;}
+      .text{padding: 16px 16px;}
+      .text p{color:#909090;font-size:12px;line-height:20px;margin-bottom:10px;}
+      .line{position:absolute;right:0;border-right:1px solid rgba(255,255,255,.5);top:22%;height:60%;}
+    </style>
+  </head>
+  <body>
+    <div class="top">
+      <span>全国已募集(元)</span>
+      <p class="p1" id="id01">0</p>
+      <div class="listc">
+        <div class="list">
+          <span id="id02">已募集</span>
+          <p class="p2" id="id03">-</p>
+          <div class="line"></div>
+        </div>
+        <div class="list">
+          <span>全国社区排名</span>
+          <p class="p2" id="id04">-</p>
+        </div>
+      </div>
+    </div>
+    <div class="users">
+      <div class="userlist">
+        <img src="assets/Group Copy 2.png" alt="">
+        <img src="assets/Group Copy 4.png" alt="">
+        <img src="assets/Group Copy 5.png" alt="">
+        <img src="assets/Group Copy 6.png" alt="">
+        <img src="assets/Group Copy 7.png" alt="">
+        <img src="assets/Group Copy 8.png" alt="">
+        <img src="assets/Group Copy 10.png" alt="">
+        <img src="assets/Group Copy 11.png" alt="">
+      </div>
+      <div class="userlist">
+        <img src="assets/Group Copy 17.png" alt="">
+        <img src="assets/Group Copy 18.png" alt="">
+        <img src="assets/Group Copy 19.png" alt="">
+        <img src="assets/Group Copy 20.png" alt="">
+        <img src="assets/Group Copy 21.png" alt="">
+        <img src="assets/Group Copy 22.png" alt="">
+        <img src="assets/Group Copy.png" alt="">
+        <span>......</span>
+      </div>
+      <p>已有 <span id="id05">...</span> 人加入友邻计划</p>
+    </div>
+    <a href="./" class="btn">我也来搭把手 ></a>
+    <div class="titleline"><span>友邻计划</span></div>
+    <div class="text">
+      <p>近两年，有越来越多商家找到物业公司要进入小区。面对利益诱惑，我们一直在思考：消费带来社区商业繁荣的同时，如何推动小区公共治理的繁荣。</p>
+      <p>“住这儿”发起“友邻计划”，旨在搭建一个业主与商家的平台。邻居们在友邻市集购买产品或服务，商家将向“友邻计划”捐赠一定比例款项，“友邻市集”承诺自身0利润。</p>
+      <p>“友邻计划”会将捐赠的资金投入到您所在小区的硬件常新及文化建设两大领域。汇聚友邻力量，助推您的物业资产保值增值。</p>
+    </div>
+    <script src="assets/fetch.js"></script>
+    <script>
+      var container = document.getElementById('container');
+      var all = document.getElementById('id01');
+      var prj_name = document.getElementById('id02');
+      var prj_rank = document.getElementById('id03');
+      var usr_rank = document.getElementById('id04');
+      var num = document.getElementById('id05');
+      var projcode = location.search.split('projcode=')[1];
+      fetch('//blackpearl.4009515151.com/interfaces/statistics/sunshine/ranking?projectCode=' + projcode, {credentials: 'include'})
+        .then(function(res){return res.json()})
+        .then(function(data){
+          console.log(data)
+          if(data.result){
+            all.innerText = data.result.national_sum
+            prj_name.innerText = data.result.project_name + '已募集';
+            prj_rank.innerText = data.result.project_sum
+            usr_rank.innerText = data.result.ranking
+            num.innerText = data.result.people_num
+          }
+        })
+    </script>
+  </body>
+</html>

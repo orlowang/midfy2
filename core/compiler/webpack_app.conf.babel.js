@@ -6,27 +6,33 @@ import _ from 'lodash';
 import { urlToRequest } from 'loader-utils';
 import Midfy from '../config';
 
-const babelrelayplugin = urlToRequest('../utils/babelrelayplugin');
-console.log(babelrelayplugin)
 const usercfg = require(`${Midfy.ENV_PROJECTPATH}/config.json`);
 const webpackConfig = {
-    entry: usercfg.app.entry || Midfy.app.entry,
+    entry: {
+        app: usercfg.app.entry || Midfy.app.entry,
+        vendor: ['react', 'react-dom', 'whatwg-fetch']
+    },
     output: {
         // Don't use hashes in dev mode for better performance
-        filename: '[name].js',
-        chunkFilename: '[name].chunk.js',
+        filename: '[name].[chunkhash].js',
+        chunkFilename: '[name].chunk.[chunkhash].js',
         path: Midfy.app.output
     },
     resolve: {
-        extensions: ["", ".webpack.js", ".web.js", ".ts", ".tsx", ".js"]
+        extensions: ["", ".webpack.js", ".web.js", ".ts", ".tsx", ".js"],
+        alias: {
+            'react': `${Midfy.ENV_BASEPATH}/node_modules/react/dist/react.min.js`,
+            'react-dom': `${Midfy.ENV_BASEPATH}/node_modules/react-dom/dist/react-dom.min.js`,
+            'whatwg-fetch': `${Midfy.ENV_BASEPATH}/node_modules/whatwg-fetch/fetch.js`
+        }
     },
     module: {
-        loaders: [
-            {
+        noParse: ['react', 'react-dom', 'whatwg-fetch'],
+        loaders: [{
                 test: /\.tsx?$/,
                 exclude: /node_modules/,
                 loaders: [
-                    `babel?cacheDirectory,presets[]=stage-0,presets[]=es2015,plugins[]=transform-class-properties,plugins[]=${urlToRequest('../utils/babelrelayplugin')}`,
+                    `babel?passPerPreset,presets[]=stage-0,presets[]=es2015,plugins[]=transform-class-properties,plugins[]=babel-relay-plugin-loader`,
                     'ts'
                 ]
             },
@@ -67,13 +73,9 @@ const webpackConfig = {
                 loaders: [
                     'file?hash=sha512&digest=hex&name=[hash].[ext]',
                     `image-webpack?{
-                        progressive:${Midfy.compile.image.encoding == "progressive"},
+                        progressive: ${Midfy.compile.image.encoding == "progressive"},
                         optimizationLevel: ${Midfy.compile.image.optimizationLevel},
-                        interlaced: ${Midfy.compile.image.encoding == "progressive"},
-                        pngquant:{
-                            quality: ${Midfy.compile.image.quality},
-                            speed: ${Midfy.compile.image.speed}
-                        }
+                        interlaced: ${Midfy.compile.image.encoding == "progressive"}
                     }`,
                 ],
             },
@@ -114,14 +116,18 @@ const webpackConfig = {
                 minifyURLs: true,
             },
             inject: true,
+            debug: !!Midfy.ENV_DEVELOPMENT
         }),
-    ],
-    postcss: () => {
-        return [
-            precss(),
-            autoprefixer({ browsers: Midfy.AUTOPREFIXER_BROWSERS })
-        ]
-    }
+
+        new webpack.LoaderOptionsPlugin({
+            postcss: () => {
+                return [
+                    precss(),
+                    autoprefixer({ browsers: Midfy.AUTOPREFIXER_BROWSERS })
+                ]
+            }
+        })
+    ]
 };
 
 if (!Midfy.ENV_DEVELOPMENT) {
@@ -135,6 +141,15 @@ if (!Midfy.ENV_DEVELOPMENT) {
                 drop_debugger: true,
                 drop_console: true
             }
+        })
+    )
+}
+
+if (!Midfy.ENV_DEVELOPMENT) {
+    webpackConfig.plugins.push(
+        new webpack.optimize.CommonsChunkPlugin({
+            name: 'vendor',
+            filename: '[name].[chunkhash].js'
         })
     )
 }
