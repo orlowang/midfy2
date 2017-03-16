@@ -27,6 +27,11 @@ Array.prototype["Unique"] = function() {
 }
 
 export let syncCallNative = (props:callNativeProps, cb?:Function) => {
+  
+  if (window.appEnvironment) {
+    if (window.appEnvironment['Html_projectCode']) localStorage.setItem('PROJECT_CODE_CACHE', window.appEnvironment['Html_projectCode']);
+    if (window.appEnvironment['Html_token']) localStorage.setItem('TOKEN_CACHE', window.appEnvironment['Html_token']);
+  }
 
   window['appEnvironment'] = null;
   // rules here can be change by situation
@@ -98,8 +103,14 @@ export const getByREST = (args, callback, ifneed?:boolean) => {
         handle: "setToken",
         data: ['Html_projectCode']
       }, (data) => {
-        let filter = `projectCode=${data.Html_projectCode}`,
-            headers = !data.Html_token ? {} : { "X-Auth-Token": data.Html_token };
+        let projectCodeInCache = localStorage.getItem('PROJECT_CODE_CACHE') || '';
+        let tokenInCache = localStorage.getItem('TOKEN_CACHE') || '';
+
+        let Html_projectCode = data.Html_projectCode ? data.Html_projectCode : projectCodeInCache;
+        let Html_token = data.Html_token ? data.Html_token : tokenInCache;
+
+        let filter = `projectCode=${Html_projectCode}`,
+            headers = !Html_token ? {} : { "X-Auth-Token": Html_token };
         console.log(`start fetch ===> //blackpearl.4009515151.com/interfaces/${args}${filter}`);
         
         fetch(`//blackpearl.4009515151.com/interfaces/${args}${filter}`, {
