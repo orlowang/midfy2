@@ -33,7 +33,6 @@ import {
 } from '../helper/Types';
 const skeleton = require('../assets/css/skeleton.styl');
 
-
 interface DetailState {
   data?: goodsListType;
   layerState?: boolean;
@@ -65,22 +64,39 @@ const callNative = ({ method, content }) => {
     }, 50)
 }
 // 调用原生分享，针对android优化
-const callNativeShare = (option) => {
-    const interval = 500
-    const timeout = 2000
-    let intervalCount = 0
-    let timer = null
-    callNative(option)
-    if (navigator.userAgent.toLowerCase().indexOf('android') >= 0) {
-      timer = setInterval(() => {
-          intervalCount += interval
-          callNative(option)
-          if (!window['appEnvironment'] || window['appEnvironment'].shareActiviry || intervalCount > timeout) {
-              clearInterval(timer)
-          }
-      }, interval)
+// const callNativeShare = (option) => {
+//     const interval = 500
+//     const timeout = 2000
+//     let intervalCount = 0
+//     let timer = null
+//     callNative(option)
+//     if (navigator.userAgent.toLowerCase().indexOf('android') >= 0) {
+//       timer = setInterval(() => {
+//           intervalCount += interval
+//           callNative(option)
+//           if (!window['appEnvironment'] || window['appEnvironment'].shareActiviry || intervalCount > timeout) {
+//               clearInterval(timer)
+//           }
+//       }, interval)
+//     }
+// }
+
+const waitForToken = () => new Promise((resolve, reject) => {
+  console.log('waitForToken pending...')
+  const timeout = 3000
+  const interval = 50;
+  let intervalCount = 0;
+  let timer = setInterval(() => {
+    intervalCount += interval;
+    let isReady = window.appEnvironment && window.appEnvironment.hasOwnProperty('Html_token')
+    if (isReady || intervalCount > timeout) {
+      console.log('waitForToken done')
+      clearInterval(timer);
     }
-}
+    if (isReady) resolve(true);
+    if (intervalCount > timeout) reject('waitForToken timeout');      
+  }, interval)
+})
 
 export default class Detail extends React.Component<DetailProps, DetailState>{
   constructor(props){
@@ -102,7 +118,9 @@ export default class Detail extends React.Component<DetailProps, DetailState>{
         shiping: null,
         products: []
       },
-      layerState: false
+      layerState: false,
+      // 用于重设按钮状态
+      currentToken: ''
     };
   };
   componentWillMount(){
@@ -125,12 +143,18 @@ export default class Detail extends React.Component<DetailProps, DetailState>{
         projcode = !fromApp ? `?projectCode=${this.props.params.code}` : '?';
 
     getByREST(`goods/detail/${this.props.params.goodsid}${projcode}`, (data) => {
-      getByREST(`goods/detail/${this.props.params.goodsid}${projcode}`, (data) => {
-          that.setState({
-            data: data.result
-          })
-        }, !fromApp)
+      that.setState({
+        data: data.result
+      })
     }, !fromApp);
+
+    waitForToken().then(
+      res => {
+        this.setState({
+          currentToken: window.appEnvironment && window.appEnvironment['Html_token']
+        })
+      }
+    ).catch(error => false)
   }
 
   isVersionOutdate(current, standard){
