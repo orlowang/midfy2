@@ -123,11 +123,13 @@ export default class Detail extends React.Component<DetailProps, DetailState>{
     let that = this,
         fromApp = this.props.params.code == 0,
         projcode = !fromApp ? `?projectCode=${this.props.params.code}` : '?';
-      
+
     getByREST(`goods/detail/${this.props.params.goodsid}${projcode}`, (data) => {
-      that.setState({
-        data: data.result
-      })
+      getByREST(`goods/detail/${this.props.params.goodsid}${projcode}`, (data) => {
+          that.setState({
+            data: data.result
+          })
+        }, !fromApp)
     }, !fromApp);
   }
 
