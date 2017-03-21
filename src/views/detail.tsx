@@ -63,23 +63,6 @@ const callNative = ({ method, content }) => {
         iframe.parentNode.removeChild(iframe)
     }, 50)
 }
-// 调用原生分享，针对android优化
-// const callNativeShare = (option) => {
-//     const interval = 500
-//     const timeout = 2000
-//     let intervalCount = 0
-//     let timer = null
-//     callNative(option)
-//     if (navigator.userAgent.toLowerCase().indexOf('android') >= 0) {
-//       timer = setInterval(() => {
-//           intervalCount += interval
-//           callNative(option)
-//           if (!window['appEnvironment'] || window['appEnvironment'].shareActiviry || intervalCount > timeout) {
-//               clearInterval(timer)
-//           }
-//       }, interval)
-//     }
-// }
 
 const waitForToken = () => new Promise((resolve, reject) => {
   console.log('waitForToken pending...')
@@ -118,9 +101,7 @@ export default class Detail extends React.Component<DetailProps, DetailState>{
         shiping: null,
         products: []
       },
-      layerState: false,
-      // 用于重设按钮状态
-      currentToken: ''
+      layerState: false
     };
   };
   componentWillMount(){
@@ -147,14 +128,6 @@ export default class Detail extends React.Component<DetailProps, DetailState>{
         }
       })
     }, !fromApp);
-
-    // waitForToken().then(res => {
-    //   if (window.appEnvironment && window.appEnvironment['Html_token']) {
-    //     this.setState({
-    //       currentToken: window.appEnvironment['Html_token'])
-    //     })
-    //   }
-    // }).catch(error => false)
   }
 
   isVersionOutdate(current, standard){
