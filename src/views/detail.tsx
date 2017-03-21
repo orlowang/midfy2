@@ -216,13 +216,16 @@ export default class Detail extends React.Component<DetailProps, DetailState>{
         url: photo
       })
     })
-    let all_stock = 0;
+    let all_stock = undefined;
     goods_detail.products.map(prd => {
+      if (all_stock === undefined) all_stock = 0
       all_stock += prd.stock
     })
 
     let setButton = () => {
-      if (all_stock == 0) {
+      if (all_stock === undefined) {
+        return <span className={skeleton.noStockBtn}>立即购买</span>
+      } else if (all_stock == 0) {
         return <span className={skeleton.noStockBtn}>已售罄</span>
       } else {
         if (isOldVersion && location.href.indexOf(spec) < 0) {
