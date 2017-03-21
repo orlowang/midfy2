@@ -129,7 +129,6 @@ export default class Detail extends React.Component<DetailProps, DetailState>{
   }
 
   componentDidMount(){
-
     callNative({
       method: "initWithBlackpearl",
       content: {
@@ -148,13 +147,13 @@ export default class Detail extends React.Component<DetailProps, DetailState>{
       })
     }, !fromApp);
 
-    waitForToken().then(
-      res => {
+    waitForToken().then(res => {
+      if (window.appEnvironment && window.appEnvironment['Html_token']) {
         this.setState({
-          currentToken: window.appEnvironment && window.appEnvironment['Html_token']
+          currentToken: window.appEnvironment['Html_token'])
         })
       }
-    ).catch(error => false)
+    }).catch(error => false)
   }
 
   isVersionOutdate(current, standard){
