@@ -129,14 +129,7 @@ export default class Detail extends React.Component<DetailProps, DetailState>{
   }
 
   componentDidMount(){
-    callNative({
-      method: "initWithBlackpearl",
-      content: {
-        Mobile_ShowShareButton: "Yes",
-        Mobile_GoodSid: this.props.params.goodsid,
-        Mobile_ConfigTitle: "商品详情"
-      }
-    })
+    
     let that = this,
         fromApp = this.props.params.code == 0,
         projcode = !fromApp ? `?projectCode=${this.props.params.code}` : '?';
@@ -145,15 +138,23 @@ export default class Detail extends React.Component<DetailProps, DetailState>{
       that.setState({
         data: data.result
       })
+      callNative({
+        method: "initWithBlackpearl",
+        content: {
+          Mobile_ShowShareButton: "Yes",
+          Mobile_GoodSid: this.props.params.goodsid,
+          Mobile_ConfigTitle: "商品详情"
+        }
+      })
     }, !fromApp);
 
-    waitForToken().then(res => {
-      if (window.appEnvironment && window.appEnvironment['Html_token']) {
-        this.setState({
-          currentToken: window.appEnvironment['Html_token'])
-        })
-      }
-    }).catch(error => false)
+    // waitForToken().then(res => {
+    //   if (window.appEnvironment && window.appEnvironment['Html_token']) {
+    //     this.setState({
+    //       currentToken: window.appEnvironment['Html_token'])
+    //     })
+    //   }
+    // }).catch(error => false)
   }
 
   isVersionOutdate(current, standard){
