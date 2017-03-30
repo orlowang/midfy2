@@ -557,16 +557,16 @@
 }
 
 :global(.fmroot){
-  height: calc(100% - 3.33333rem);
+  height: calc(100% - 0rem);
 }
 
 .bars{
-  position: fixed;
+  // position: fixed;
   box-shadow: 0 -2px 8px rgba(0,0,0,.15);
-  bottom: 0;
+  // bottom: 0;
   display: flex;
   justify-content: space-around;
-  z-index: 9;
+  // z-index: 9;
   width: 100%;
   height: 3.33333rem;
   background-color: #fff;
@@ -584,7 +584,13 @@
     }
   }
 }
-
+// tab位置改变
+.fixTitle{
+	position: fixed;
+	z-index: 9;
+	left: 0;
+	top: 0;
+}
 :global(.LayerComp){
   background-color: rgba(57,57,57,.7);
   z-index: 9;
