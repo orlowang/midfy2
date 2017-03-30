@@ -38,7 +38,7 @@ interface MallState {
   layerState?: Function;
   fkad?: Object[];
 }
-
+console.log(skeleton)
 interface MallProps extends Props<Mall>{
   viewer: {
     goodsList: any;
@@ -64,7 +64,8 @@ export default class Mall extends Component<MallProps, MallState>{
         page: 0,
         isLast: false
       },
-      layerState: null
+      layerState: null,
+      titlePos: false
     };
   };
   componentWillMount(){
@@ -81,11 +82,15 @@ export default class Mall extends Component<MallProps, MallState>{
     })
     localStorage.removeItem('keeper');
     let that = this;
+    // 最开始时tab的位置
+    let tabTop = that.refs.tab.offsetTop;
+    console.log("第一次"+new Date().getTime());
     getByREST('category/list?', (data) => {
       that.setState({
         categorys: data.result
       }, () => {
         getByREST(`goods/list?cat=${this.state.categorys[0].categoryId}&page=0&per_page=10&`, (data) => {
+	      console.log("渲染出来列表数据" +new Date().getTime())
           that.setState({
             data: data.result
           }, () => {
@@ -96,6 +101,16 @@ export default class Mall extends Component<MallProps, MallState>{
               let documentheight = this.refs.scrollbody.scrollHeight;
               let documenttop = this.refs.scrollbody.scrollTop;
               let dpr = window.devicePixelRatio;
+              // 添加当滚到tab位置时tab悬浮置顶
+              if(documenttop >= tabTop){
+              	that.setState({
+              		titlePos: true
+              	})
+              }else{
+              	that.setState({
+              		titlePos: false
+              	})
+              }
               if(documenttop >= parseInt(documentheight - bodyheight + dpr * 12 * 3.33333)){
                 if (that.AJAX_LOCK) return 
                 that.AJAX_LOCK = true
@@ -291,13 +306,16 @@ export default class Mall extends Component<MallProps, MallState>{
             <span>为社区加油，争当NO.1 我也来搭把手 ></span>
           </div>
         </a>
+        <div className={`${skeleton.bars} ${titlePos ? skeleton.fixTitle : ''}`} ref="tab">
+        	{this.state.categorys.map((category, index) => index <= 3 && <div className={this.state.cateState.index == index ? skeleton.on : ''} onClick={this.setCategory.bind(this, category.categoryId, index)} key={category.categoryId}>{category.name}</div>)}
+        </div>
         <div className={`${skeleton.goodsList}`}>
           {ui_good_list}
         </div>
       </div>
-      <div className={skeleton.bars}>
+      {/*<div className={skeleton.bars}>
         {this.state.categorys.map((category, index) => index <= 3 && <div className={this.state.cateState.index == index ? skeleton.on : ''} onClick={this.setCategory.bind(this, category.categoryId, index)} key={category.categoryId}>{category.name}</div>)}
-      </div>
+      </div>*/}
       <div>
         {this.state.layerState && <div><Layer confirm={{text: `我知道了`, func: this.state.layerState}}>
           <img src={require('../assets/img/banben.svg')} alt=""/>
