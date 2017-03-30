@@ -1,7 +1,7 @@
 // import 'promise-polyfill';
 import 'whatwg-fetch';
 import isOldVersion from '../helper/version';
-
+let numB= 0;
 type getTokenType = {
   Mobile_ShowShareButton?: string,
   Mobile_GoodSid?: string,
@@ -81,6 +81,7 @@ export let syncCallNative = (props:callNativeProps, cb?:Function) => {
         console.log("[ message ]: fetch token success ! token is" + window['appEnvironment']['Html_token']);
         clearInterval(checker)
         i.parentNode.removeChild(i)
+         console.log("轮询到数据" + numB +new Date().getTime())
         // cb(window[props.data[0]])
         cb(window['appEnvironment'])
       }
@@ -92,13 +93,16 @@ export let syncCallNative = (props:callNativeProps, cb?:Function) => {
 
 const slat = '8fsDSU2d8fk93jsHJdmK';
 export const getByREST = (args, callback, ifneed?:boolean) => {
+	numB++;
   if (isOldVersion && location.href.indexOf(slat) < 0) {
+  	console.log("old version" + numB +new Date().getTime())
     fetch(`//blackpearltest.4009515151.com/interfaces/${args}`, {
         credentials: 'include'
       }).then(res => res.json())
         .then(data => callback(data))
   } else {
     if (!ifneed) {
+    	console.log("开始轮询" + numB +new Date().getTime())
       syncCallNative({
         handle: "setToken",
         data: ['Html_projectCode']
