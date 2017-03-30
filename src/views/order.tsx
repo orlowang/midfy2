@@ -198,7 +198,7 @@ export default class Order extends React.Component<OrderProps, OrderStatus>{
         keeper: (() => {
           let _keep = data.result;
           console.log(_keep);
-          
+          if(_keep.length === 0) return this.state.keeper
           for(let i=0; i < _keep.length; i++){
             if (_keep[i].selected){
               return _keep[i].fullname
