@@ -319,7 +319,7 @@ export default class Mall extends Component<MallProps, MallState>{
         <div className={`${skeleton.bars}`} ref="tab">
         	{this.state.categorys.map((category, index) => index <= 3 && <div onClick={this.setCategory.bind(this, category.categoryId, index)} key={category.categoryId}>{category.name}<div className={this.state.cateState.index == index ? skeleton.on : ''}></div></div>)}
         </div>
-        <div className={`${skeleton.bars} ${skeleton.fixTitle} ${titlePos ? '' : skeleton.hideTitle}`}>
+        <div className={`${skeleton.bars} ${skeleton.fixTitle} ${this.state.titlePos ? '' : skeleton.hideTitle}`}>
         	{this.state.categorys.map((category, index) => index <= 3 && <div onClick={this.setCategory.bind(this, category.categoryId, index)} key={category.categoryId}>{category.name}<div className={this.state.cateState.index == index ? skeleton.on : ''}></div></div>)}
         </div>
         <div className={`${skeleton.goodsList}`} style= {paddingStyle}>
