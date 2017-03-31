@@ -65,7 +65,8 @@ export default class Mall extends Component<MallProps, MallState>{
         isLast: false
       },
       layerState: null,
-      titlePos: false
+      titlePos: false,
+      paddingBot: 0            
     };
   };
   componentWillMount(){
@@ -109,6 +110,12 @@ export default class Mall extends Component<MallProps, MallState>{
               }else{
               	that.setState({
               		titlePos: false
+              	},() => {
+              		let scrollDis= tabTop - documenttop;
+              		that.setState({
+              			paddingBot: scrollDis
+              		})
+              		window.scrollTo(0,scrollDis)
               	})
               }
               if(documenttop >= parseInt(documentheight - bodyheight + dpr * 12 * 3.33333)){
@@ -267,6 +274,9 @@ export default class Mall extends Component<MallProps, MallState>{
         </GoodsItemFlat>
       </Link>;
     });
+    let paddingStyle= {
+    	paddingBottom: this.state.paddingBot
+    }
     // MountAnimaShow导致ios8.x，暂时禁用
     return <div>
       <div ref="scrollbody" className={`${skeleton.root} ${skeleton.scrollwrap} ${navigator.userAgent.indexOf('VKStaffAssistant') >= 0 && skeleton.hastitlebar} fmroot`}>
@@ -306,10 +316,13 @@ export default class Mall extends Component<MallProps, MallState>{
             <span>为社区加油，争当NO.1 我也来搭把手 ></span>
           </div>
         </a>
-        <div className={`${skeleton.bars} ${titlePos ? skeleton.fixTitle : ''}`} ref="tab">
-        	{this.state.categorys.map((category, index) => index <= 3 && <div className={this.state.cateState.index == index ? skeleton.on : ''} onClick={this.setCategory.bind(this, category.categoryId, index)} key={category.categoryId}>{category.name}</div>)}
+        <div className={`${skeleton.bars}`} ref="tab">
+        	{this.state.categorys.map((category, index) => index <= 3 && <div onClick={this.setCategory.bind(this, category.categoryId, index)} key={category.categoryId}>{category.name}<div className={this.state.cateState.index == index ? skeleton.on : ''}></div></div>)}
         </div>
-        <div className={`${skeleton.goodsList}`}>
+        <div className={`${skeleton.bars} ${skeleton.fixTitle} ${this.state.titlePos ? '' : skeleton.hideTitle}`}>
+        	{this.state.categorys.map((category, index) => index <= 3 && <div onClick={this.setCategory.bind(this, category.categoryId, index)} key={category.categoryId}>{category.name}<div className={this.state.cateState.index == index ? skeleton.on : ''}></div></div>)}
+        </div>
+        <div className={`${skeleton.goodsList}`} style= {paddingStyle}>
           {ui_good_list}
         </div>
       </div>
