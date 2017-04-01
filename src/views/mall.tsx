@@ -110,12 +110,6 @@ export default class Mall extends Component<MallProps, MallState>{
               }else{
               	that.setState({
               		titlePos: false
-              	},() => {
-              		let scrollDis= tabTop - documenttop;
-              		that.setState({
-              			paddingBot: scrollDis
-              		})
-              		window.scrollTo(0,scrollDis)
               	})
               }
               if(documenttop >= parseInt(documentheight - bodyheight + dpr * 12 * 3.33333)){
@@ -227,8 +221,8 @@ export default class Mall extends Component<MallProps, MallState>{
         }, 100)
       }
     }, 200);
-  }
-
+  }          	
+              	
   setCategory(cid, index){
     let that = this;
     getByREST(`goods/list?cat=${cid}&page=0&per_page=10&`, (data) => {
@@ -241,6 +235,19 @@ export default class Mall extends Component<MallProps, MallState>{
           isLast: false
         },
         data: data.result
+      },() => {
+    	let tabTop = that.refs.tab.offsetTop;
+    	let clientHeight = that.refs.scrollbody.scrollHeight;
+    	let bodyheight = document.body.scrollHeight;
+    	let dis= clientHeight - bodyheight;
+        if(dis<tabTop){
+        	that.setState({
+        		paddingBot: tabTop - dis
+        	})
+        	that.refs.scrollbody.scrollTop= tabTop;
+        }else{
+        	
+        }
       })
     });
   }
