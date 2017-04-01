@@ -243,10 +243,13 @@ export default class Mall extends Component<MallProps, MallState>{
         if(dis<tabTop){
         	that.setState({
         		paddingBot: tabTop - dis
-        	})
-        	that.refs.scrollbody.scrollTop= tabTop;
+        	},() => {
+        		that.refs.scrollbody.scrollTop= tabTop;
+        	})	
         }else{
-        	
+        	that.setState({
+        		paddingBot: 0
+        	})
         }
       })
     });
