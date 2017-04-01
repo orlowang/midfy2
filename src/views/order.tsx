@@ -406,8 +406,10 @@ export default class Order extends React.Component<OrderProps, OrderStatus>{
       console.log(info)
       // 拉起支付,(fetch或者router跳转)location
       if(info.code != 0){
-        alert(info.result || '订单提交失败');
-        return;
+        if (info.result != 'repeat') {
+          alert(info.result || '订单提交失败')
+          return;
+        }
       }
       if (info.result && info.result.order_id) {
         this.isOrderExist = false;
