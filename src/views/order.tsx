@@ -370,10 +370,10 @@ export default class Order extends React.Component<OrderProps, OrderStatus>{
   }
 
   sendOrder(){
-    if (this.isOrderExist) {
-      alert('订单正在创建中...')
-      return
-    }
+    // if (this.isOrderExist) {
+    //   alert('订单正在创建中...')
+    //   return
+    // }
     let sessionId = `order-${this.props.params.goodsid}`;
 
     let session = JSON.parse(localStorage[sessionId]);
